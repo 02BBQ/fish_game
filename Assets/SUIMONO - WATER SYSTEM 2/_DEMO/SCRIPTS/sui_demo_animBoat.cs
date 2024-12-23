@@ -9,7 +9,6 @@ public class sui_demo_animBoat : MonoBehaviour {
 	public GameObject propObject;
 	public GameObject rudderObject;
 	public float propellerSpeed = 0.0f;
-	public float power = 1f;
 	public float engineRotation = 0.0f;
 	public Transform playerPosition;
 	public Transform playerExit;
@@ -77,10 +76,10 @@ public class sui_demo_animBoat : MonoBehaviour {
 			if (propObject != null){
 				propSpd = 0.0f;
 				if (behaviorIsOn){
-					propSpd = 200.0f * power;
-					if (behaviorIsRevving) propSpd = 1200.0f * power;
-					if (behaviorIsRevvingHigh) propSpd = 3000.0f * power;
-					if (behaviorIsRevvingBack) propSpd = -800.0f * power;
+					propSpd = 200.0f;
+					if (behaviorIsRevving) propSpd = 1200.0f;
+					if (behaviorIsRevvingHigh) propSpd = 3000.0f;
+					if (behaviorIsRevvingBack) propSpd = -800.0f;
 				}
 				propellerSpeed = Mathf.Lerp(propellerSpeed,propSpd,Time.deltaTime);
 				propObject.transform.localEulerAngles = new Vector3(

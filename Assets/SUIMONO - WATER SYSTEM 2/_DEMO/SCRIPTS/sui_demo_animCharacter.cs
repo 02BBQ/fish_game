@@ -175,8 +175,8 @@ public class sui_demo_animCharacter : MonoBehaviour {
 		
 		} else if (isInBoat){
 			useClip = "anim_miho_boat_sit_idle";
-			fadeSpeed = 90.4f;
-			playSpeed = 91.0f;
+			fadeSpeed = 0.4f;
+			playSpeed = 1.0f;
 		}	
 		
 		//useClip = "anim_miho_swim_idle";
@@ -352,6 +352,7 @@ public class sui_demo_animCharacter : MonoBehaviour {
 			boneHead.transform.localEulerAngles.y,
 			boneHead.transform.localEulerAngles.z
 			);
+
 	}
 
 

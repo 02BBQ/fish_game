@@ -73,7 +73,7 @@ namespace Suimono.Core
 		void Start () {
 
 			if (GameObject.Find("SUIMONO_Module") != null){
-				moduleObject = (Suimono.Core.SuimonoModule) FindAnyObjectByType(typeof(Suimono.Core.SuimonoModule));
+				moduleObject = (Suimono.Core.SuimonoModule) FindObjectOfType(typeof(Suimono.Core.SuimonoModule));
 			}
 
 			//set random
