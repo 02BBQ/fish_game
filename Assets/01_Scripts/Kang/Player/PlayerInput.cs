@@ -14,6 +14,7 @@ public class PlayerInput : ScriptableObject
     public event Action DownJump;
     public event Action UpJump;
     public event Action ClickEsc;
+    public event Action ClickInteract;
     public event Action DownCtrl;
     public event Action UpCtrl;
     public event Action DownShift;
@@ -38,6 +39,7 @@ public class PlayerInput : ScriptableObject
         _inputAction.Player.Attack.performed += (obj) => LCDown?.Invoke();
         _inputAction.Player.Attack.canceled += (obj) => LCUp?.Invoke();
 
+        _inputAction.Player.Interact.performed += (obj) => ClickInteract?.Invoke();
         _inputAction.Player.Ctrl.performed += (obj) => DownCtrl?.Invoke();
         _inputAction.Player.Ctrl.canceled += (obj) => UpCtrl?.Invoke();
     }
