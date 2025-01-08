@@ -8,21 +8,36 @@ public class Player : MonoBehaviour
     public Rigidbody Rigidbody { get => _rigid; }
     [HideInInspector] public PlayerAnimation playerAnim;
     [HideInInspector] public PlayerMovement playerMovement;
+    [HideInInspector] public PlayerBoat playerBoat;
+    [HideInInspector] public bool boating = false;
     public PlayerInput playerInput;
-    CapsuleCollider _capsuleCollider;
 
+    CapsuleCollider _capsuleCollider;
     [SerializeField] List<Collider> bodyCollider;
 
-    public Action<Collision> OnPlayerCollisionEnter;
+    public Action<Collision> CollisionEnter;
+    public Action<Collider> TriggerEnter;
+    public Action<Collider> TriggerStay;
+    public Action<Collider> TriggerExit;
+
+
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody>();
 
         playerAnim = GetComponent<PlayerAnimation>();
         playerMovement = GetComponent<PlayerMovement>();
+        playerBoat = GetComponent<PlayerBoat>();
         _capsuleCollider = transform.Find("Collider").GetComponent<CapsuleCollider>();
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+    }
+    private void Update()
+    {
+        if (boating)
+            playerBoat.Move(playerInput.Movement);
+        else
+            playerMovement.Move(playerInput.Movement);
     }
     public void StartPhysics()
     {
@@ -53,6 +68,18 @@ public class Player : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        OnPlayerCollisionEnter?.Invoke(collision);
+        CollisionEnter?.Invoke(collision);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        TriggerEnter?.Invoke(other);
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        TriggerStay?.Invoke(other);
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        TriggerExit?.Invoke(other);
     }
 }
