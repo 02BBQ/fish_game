@@ -33,10 +33,10 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 direction = Vector3.zero;
 
     //Target
-    AutoMoveState _chaseTarget = AutoMoveState.None;
+    AutoMoveState _chaseState = AutoMoveState.None;
     Action _chaseEndAction;
-    Vector3 _targetPos;
-    Quaternion _forward;
+    Transform _targetPos;
+    Transform _forward;
 
     #region UNITY_EVENTS
     private void Awake()
@@ -72,47 +72,76 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         FallingCheck();
-        switch (_chaseTarget)
+
+        switch (_chaseState)
         {
             case AutoMoveState.Move:
-                Vector3 target = _targetPos - transform.position;
+                _player.playerAnim.SetDirection(Vector3.Lerp(_player.playerAnim.GetDirection(), Vector3.forward, Time.deltaTime * 10f));
+                Vector3 target = _targetPos.position - transform.position;
                 target.y = 0f;
-                _forward = Quaternion.LookRotation(target);
-                transform.localRotation = Quaternion.RotateTowards(transform.localRotation, _forward, _rotateSpeed * Time.deltaTime);
-                _player.Rigidbody.linearVelocity = transform.forward * _moveSpeed;
+                Quaternion forward = Quaternion.LookRotation(target);
+                transform.localRotation = Quaternion.RotateTowards(transform.localRotation, forward, _rotateSpeed * Time.deltaTime * 2f);
+
+                _player.Rigidbody.linearVelocity = target.normalized * _moveSpeed;
+                if(target.sqrMagnitude < 0.3f)
+                {
+                    _chaseState = AutoMoveState.None;
+                    _player.playerAnim.SetDirection(Vector3.zero);
+                    _chaseEndAction?.Invoke();
+                }
                 break;
             case AutoMoveState.Rotate:
+
+                Vector3 forw = _forward.forward;
+                forw.y = 0f;
+                transform.forward = Vector3.MoveTowards(transform.forward, forw, _rotateSpeed * Time.deltaTime * 0.06f);
+                print(Vector3.Dot(transform.forward, forw));
+                if (Vector3.Dot(transform.forward, forw) > 0.99f)
+                {
+                    _chaseState = AutoMoveState.None;
+                    _player.playerAnim.SetDirection(Vector3.zero);
+                    _chaseEndAction?.Invoke();
+                }
                 break;
         }
     }
     private void TriggerEnter(Collider other)
     {
+        if (other.isTrigger) return;
+
         if (_triggerCnt == 0)
         {
-            _player.playerAnim.anim.SetInteger("Landing", 1);
+            grounded = true;
+            _player.playerAnim.SetBool("Ground", true);
         }
         _triggerCnt++;
     }
     private void TriggerStay(Collider other)
     {
+        if (other.isTrigger) return;
+
         if (!grounded)
         {
             grounded = true;
+            _player.playerAnim.SetBool("Ground", true);
         }
     }
     private void TriggerExit(Collider other)
     {
+        if (other.isTrigger) return;
+
         _triggerCnt--;
         if (_triggerCnt == 0)
         {
-            _player.playerAnim.anim.SetInteger("Landing", 0);
-            _player.playerAnim.SetTrigger("Falling");
             grounded = false;
+            _player.playerAnim.SetBool("Ground", false);
         }
     }
 
     void Aim(Vector2 pos)
     {
+        if (_chaseState != AutoMoveState.None || _player.boating) return;
+
         if (Cursor.visible == false)
         {
             _yaw += _camSpeed * 0.1f * pos.x;
@@ -129,14 +158,15 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_triggerCnt == 0 && grounded)
         {
-            _player.playerAnim.anim.SetInteger("Landing", 0);
-            _player.playerAnim.SetTrigger("Falling");
             grounded = false;
+            _player.playerAnim.SetBool("Ground", false);
         }
     }
 
     public void Move(Vector2 input)
     {
+        if (_chaseState != AutoMoveState.None || _player.boating) return;
+
         int weight = 1;
 
         if (_player.playerInput.Shift) weight *= 2;
@@ -177,6 +207,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void Jump()
     {
+        if (_chaseState != AutoMoveState.None || _player.boating) return;
+
         if (grounded && _rb.isKinematic == false)
         {
             _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, _jumpPower, _rb.linearVelocity.z);
@@ -184,21 +216,23 @@ public class PlayerMovement : MonoBehaviour
     }
     public void StopMoveTarget()
     {
-        _chaseTarget = AutoMoveState.None;
-        _targetPos = transform.position;
+        _chaseState = AutoMoveState.None;
+        _player.playerAnim.SetDirection(Vector3.zero);
+        _targetPos = null;
         _chaseEndAction = null;
-        _forward = Quaternion.identity;
+        _forward = null;
     }
-    public void MoveTarget(Vector3 position, Action endAction)
+    public void MoveTarget(Transform position, Action endAction)
     {
-        _chaseTarget = AutoMoveState.Move;
+        _chaseState = AutoMoveState.Move;
         _targetPos = position;
         _chaseEndAction = endAction;
     }
-    public void LookTarget(Vector3 forward)
+    public void LookTarget(Transform forward, Action endAction)
     {
-        _chaseTarget = AutoMoveState.Rotate;
-        _targetPos = transform.position;
-        _forward = Quaternion.LookRotation(forward);
+        _chaseState = AutoMoveState.Rotate;
+        _targetPos = null;
+        _forward = forward;
+        _chaseEndAction = endAction;
     }
 }

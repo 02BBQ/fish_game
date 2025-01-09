@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
@@ -15,8 +16,14 @@ public class PlayerAnimation : MonoBehaviour
         anim.SetFloat("X", _direction.x);
         anim.SetFloat("Y", _direction.z);
     }
-    public void SetTrigger(string name)
+    public void SetTrigger(string name) => anim.SetTrigger(name);
+    public void ResetTrigger(string name) => anim.ResetTrigger(name);
+    public void SetBool(string name, bool value) => anim.SetBool(name, value);
+    public void SetFloat(string name, float value) => anim.SetFloat(name, value);
+    public void SetInt(string name, int value) => anim.SetInteger(name, value);
+
+    public Vector3 GetDirection()
     {
-        anim.SetTrigger(name);
+        return new Vector3(anim.GetFloat("X"), 0, anim.GetFloat("Y"));
     }
 }

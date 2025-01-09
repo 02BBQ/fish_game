@@ -24,11 +24,25 @@ public class PlayerBoat : MonoBehaviour
     {
         _player.TriggerEnter -= TriggerEnter;
         _player.TriggerExit -= TriggerExit;
+        _player.playerInput.ClickInteract -= TryInterect;
+    }
+
+    private void Update()
+    {
+        if (_player.boating)
+        {
+            Vector3 targetPos = _currentBoat.ridePoint.position;
+            targetPos.y = Mathf.Max(transform.position.y, targetPos.y);
+            transform.position = targetPos;
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, _currentBoat.ridePoint.eulerAngles.y, transform.eulerAngles.z);
+        }   
     }
     #endregion
 
     private void TryInterect()
     {
+        if (!_ridable) return;
+        
         if (_player.boating)
         {
             _player.boating = false;
@@ -36,25 +50,28 @@ public class PlayerBoat : MonoBehaviour
         }
         else
         {
-            if (_ridable)
-            {
-                _player.boating = true;
-                _player.playerMovement.MoveTarget(_currentBoat.ridePoint.position, () => _player.playerMovement.LookTarget(_currentBoat.ridePoint.forward));
-            }
+            _player.playerMovement.MoveTarget(_currentBoat.ridePoint, () => 
+            _player.playerMovement.LookTarget(_currentBoat.ridePoint, () => 
+            _player.boating = true));
         }
+
     }
 
     private void TriggerEnter(Collider other)
     {
-        _ridable = true;
-        _currentBoat = other.GetComponent<BoatController>();
+        if(other.transform.root.TryGetComponent(out _currentBoat))
+        {
+            _ridable = true;
+        }
     }
     private void TriggerExit(Collider other)
     {
-        _ridable = false;
+        if(_currentBoat && other.transform.root == _currentBoat.transform)
+            _ridable = false;
     }
     public void Move(Vector2 input)
     {
-        _currentBoat.Move(input);
+        if(_currentBoat)
+            _currentBoat.Move(input);
     }
 }
