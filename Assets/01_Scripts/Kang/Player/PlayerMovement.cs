@@ -175,7 +175,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (grounded)
             direction = Vector3.Lerp(direction, localMovement, 7f * Time.deltaTime);
-        _player.playerAnim.SetDirection(direction);
+        _player.playerAnim.SetDirection(Vector3.forward*direction.magnitude);
+        // _player.playerAnim.SetDirection(_visual.forward*direction.magnitude);
 
 
         Vector3 velocity = _rb.linearVelocity;
@@ -183,16 +184,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (input.sqrMagnitude < 0.1f) return;
 
-/*        Quaternion targetRotation = Quaternion.LookRotation(localMovement);
-        _visual.localRotation = Quaternion.RotateTowards(_visual.localRotation, targetRotation, _rotateSpeed * Time.deltaTime);*/
-        /*if (!aiming)
-        {
-        }
-        else
-        {
-            Quaternion targetRotation = Quaternion.Euler(0f, 90f, 0f);
-            _visual.localRotation = Quaternion.RotateTowards(_visual.localRotation, targetRotation, _rotateSpeed * Time.deltaTime);
-        }*/
+        Quaternion targetRotation = Quaternion.LookRotation(localMovement);
+        _visual.localRotation = Quaternion.RotateTowards(_visual.localRotation, targetRotation, _rotateSpeed * Time.deltaTime);
+
+        // Quaternion targetRotation = Quaternion.Euler(0f, 90f, 0f);
+        // _visual.localRotation = Quaternion.RotateTowards(_visual.localRotation, targetRotation, _rotateSpeed * Time.deltaTime);
 
         Vector3 worldMovement = transform.TransformDirection(direction);
 
