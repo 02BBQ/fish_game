@@ -20,7 +20,6 @@ public class Player : MonoBehaviour
     public Action<Collider> TriggerStay;
     public Action<Collider> TriggerExit;
 
-
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody>();
@@ -29,8 +28,8 @@ public class Player : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         playerBoat = GetComponent<PlayerBoat>();
         _capsuleCollider = transform.Find("Collider").GetComponent<CapsuleCollider>();
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+     /*   Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;*/
     }
     private void Update()
     {

@@ -21,6 +21,7 @@ public class PlayerInput : ScriptableObject
     public event Action UpShift;
     public event Action LCDown;
     public event Action LCUp;
+    public event Action<int> downKeyPad;
     public Vector2 Movement { get; private set; }
     public bool Shift { get; private set; }
     public bool Jumping { get; private set; }
@@ -42,6 +43,13 @@ public class PlayerInput : ScriptableObject
         _inputAction.Player.Interact.performed += (obj) => ClickInteract?.Invoke();
         _inputAction.Player.Ctrl.performed += (obj) => DownCtrl?.Invoke();
         _inputAction.Player.Ctrl.canceled += (obj) => UpCtrl?.Invoke();
+
+        _inputAction.Player.KeyPad.performed += KeyPad_performed;
+    }
+
+    private void KeyPad_performed(InputAction.CallbackContext obj)
+    {
+        downKeyPad?.Invoke(int.Parse(obj.control.name));
     }
 
     private void Shift_canceled(InputAction.CallbackContext obj)
