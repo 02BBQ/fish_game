@@ -1,10 +1,12 @@
 using System;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class BoatController : MonoBehaviour
 {
     [SerializeField] BoatDataSO _boatData;
     private Rigidbody rigid;
+    public Transform camPos;
     //Vector2 currentVelocity;
 
     [HideInInspector] public Transform ridePoint;
