@@ -1,8 +1,10 @@
 using System;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class PlayerBoat : MonoBehaviour
 {
+    public CinemachineCamera boatCam;
 
     private Player _player;
     BoatController _currentBoat;
@@ -42,17 +44,24 @@ public class PlayerBoat : MonoBehaviour
     private void TryInterect()
     {
         if (!_ridable) return;
-        
+
         if (_player.boating)
         {
             _player.boating = false;
             _player.playerMovement.StopMoveTarget();
+            boatCam.Follow = null;
+            boatCam.Priority = -1;
         }
         else
         {
-            _player.playerMovement.MoveTarget(_currentBoat.ridePoint, () => 
-            _player.playerMovement.LookTarget(_currentBoat.ridePoint, () => 
-            _player.boating = true));
+            _player.playerMovement.MoveTarget(_currentBoat.ridePoint, () =>
+            _player.playerMovement.LookTarget(_currentBoat.ridePoint, () => {
+                _player.boating = true;
+                boatCam.Priority = 10;
+            }));
+            boatCam.transform.SetPositionAndRotation(_currentBoat.transform.position, _currentBoat.transform.rotation);
+            boatCam.Follow = _currentBoat.camPos;
+            
         }
 
     }
