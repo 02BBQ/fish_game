@@ -8,6 +8,7 @@ public class BoatController : MonoBehaviour
     private Rigidbody rigid;
     public Transform camPos;
     //Vector2 currentVelocity;
+    BoatEdge[] boatEdges;
 
     [HideInInspector] public Transform ridePoint;
 
@@ -15,6 +16,8 @@ public class BoatController : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         ridePoint = transform.Find("RidePoint");
+
+        boatEdges = GetComponentsInChildren<BoatEdge>();
     }
     private void Start()
     {
@@ -27,6 +30,18 @@ public class BoatController : MonoBehaviour
     {
         rigid.AddTorque(transform.up * (input.x * Time.deltaTime * _boatData.boatSpeed), ForceMode.Force);
         rigid.AddForce(transform.forward * (input.y * Time.deltaTime * _boatData.boatSpeed), ForceMode.Force);
+    }
+
+    public bool CanExitBoat()
+    {
+        foreach(BoatEdge edges in boatEdges)
+        {
+            if (edges.CheckEdge(0.5f))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
 /*    public void Move(Vector2 input)

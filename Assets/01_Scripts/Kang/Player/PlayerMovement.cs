@@ -67,8 +67,6 @@ public class PlayerMovement : MonoBehaviour
         _player.TriggerStay -= TriggerStay;
         _player.TriggerExit -= TriggerExit;
     }
-    #endregion
-
     private void Update()
     {
         FallingCheck();
@@ -105,6 +103,8 @@ public class PlayerMovement : MonoBehaviour
                 break;
         }
     }
+    #endregion
+
     private void TriggerEnter(Collider other)
     {
         if (other.isTrigger) return;
@@ -175,12 +175,22 @@ public class PlayerMovement : MonoBehaviour
 
         if (grounded)
             direction = Vector3.Lerp(direction, localMovement, 7f * Time.deltaTime);
-        _player.playerAnim.SetDirection(Vector3.forward*direction.magnitude);
+
+
+
+        Vector3 worldMovement = transform.TransformDirection(direction);
+        if(Physics.Raycast(new Ray(transform.position + worldMovement * 2 + Vector3.up, Vector3.down), out RaycastHit hit, 5))
+        {
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Suimono_Water"))
+            {
+                _player.playerAnim.SetFloat("Y", Mathf.Lerp(_player.playerAnim.anim.GetFloat("Y"), 0f, Time.deltaTime * 8f));
+                return;
+            }
+        }
+        _player.playerAnim.SetFloat("Y", direction.magnitude);
         // _player.playerAnim.SetDirection(_visual.forward*direction.magnitude);
 
-
         Vector3 velocity = _rb.linearVelocity;
-
 
         if (input.sqrMagnitude < 0.1f) return;
 
@@ -190,7 +200,6 @@ public class PlayerMovement : MonoBehaviour
         // Quaternion targetRotation = Quaternion.Euler(0f, 90f, 0f);
         // _visual.localRotation = Quaternion.RotateTowards(_visual.localRotation, targetRotation, _rotateSpeed * Time.deltaTime);
 
-        Vector3 worldMovement = transform.TransformDirection(direction);
 
         velocity.x = worldMovement.x * _moveSpeed;
         velocity.z = worldMovement.z * _moveSpeed;

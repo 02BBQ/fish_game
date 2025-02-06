@@ -4500,7 +4500,7 @@ MonoBehaviour:
   _moveSpeed: 5
   _camSpeed: 0.5
   _jumpPower: 9
-  _rotateSpeed: 200
+  _rotateSpeed: 360
   _camTrm: {fileID: 8324371203742673735}
   groundLayer:
     serializedVersion: 2
@@ -4575,6 +4575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b184a8ee531fd64bbe74e471e7eb8e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boatCam: {fileID: 0}
 --- !u!1 &7082741053267771735
 GameObject:
   m_ObjectHideFlags: 0

@@ -28,4 +28,19 @@ public static class Definder
             _player = value;
         }
     }
+
+    private static GameManager _gameManager;
+    public static GameManager GameManager
+    {
+        get
+        {
+            if (!_gameManager)
+                _gameManager = Object.FindAnyObjectByType<GameManager>();
+            return _gameManager;
+        }
+        private set
+        {
+            _gameManager = value;
+        }
+    }
 }

@@ -20,7 +20,11 @@ public class Goods : MonoBehaviour
 
     private void ClickBuy()
     {
-        InventoryManager.Instance.AddItem(item);
+        if (Definder.GameManager.Coin >= cost)
+        {
+            InventoryManager.Instance.AddItem(item);
+            Definder.GameManager.Coin -= cost;
+        }
     }
 
     public void SetItem(Item item)

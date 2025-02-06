@@ -8,6 +8,7 @@ public class PlayerBoat : MonoBehaviour
 
     private Player _player;
     BoatController _currentBoat;
+
     bool _ridable = false;
 
     #region UNITY_EVENTS
@@ -47,6 +48,8 @@ public class PlayerBoat : MonoBehaviour
 
         if (_player.boating)
         {
+            if (!_currentBoat.CanExitBoat()) return;
+
             _player.boating = false;
             _player.playerMovement.StopMoveTarget();
             boatCam.Follow = null;

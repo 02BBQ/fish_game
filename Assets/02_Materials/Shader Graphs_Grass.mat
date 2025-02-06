@@ -40,8 +40,9 @@ Material:
     m_Floats:
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Scale: 3927.6
-    - _Step: 0.18
+    - _Scale: 3019.81
+    - _Step: -0.56
+    - _Step2: 0.66
     m_Colors:
     - _Color: {r: 0.118250735, g: 0.64779866, b: 0.006111207, a: 0}
     - _GrassColor: {r: 0.038271084, g: 0.49056602, b: 0, a: 0}
