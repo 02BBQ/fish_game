@@ -103,6 +103,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Fishing",
+                    "type": "Button",
+                    "id": "c883905d-53ec-4a62-b70d-b0b05e4c9ffa",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -609,6 +618,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "KeyPad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "08074716-74fc-4d08-bd00-15cca9a9a5b4",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Fishing",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
