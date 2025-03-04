@@ -41,7 +41,31 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Map_1:
+        m_Texture: {fileID: 2800000, guid: a0474db4866d17246bc400c026913a49, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Map_2:
+        m_Texture: {fileID: 2800000, guid: 28986cb7d3954634d96d1a20ed4897df, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Map_3:
+        m_Texture: {fileID: 2800000, guid: 29cae67a7d5b8844f870ab50f7cdd045, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Map_4:
+        m_Texture: {fileID: 2800000, guid: fe54cbf61f52f28438f99a93f2091c3c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Map_5:
+        m_Texture: {fileID: 2800000, guid: 27284cc8f3ab9d941bf2f84fb604b10e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SecondNormal:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2D_Array:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -59,22 +83,30 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Depth: 1.82
+    - _Depth: 9.56
     - _Distance: 0
-    - _FoamAmount: 3.29
-    - _FoamCutoff: 10.83
-    - _FoamScale: 6
+    - _FoamAmount: 3.2
+    - _FoamCutoff: 1.33
+    - _FoamScale: 4314
     - _FoamSpeed: 11.59
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ReflScale: 0.07
-    - _ReflSpeed: 0.04
-    - _Strength: 0.01
+    - _ReflScale: 23.4
+    - _ReflSpeed: 0.07
+    - _Strength: 0.05
     m_Colors:
-    - _DeepWater: {r: 0, g: 0.23529395, b: 0.7803922, a: 0.64705884}
+    - _DeepWater: {r: 0, g: 0.022461874, b: 0.6289307, a: 0.32941177}
     - _DeepWaterColor: {r: 0.12598377, g: 0.19665477, b: 0.81761, a: 0.4470588}
+    - _DeepWater_1: {r: 0.21336168, g: 0.2734881, b: 0.72955966, a: 0.64705884}
+    - _DeepWater_2: {r: 0.3546338, g: 0.51088226, b: 0.8742138, a: 0.64705884}
+    - _DeepWater_3: {r: 0.20167309, g: 0.40364662, b: 0.6226415, a: 0.7254902}
+    - _DeepWater_4: {r: 0, g: 0.6646532, b: 0.7169812, a: 0.64705884}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 0.6509804}
-    - _ShallowWater: {r: 0, g: 0.7725491, b: 1, a: 0.8862745}
+    - _ShallowWater: {r: 0.2560618, g: 0.39218187, b: 0.7610062, a: 1}
     - _ShallowWaterColor: {r: 0.40566027, g: 0.8609618, b: 1, a: 0.5333334}
+    - _ShallowWater_1: {r: 0.5028281, g: 0.5274741, b: 0.70440245, a: 1}
+    - _ShallowWater_2: {r: 0.48247686, g: 0.6502525, b: 0.7484276, a: 0.8862745}
+    - _ShallowWater_3: {r: 0.37723976, g: 0.52829844, b: 0.6415094, a: 0.8862745}
+    - _ShallowWater_4: {r: 0, g: 1, b: 0.8812494, a: 0.8862745}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

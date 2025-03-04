@@ -1,15 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Market : MonoBehaviour
+public class Market : MapEntity, IInteractable
 {
     public List<Item> items;
     public Transform shopUIRoot;
     public Transform shopUIParent;
     public GameObject goods;
-    void Start()
+    public MeshRenderer outlineMesh;
+    Material outlineMaterial;
+    Material[] materials;
+
+    protected override void Start()
     {
-        foreach(Item item in items)
+        base.Start();
+
+        outlineMaterial = outlineMesh.materials[1];
+        materials = outlineMesh.materials;
+        materials[1] = null;
+        outlineMesh.materials = materials;
+
+        foreach (Item item in items)
         {
             Goods copyGoods = Instantiate(goods, shopUIParent).GetComponent<Goods>();
             copyGoods.SetItem(item);
@@ -20,14 +31,22 @@ public class Market : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            shopUIRoot.gameObject.SetActive(true);
+            materials[1] = outlineMaterial;
+            outlineMesh.materials = materials;
+            Definder.Player.AddInteract(OnInterect);
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            shopUIRoot.gameObject.SetActive(false);
+            materials[1] = null;
+            outlineMesh.materials = materials;
+            Definder.Player.RemoveInterect(OnInterect);
         }
+    }
+    public void OnInterect()
+    {
+        shopUIRoot.gameObject.SetActive(true);
     }
 }

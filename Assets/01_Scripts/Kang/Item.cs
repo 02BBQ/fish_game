@@ -6,6 +6,9 @@ public class Item : ScriptableObject
     public Sprite image;
     public ItemType type;
 
+    public string nameStr;
+    public int cost;
+
     [TextArea]
     public string description;
 
@@ -17,5 +20,6 @@ public enum ItemType
 {
     Fishing,
     Bait,
-    Fish
+    Fish,
+    Boat
 }

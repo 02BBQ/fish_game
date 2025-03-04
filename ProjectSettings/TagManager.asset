@@ -9,15 +9,15 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
+  - Boat
   - 
   - Suimono_Water
   - Suimono_Depth
   - Suimono_Screen
-  - 
+  - Map
   - 
   - 
   - 

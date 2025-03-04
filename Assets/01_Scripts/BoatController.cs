@@ -2,7 +2,7 @@ using System;
 using Unity.Cinemachine;
 using UnityEngine;
 
-public class BoatController : MonoBehaviour
+public class BoatController : MapEntity
 {
     [SerializeField] BoatDataSO _boatData;
     private Rigidbody rigid;
@@ -19,17 +19,21 @@ public class BoatController : MonoBehaviour
 
         boatEdges = GetComponentsInChildren<BoatEdge>();
     }
-    private void Start()
+    protected override void Start()
     {
-        rigid.mass = _boatData.boatMass;
+        isDynamic = true;
+        base.Start();
+
         rigid.angularDamping = _boatData.boatDamp;
         rigid.linearDamping = _boatData.boatDamp;
+        rigid.mass = 10000;
     }
 
     public void Move(Vector2 input)
     {
+        rigid.mass = _boatData.boatMass;
         rigid.AddTorque(transform.up * (input.x * Time.deltaTime * _boatData.boatSpeed), ForceMode.Force);
-        rigid.AddForce(transform.forward * (input.y * Time.deltaTime * _boatData.boatSpeed), ForceMode.Force);
+        rigid.AddForce(ridePoint.forward * (input.y * Time.deltaTime * _boatData.boatSpeed), ForceMode.Force);
     }
 
     public bool CanExitBoat()
@@ -44,20 +48,26 @@ public class BoatController : MonoBehaviour
         return false;
     }
 
-/*    public void Move(Vector2 input)
+    internal void ExitBoat()
     {
-        currentVelocity += input * _boatData.boatWeight * Time.deltaTime;
-        currentVelocity.x = Mathf.Min(currentVelocity.x, _boatData.boatSpeed);
-        currentVelocity.y = Mathf.Min(currentVelocity.y, _boatData.boatSpeed);
-
+        rigid.mass = 10000;
+        IconEnable();
     }
-    private void LateUpdate()
-    {
-        rigid.angularVelocity = new Vector3(rigid.angularVelocity.x, currentVelocity.x * 10f, rigid.angularVelocity.z);
-        rigid.linearVelocity = transform.TransformDirection(new Vector3(rigid.linearVelocity.x, rigid.linearVelocity.y, currentVelocity.y * 80f));
 
-        currentVelocity -= Vector2.one * _boatData.boatWeight * Time.deltaTime;
-        currentVelocity.x = Mathf.Max(currentVelocity.x, 0f);
-        currentVelocity.y = Mathf.Max(currentVelocity.y, 0f);
-    }*/
+    /*    public void Move(Vector2 input)
+        {
+            currentVelocity += input * _boatData.boatWeight * Time.deltaTime;
+            currentVelocity.x = Mathf.Min(currentVelocity.x, _boatData.boatSpeed);
+            currentVelocity.y = Mathf.Min(currentVelocity.y, _boatData.boatSpeed);
+
+        }
+        private void LateUpdate()
+        {
+            rigid.angularVelocity = new Vector3(rigid.angularVelocity.x, currentVelocity.x * 10f, rigid.angularVelocity.z);
+            rigid.linearVelocity = transform.TransformDirection(new Vector3(rigid.linearVelocity.x, rigid.linearVelocity.y, currentVelocity.y * 80f));
+
+            currentVelocity -= Vector2.one * _boatData.boatWeight * Time.deltaTime;
+            currentVelocity.x = Mathf.Max(currentVelocity.x, 0f);
+            currentVelocity.y = Mathf.Max(currentVelocity.y, 0f);
+        }*/
 }
