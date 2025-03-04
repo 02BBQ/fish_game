@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _rotateSpeed = 200f;
 
     [SerializeField] private Transform _camTrm;
-    private Transform _visual;
+    public Transform visual;
 
     public LayerMask groundLayer;
     public bool grounded = true;
@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _player = GetComponent<Player>();
-        _visual = transform.GetChild(0);
+        visual = transform.GetChild(0);
     }
 
     private void Start()
@@ -78,9 +78,19 @@ public class PlayerMovement : MonoBehaviour
                 Vector3 target = _targetPos.position - transform.position;
                 target.y = 0f;
                 Quaternion forward = Quaternion.LookRotation(target);
-                transform.localRotation = Quaternion.RotateTowards(transform.localRotation, forward, _rotateSpeed * Time.deltaTime * 2f);
+                visual.localRotation = Quaternion.RotateTowards(visual.localRotation, forward, _rotateSpeed * Time.deltaTime * 2f);
 
-                _player.Rigidbody.linearVelocity = target.normalized * _moveSpeed;
+                if (Physics.Raycast(new Ray(transform.position + Vector3.up * 0.1f, target), 0.4f))
+                {
+                    if (grounded && _rb.isKinematic == false)
+                    {
+                        _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, _jumpPower, _rb.linearVelocity.z);
+                    }
+                }
+
+                
+                _rb.linearVelocity = new Vector3(target.normalized.x * _moveSpeed, _rb.linearVelocity.y, target.normalized.z * _moveSpeed);
+
                 if(target.sqrMagnitude < 0.3f)
                 {
                     _chaseState = AutoMoveState.None;
@@ -92,9 +102,8 @@ public class PlayerMovement : MonoBehaviour
 
                 Vector3 forw = _forward.forward;
                 forw.y = 0f;
-                transform.forward = Vector3.MoveTowards(transform.forward, forw, _rotateSpeed * Time.deltaTime * 0.06f);
-                print(Vector3.Dot(transform.forward, forw));
-                if (Vector3.Dot(transform.forward, forw) > 0.99f)
+                visual.forward = Vector3.MoveTowards(visual.forward, forw, _rotateSpeed * Time.deltaTime * 0.02f);
+                if (Vector3.Dot(visual.forward, forw) > 0.99f)
                 {
                     _chaseState = AutoMoveState.None;
                     _player.playerAnim.SetDirection(Vector3.zero);
@@ -173,13 +182,12 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 localMovement = new Vector3(input.x * weight, 0f, input.y * weight);
 
-        if (grounded)
-            direction = Vector3.Lerp(direction, localMovement, 7f * Time.deltaTime);
+        direction = Vector3.Lerp(direction, localMovement, 7f * Time.deltaTime);
 
 
 
         Vector3 worldMovement = transform.TransformDirection(direction);
-        if(Physics.Raycast(new Ray(transform.position + worldMovement * 2 + Vector3.up, Vector3.down), out RaycastHit hit, 5))
+        if(Physics.Raycast(new Ray(transform.position + worldMovement * 2f + Vector3.up * 3f, Vector3.down), out RaycastHit hit, 8f))
         {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Suimono_Water"))
             {
@@ -195,7 +203,7 @@ public class PlayerMovement : MonoBehaviour
         if (input.sqrMagnitude < 0.1f) return;
 
         Quaternion targetRotation = Quaternion.LookRotation(localMovement);
-        _visual.localRotation = Quaternion.RotateTowards(_visual.localRotation, targetRotation, _rotateSpeed * Time.deltaTime);
+        visual.localRotation = Quaternion.RotateTowards(visual.localRotation, targetRotation, _rotateSpeed * Time.deltaTime);
 
         // Quaternion targetRotation = Quaternion.Euler(0f, 90f, 0f);
         // _visual.localRotation = Quaternion.RotateTowards(_visual.localRotation, targetRotation, _rotateSpeed * Time.deltaTime);

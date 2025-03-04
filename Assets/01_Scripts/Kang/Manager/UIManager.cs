@@ -14,7 +14,7 @@ public enum Dir : short
 public struct UI
 {
     public RectTransform changeUI;
-    public CanvasGroup fadeUI;
+    public Image fadeUI;
     public TextMeshProUGUI fadeText;
     public Dir dir;
     public Vector2 inAndOut;
@@ -28,19 +28,44 @@ public class UIManager : SingleTon<UIManager>
     public UI[] mainUI;
     public UI[] playUI;
     public GameObject block;
-    public Image taskbar;
-    public TextMeshProUGUI timeText;
+    public TextMeshProUGUI oceanText;
+    public Image playerIcon;
 
+    public List<string> oceanNames;
+    int currentOcean;
+
+    private void Start()
+    {
+        currentOcean = Definder.Player.GetCurrentOcean();
+    }
     private void Update()
     {
-        if(timeText != null)
+        int frameOcean = Definder.Player.GetCurrentOcean();
+        if (currentOcean != frameOcean)
         {
-            string date = DateTime.Now.ToString("yyyy-MM-dd");
-            string time = DateTime.Now.ToString("HH:mm");
-
-            timeText.text = time + "\n" + date;
-        }
+            if (PostText(frameOcean))
+            {
+                currentOcean = frameOcean;
+            }
+        } 
     }
+
+    private bool PostText(int index)
+    {
+        if (oceanText.gameObject.activeSelf == true) return false;
+
+        oceanText.gameObject.SetActive(true);
+        oceanText.SetText(oceanNames[index-1]);
+        oceanText.DOFade(1f, 0.7f).OnComplete(() =>
+        {
+            oceanText.DOFade(0f, 0.7f).SetDelay(1.5f).OnComplete(() =>
+            {
+                oceanText.gameObject.SetActive(false);
+            });
+        });
+        return true;
+    }
+
     public void GameOverUIIn()
     {
         In(gameOverUI);

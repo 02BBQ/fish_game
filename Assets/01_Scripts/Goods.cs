@@ -8,9 +8,10 @@ public class Goods : MonoBehaviour
 {
     Button button;
     public Item item;
-    public int cost;
     public Image image;
     public TextMeshProUGUI description;
+    public TextMeshProUGUI costText;
+    public TextMeshProUGUI nameText;
 
     private void Awake()
     {
@@ -20,10 +21,16 @@ public class Goods : MonoBehaviour
 
     private void ClickBuy()
     {
-        if (Definder.GameManager.Coin >= cost)
+        if (Definder.GameManager.Coin >= item.cost)
         {
-            InventoryManager.Instance.AddItem(item);
-            Definder.GameManager.Coin -= cost;
+            if(item.type == ItemType.Boat)
+            {
+                Definder.GameManager.UnlockBoat(item.nameStr);
+                Destroy(gameObject);
+            }
+            else
+                InventoryManager.Instance.AddItem(item);
+            Definder.GameManager.Coin -= item.cost;
         }
     }
 
@@ -31,6 +38,8 @@ public class Goods : MonoBehaviour
     {
         this.item = item;
         description.text = item.description;
+        costText.text = item.cost.ToString() + "<sprite=0>";
+        nameText.text = item.name;
         image.sprite = item.image;
     }
 }

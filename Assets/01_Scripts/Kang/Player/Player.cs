@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     [HideInInspector] public PlayerBoat playerBoat;
     [HideInInspector] public bool boating = false;
     public PlayerInput playerInput;
+    public LayerMask mapLayer;
 
     CapsuleCollider _capsuleCollider;
     [SerializeField] List<Collider> bodyCollider;
@@ -31,12 +32,14 @@ public class Player : MonoBehaviour
      /*   Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;*/
     }
+
     private void Update()
     {
         if (boating)
             playerBoat.Move(playerInput.Movement);
         else
             playerMovement.Move(playerInput.Movement);
+        print(GetCurrentOcean());
     }
     public void StartPhysics()
     {
@@ -80,5 +83,22 @@ public class Player : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         TriggerExit?.Invoke(other);
+    }
+
+    public int GetCurrentOcean()
+    {
+        if (Physics.Raycast(playerMovement.visual.position, Vector3.up, out RaycastHit hit, 1000f, mapLayer))
+        {
+            return int.Parse(hit.collider.name[hit.collider.name.Length - 1].ToString());
+        }
+        return -1;
+    }
+    public void AddInteract(Action action)
+    {
+        playerInput.ClickInteract += action;
+    }
+    public void RemoveInterect(Action action)
+    {
+        playerInput.ClickInteract -= action;
     }
 }

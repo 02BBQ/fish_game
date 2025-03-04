@@ -38,9 +38,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Metal: -0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Scale: 3019.81
+    - _Smooth: 0.32
     - _Step: -0.56
     - _Step2: 0.66
     m_Colors:

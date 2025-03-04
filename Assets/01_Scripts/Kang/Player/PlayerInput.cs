@@ -41,6 +41,7 @@ public class PlayerInput : ScriptableObject
         _inputAction.Player.Attack.canceled += (obj) => LCUp?.Invoke();
 
         _inputAction.Player.Interact.performed += (obj) => ClickInteract?.Invoke();
+
         _inputAction.Player.Ctrl.performed += (obj) => DownCtrl?.Invoke();
         _inputAction.Player.Ctrl.canceled += (obj) => UpCtrl?.Invoke();
 
