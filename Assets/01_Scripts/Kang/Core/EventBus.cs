@@ -7,6 +7,7 @@ public enum EventBusType
 {
     Start,
     GameOver,
+    Drowning,
     GoMain
 }
 public static class EventBus

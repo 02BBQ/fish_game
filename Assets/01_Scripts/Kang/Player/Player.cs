@@ -1,15 +1,21 @@
+using DG.Tweening;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Player : MonoBehaviour
 {
     [HideInInspector] private Rigidbody _rigid;
     public Rigidbody Rigidbody { get => _rigid; }
-    [HideInInspector] public PlayerAnimation playerAnim;
-    [HideInInspector] public PlayerMovement playerMovement;
-    [HideInInspector] public PlayerBoat playerBoat;
+    public PlayerAnimation playerAnim;
+    public PlayerMovement playerMovement;
+    public PlayerBoat playerBoat;
+    public Trigger playerTrigger;
+
     [HideInInspector] public bool boating = false;
+
     public PlayerInput playerInput;
     public LayerMask mapLayer;
 
@@ -17,29 +23,23 @@ public class Player : MonoBehaviour
     [SerializeField] List<Collider> bodyCollider;
 
     public Action<Collision> CollisionEnter;
-    public Action<Collider> TriggerEnter;
-    public Action<Collider> TriggerStay;
-    public Action<Collider> TriggerExit;
 
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody>();
 
-        playerAnim = GetComponentInChildren<PlayerAnimation>();
-        playerMovement = GetComponent<PlayerMovement>();
-        playerBoat = GetComponent<PlayerBoat>();
         _capsuleCollider = transform.Find("Collider").GetComponent<CapsuleCollider>();
-     /*   Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;*/
     }
-
     private void Update()
     {
+
         if (boating)
             playerBoat.Move(playerInput.Movement);
         else
             playerMovement.Move(playerInput.Movement);
-        print(GetCurrentOcean());
+
+        if(transform.position.y <= -1.75f)
+            Die();
     }
     public void StartPhysics()
     {
@@ -72,18 +72,6 @@ public class Player : MonoBehaviour
     {
         CollisionEnter?.Invoke(collision);
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        TriggerEnter?.Invoke(other);
-    }
-    private void OnTriggerStay(Collider other)
-    {
-        TriggerStay?.Invoke(other);
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        TriggerExit?.Invoke(other);
-    }
 
     public int GetCurrentOcean()
     {
@@ -100,5 +88,33 @@ public class Player : MonoBehaviour
     public void RemoveInterect(Action action)
     {
         playerInput.ClickInteract -= action;
+    }
+    private void Die()
+    {
+        StartCoroutine(DieCoroutine());
+    }
+
+    private IEnumerator DieCoroutine()
+    {
+        Transform camParent = CameraManager.Instance.camVirtual.transform.parent;
+        if (camParent == null)
+            yield break;
+
+        playerMovement.movable = false;
+        var localPos = CameraManager.Instance.camVirtual.transform.localPosition;
+        var localRot = CameraManager.Instance.camVirtual.transform.localRotation;
+        CameraManager.Instance.camVirtual.transform.parent = null;
+
+        UIManager.Instance.FadeIn(1.5f);
+        yield return new WaitForSeconds(2.5f);
+
+        playerMovement.movable = true;
+        transform.position = Definder.GameManager.spawnPoint.position;
+        CameraManager.Instance.camVirtual.transform.parent = camParent;
+        CameraManager.Instance.camVirtual.transform.SetLocalPositionAndRotation(localPos, localRot);
+        EventBus.Publish(EventBusType.Drowning);
+        boating = false;
+        
+        UIManager.Instance.FadeOut(1f);
     }
 }

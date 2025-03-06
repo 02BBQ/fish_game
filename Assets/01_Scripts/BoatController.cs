@@ -11,6 +11,8 @@ public class BoatController : MapEntity
     BoatEdge[] boatEdges;
 
     [HideInInspector] public Transform ridePoint;
+    Vector3 originPos;
+    Quaternion originRot;
 
     private void Awake()
     {
@@ -18,6 +20,7 @@ public class BoatController : MapEntity
         ridePoint = transform.Find("RidePoint");
 
         boatEdges = GetComponentsInChildren<BoatEdge>();
+        transform.GetPositionAndRotation(out originPos, out originRot);
     }
     protected override void Start()
     {
@@ -27,6 +30,16 @@ public class BoatController : MapEntity
         rigid.angularDamping = _boatData.boatDamp;
         rigid.linearDamping = _boatData.boatDamp;
         rigid.mass = 10000;
+    }
+    private void OnEnable()
+    {
+        EventBus.Subscribe(EventBusType.Drowning, OnDrowning);
+    }
+
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe(EventBusType.Drowning, OnDrowning);
     }
 
     public void Move(Vector2 input)
@@ -54,6 +67,11 @@ public class BoatController : MapEntity
         IconEnable();
     }
 
+    private void OnDrowning()
+    {
+        rigid.linearVelocity = Vector3.zero;
+        transform.SetPositionAndRotation(originPos, originRot);
+    }
     /*    public void Move(Vector2 input)
         {
             currentVelocity += input * _boatData.boatWeight * Time.deltaTime;

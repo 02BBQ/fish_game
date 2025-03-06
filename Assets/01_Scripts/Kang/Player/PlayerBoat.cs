@@ -21,27 +21,34 @@ public class PlayerBoat : MonoBehaviour
     }
     private void OnEnable()
     {
-        _player.TriggerEnter += TriggerEnter;
-        _player.TriggerExit += TriggerExit;
+        _player.playerTrigger.TriggerEnter += TriggerEnter;
+        _player.playerTrigger.TriggerExit += TriggerExit;
+        EventBus.Subscribe(EventBusType.Drowning, Reset);
         _player.AddInteract(TryInterect);
     }
 
+
     private void OnDisable()
     {
-        _player.TriggerEnter -= TriggerEnter;
-        _player.TriggerExit -= TriggerExit;
+        _player.playerTrigger.TriggerEnter += TriggerEnter;
+        _player.playerTrigger.TriggerExit += TriggerExit;
+        EventBus.Unsubscribe(EventBusType.Drowning, Reset);
         _player.RemoveInterect(TryInterect);
     }
 
     private void Update()
     {
-        if (_player.boating)
+        if (_player.boating && _currentBoat)
         {
             Vector3 targetPos = _currentBoat.ridePoint.position;
             targetPos.y = Mathf.Max(transform.position.y, targetPos.y);
             transform.position = targetPos;
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, _currentBoat.ridePoint.eulerAngles.y, transform.eulerAngles.z);
-        }   
+        }
+        else if (_player.boating)
+        {
+            //Debug.Log(_currentBoat);
+        }
     }
     #endregion
 
@@ -50,8 +57,6 @@ public class PlayerBoat : MonoBehaviour
 
         if (_player.boating)
         {
-            //if (!_currentBoat.CanExitBoat()) return;
-
             _player.boating = false;
             _player.playerMovement.StopMoveTarget();
             _currentBoat.ExitBoat();
@@ -64,36 +69,52 @@ public class PlayerBoat : MonoBehaviour
             if (!_ridable) return;
 
             _player.playerMovement.MoveTarget(_currentBoat.ridePoint, () =>
-            _player.playerMovement.LookTarget(_currentBoat.ridePoint, () => {
-                Transform visual = _player.playerMovement.visual;
-                visual.localEulerAngles = new Vector3(visual.localEulerAngles.x, 0f, visual.localEulerAngles.z);
-                _player.boating = true;
-                boatCam.Priority = 10;
-                _currentBoat.IconDisable();
-                UIManager.Instance.playerIcon.color = _ridingColor;
-            }));
-            boatCam.transform.SetPositionAndRotation(_currentBoat.transform.position, _currentBoat.transform.rotation);
-            boatCam.Follow = _currentBoat.camPos;
-            
+            {
+                _player.playerMovement.LookTarget(_currentBoat.ridePoint, () =>
+                {
+                    Transform visual = _player.playerMovement.visual;
+                    visual.localEulerAngles = new Vector3(visual.localEulerAngles.x, 0f, visual.localEulerAngles.z);
+                    _player.boating = true;
+                    boatCam.Priority = 10;
+                    _currentBoat.IconDisable();
+                    UIManager.Instance.playerIcon.color = _ridingColor;
+                });
+                boatCam.transform.SetPositionAndRotation(_currentBoat.transform.position, _currentBoat.transform.rotation);
+                boatCam.Follow = _currentBoat.camPos;
+            });
         }
-
     }
 
     private void TriggerEnter(Collider other)
     {
-        if(other.transform.root.TryGetComponent(out _currentBoat))
+        var boat = other.transform.root.GetComponent<BoatController>();
+        if (boat != null)
         {
+            _currentBoat = boat;
+            Debug.Log(_currentBoat);
             _ridable = true;
         }
     }
     private void TriggerExit(Collider other)
     {
-        if(_currentBoat && other.transform.root == _currentBoat.transform)
+        if (_currentBoat && other.transform.root == _currentBoat.transform)
+        {
             _ridable = false;
+        }
     }
     public void Move(Vector2 input)
     {
         if(_currentBoat)
             _currentBoat.Move(input);
+    }
+    private void Reset()
+    {
+        _ridable = false;
+        _currentBoat.ExitBoat();
+        _player.playerMovement.StopMoveTarget();
+        UIManager.Instance.playerIcon.color = _originColor;
+        boatCam.Follow = null;
+        boatCam.Priority = -1;
+        _currentBoat = null;
     }
 }
