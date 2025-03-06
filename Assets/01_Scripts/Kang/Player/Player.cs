@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody>();
-
+        playerAnim = GetComponentInChildren<PlayerAnimation>();
         _capsuleCollider = transform.Find("Collider").GetComponent<CapsuleCollider>();
     }
     private void Update()
