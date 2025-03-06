@@ -6,6 +6,9 @@ public class PlayerAnimation : MonoBehaviour
     [HideInInspector] public Animator anim;
     public event Action OnCastRod;
     Vector3 _direction = Vector3.zero;
+
+    public  event Action OnReelEnd;
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -31,5 +34,11 @@ public class PlayerAnimation : MonoBehaviour
     public void CastRod()
     {
         OnCastRod?.Invoke();
+        Debug.Log("Casting Rod");
+    }
+
+    public void ReelEnd()
+    {
+        OnReelEnd?.Invoke();
     }
 }

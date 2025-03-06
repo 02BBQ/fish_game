@@ -1,11 +1,25 @@
 using System;
-using System.Diagnostics;
 using Unity.Mathematics;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
+
+
 public class Fishing : MonoBehaviour
 {
+    public enum FishingState
+    {
+        Aiming,
+        Casting,
+        Reeling,
+        Fishing,
+        Idle,    
+    }
+
+    private RaycastHit _hit;
+
+    public FishingState currentState {get; private set;} = FishingState.Idle;
+
     [SerializeField] private GameObject _aim;
     public Player player {get; private set;}
     private PlayerMovement playerMovement => player.playerMovement;
@@ -27,17 +41,18 @@ public class Fishing : MonoBehaviour
 
     void Awake()
     {
+        _rodLine.enabled = false;
         _aim.SetActive(false);
         player = GetComponentInParent<Player>();
         if (player == null){
-            UnityEngine.Debug.LogWarning("Something's Wrong...");
+            Debug.LogWarning("Something's Wrong...");
             Destroy(gameObject);
         }
 
         player.playerInput.FishingDown += handleHoldStart;
         player.playerInput.FishingUp += handleHoldEnd;
 
-        player.playerAnim.OnCastRod += HandleCast;
+        player.playerAnim.OnCastRod += HandleCast;  
         // player.playerInput
     }
 
@@ -48,13 +63,14 @@ public class Fishing : MonoBehaviour
 
     void handleHoldStart()
     {
-        if (isFishing)
+        if (currentState == FishingState.Fishing)
         {
             PullReel();
-            return;
         }
-        if (!isAiming)
+        if (currentState == FishingState.Idle)
+        {
             Aim();
+        }
             
     }
 
@@ -69,20 +85,20 @@ public class Fishing : MonoBehaviour
         // player.transform.position = origin;
         trans.position = origin;
         _distance = 1;
-        isAiming = true;
+        currentState = FishingState.Aiming;
 
         Action AimUpdate = null; AimUpdate = () => {
             _distance = math.min(_distance+Time.deltaTime * 25, _maxDistance);
-            if (!isAiming)
+            if (currentState != FishingState.Aiming)
             {
                 Stepped -= AimUpdate;
                 _destination = trans.position;
                 return;
             }
             trans.position = origin + dir * _distance;
-            if (Physics.Raycast(trans.position, -Vector3.up, out RaycastHit hit, 50, _toAimLayer))
+            if (Physics.Raycast(trans.position + Vector3.up*4, -Vector3.up, out _hit, 50, _toAimLayer))
             {
-                trans.position = new Vector3(trans.position.x, hit.point.y, trans.position.z);
+                trans.position = new Vector3(trans.position.x, -_hit.point.y, trans.position.z);
             }
         };
         Stepped += AimUpdate;
@@ -101,14 +117,15 @@ public class Fishing : MonoBehaviour
     private void PullReel()
     {
         player.playerAnim.SetBool("Fishing", false);
-        isFishing = false;
-        isAiming = false;
-
+        currentState = FishingState.Reeling;
         var v = 0.0f;
 
+        var goal = transform.localPosition;
+        goal.y = _rodLine.GetPosition(1).y;
+
         Action RodUpdate = null; RodUpdate = () => {
-            v = math.min(v+Time.deltaTime, 1);
-            _rodLine.SetPosition(1, Vector3.Lerp(_rodLine.GetPosition(1), transform.localPosition, v));
+            v = math.min(v+Time.deltaTime*0.5f, 1);
+            _rodLine.SetPosition(1, Vector3.Lerp(_rodLine.GetPosition(1), goal, v));
             if (v == 1)
             {
                 Stepped -= RodUpdate;
@@ -121,16 +138,17 @@ public class Fishing : MonoBehaviour
 
     private void EndReel()
     {
-        throw new NotImplementedException();
+        currentState = FishingState.Idle;
     }
 
     private void HandleCast()
     {
-        isFishing = true;
-        isAiming = false;
+        currentState = FishingState.Casting;
         _aim.SetActive(false);
 
         var v = 0.0f;
+
+        _rodLine.enabled = true;
 
         Action RodUpdate = null; RodUpdate = () => {
             v = math.min(v+Time.deltaTime * 8 / ((_destination - transform.position).magnitude/2.3f), 1);
@@ -141,7 +159,12 @@ public class Fishing : MonoBehaviour
             if(v == 1)
             {
                 Stepped -= RodUpdate;
-                
+                currentState = FishingState.Fishing;
+                if (_hit.collider != null && _hit.collider.gameObject.layer != LayerMask.NameToLayer("Suimono_Water"))
+                {
+                    PullReel();
+                    return;
+                }
                 return;
             }
         };

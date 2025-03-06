@@ -55,7 +55,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.4146034
+      - time: 0.4615833
         functionName: CastRod
         data: 
         objectReferenceParameter: {instanceID: 0}
@@ -533,23 +533,23 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: Fishing Cast Charge(Clone)
+    - name: Fishing Cast(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Alpha_Surface
-      parentName: Fishing Cast Charge(Clone)
+      parentName: Fishing Cast(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Alpha_Joints
-      parentName: Fishing Cast Charge(Clone)
+      parentName: Fishing Cast(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: mixamorig:Hips
-      parentName: Fishing Cast Charge(Clone)
+      parentName: Fishing Cast(Clone)
       position: {x: -0.00055764016, y: 0.98197097, z: -0.0034612948}
       rotation: {x: 6.032177e-11, y: 0.0000013737008, z: -0.00004390604, w: 1}
       scale: {x: 0.99999994, y: 1, z: 1}
