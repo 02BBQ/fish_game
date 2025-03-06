@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
 
     public LayerMask groundLayer;
     public bool grounded = true;
+    public bool movable = true;
 
     private Rigidbody _rb;
     private Player _player;
@@ -55,22 +56,23 @@ public class PlayerMovement : MonoBehaviour
     {
         _player.playerInput.OnAim += Aim;
         _player.playerInput.DownJump += Jump;
-        _player.TriggerEnter += TriggerEnter;
-        _player.TriggerStay += TriggerStay;
-        _player.TriggerExit += TriggerExit;
+        _player.playerTrigger.TriggerEnter += TriggerEnter;
+        _player.playerTrigger.TriggerStay += TriggerStay;
+        _player.playerTrigger.TriggerExit += TriggerExit;
     }
     private void OnDisable()
     {
         _player.playerInput.OnAim -= Aim;
         _player.playerInput.DownJump -= Jump;
-        _player.TriggerEnter -= TriggerEnter;
-        _player.TriggerStay -= TriggerStay;
-        _player.TriggerExit -= TriggerExit;
+        _player.playerTrigger.TriggerEnter += TriggerEnter;
+        _player.playerTrigger.TriggerStay += TriggerStay;
+        _player.playerTrigger.TriggerExit += TriggerExit;
     }
     private void Update()
     {
         FallingCheck();
 
+        if (!movable) return;
         switch (_chaseState)
         {
             case AutoMoveState.Move:
@@ -88,7 +90,6 @@ public class PlayerMovement : MonoBehaviour
                     }
                 }
 
-                
                 _rb.linearVelocity = new Vector3(target.normalized.x * _moveSpeed, _rb.linearVelocity.y, target.normalized.z * _moveSpeed);
 
                 if(target.sqrMagnitude < 0.3f)
@@ -175,6 +176,7 @@ public class PlayerMovement : MonoBehaviour
     public void Move(Vector2 input)
     {
         if (_chaseState != AutoMoveState.None || _player.boating) return;
+        if (!movable) return;
 
         int weight = 1;
 
@@ -221,6 +223,7 @@ public class PlayerMovement : MonoBehaviour
     public void Jump()
     {
         if (_chaseState != AutoMoveState.None || _player.boating) return;
+        if (!movable) return;
 
         if (grounded && _rb.isKinematic == false)
         {

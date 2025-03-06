@@ -30,8 +30,11 @@ public class UIManager : SingleTon<UIManager>
     public GameObject block;
     public TextMeshProUGUI oceanText;
     public Image playerIcon;
-
     public List<string> oceanNames;
+
+    [SerializeField] private Image image;
+
+    private Tween currentTween;
     int currentOcean;
 
     private void Start()
@@ -164,5 +167,30 @@ public class UIManager : SingleTon<UIManager>
     {
         yield return new WaitForSecondsRealtime(time);
         block.SetActive(false);
+    }
+
+
+    public void FadeOut(float duration)
+    {
+        if (currentTween != null && currentTween.IsActive())
+        {
+            currentTween.Kill();
+        }
+
+        currentTween = image.DOFade(0f, duration).OnComplete(() =>
+        {
+            image.enabled = false;
+        });
+    }
+
+    public void FadeIn(float duration)
+    {
+        if (currentTween != null && currentTween.IsActive())
+        {
+            currentTween.Kill();
+        }
+
+        image.enabled = true;
+        currentTween = image.DOFade(1f, duration);
     }
 }

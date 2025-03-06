@@ -1,4 +1,5 @@
 using System;
+using System.Net.Sockets;
 using TMPro;
 using UnityEngine;
 
@@ -15,7 +16,8 @@ public class GameManager : MonoBehaviour
     }
 
     [SerializeField] private TextMeshProUGUI coinText;
-    [SerializeField] public GameObject[] boats; 
+    public GameObject[] boats;
+    public Transform spawnPoint;
 
     private void Start()
     {
