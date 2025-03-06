@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     {
         _rigid = GetComponent<Rigidbody>();
 
-        playerAnim = GetComponent<PlayerAnimation>();
+        playerAnim = GetComponentInChildren<PlayerAnimation>();
         playerMovement = GetComponent<PlayerMovement>();
         playerBoat = GetComponent<PlayerBoat>();
         _capsuleCollider = transform.Find("Collider").GetComponent<CapsuleCollider>();

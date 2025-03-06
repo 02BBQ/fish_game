@@ -4,10 +4,11 @@ using UnityEngine;
 public class PlayerAnimation : MonoBehaviour
 {
     [HideInInspector] public Animator anim;
+    public event Action OnCastRod;
     Vector3 _direction = Vector3.zero;
     private void Awake()
     {
-        anim = transform.GetChild(0).GetComponent<Animator>();
+        anim = GetComponent<Animator>();
     }
 
     public void SetDirection(Vector3 vector)
@@ -25,5 +26,10 @@ public class PlayerAnimation : MonoBehaviour
     public Vector3 GetDirection()
     {
         return new Vector3(anim.GetFloat("X"), 0, anim.GetFloat("Y"));
+    }
+
+    public void CastRod()
+    {
+        OnCastRod?.Invoke();
     }
 }
