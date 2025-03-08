@@ -18,8 +18,8 @@ public class Item : ScriptableObject
 
 public enum ItemType
 {
-    Fishing,
-    Bait,
-    Fish,
-    Boat
+    Boat = 0,
+    Fish = 1,
+    Fishing = 2,
+    Bait = 3
 }

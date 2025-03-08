@@ -91,7 +91,6 @@ public class PlayerBoat : MonoBehaviour
         if (boat != null)
         {
             _currentBoat = boat;
-            Debug.Log(_currentBoat);
             _ridable = true;
         }
     }
@@ -110,7 +109,8 @@ public class PlayerBoat : MonoBehaviour
     private void Reset()
     {
         _ridable = false;
-        _currentBoat.ExitBoat();
+        if(_currentBoat)
+            _currentBoat.ExitBoat();
         _player.playerMovement.StopMoveTarget();
         UIManager.Instance.playerIcon.color = _originColor;
         boatCam.Follow = null;
