@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6522fc69616c13c4891c6b3959f595aa, type: 3}
   m_Name: DummyFish
   m_EditorClassIdentifier: 
+  fishSprite: {fileID: 21300000, guid: 51fdaa6702a25a74995c7892aa2a1feb, type: 3}
   baseWeight: 100
   spec: Dummy
-  basePrice: 0
-  id: 
-  fishPrefab: {fileID: 0}
-  MaxWeightMultiplier: 0
-  MinWeightMultiplier: 0
+  basePrice: 150
+  fishPrefab: {fileID: 6663331180626984394, guid: 5b2690616b7631347ae41063b60b2d2f, type: 3}
+  MaxWeightMultiplier: 3
+  MinWeightMultiplier: 1

@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: Default
   m_EditorClassIdentifier: Assembly-CSharp::FishingRegion
-  regionName: 
-  fishWeights: []
+  regionName: None
+  fishWeights:
+  - fish: {fileID: 11400000, guid: fe4257027e635be4a86faf25ad1ecd97, type: 2}
+    weight: 5
+  - fish: {fileID: 11400000, guid: fe4257027e635be4a86faf25ad1ecd97, type: 2}
+    weight: 1

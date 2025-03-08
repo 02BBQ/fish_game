@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
-    [HideInInspector] public Animator anim;
+    public Animator anim;
     public event Action OnCastRod;
     Vector3 _direction = Vector3.zero;
 
