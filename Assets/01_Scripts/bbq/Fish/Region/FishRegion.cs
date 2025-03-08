@@ -4,12 +4,13 @@ using UnityEngine;
     [System.Serializable]
     public class FishWeight
     {
-        public Fish fish;
+        public FishData fish;
         public int weight;
     }
 
     [System.Serializable]
-    public class FishingRegion
+    [CreateAssetMenu(fileName = "Region", menuName = "SO/Fishing/FishingRegion")]
+    public class FishingRegion: ScriptableObject
     {
         public string regionName;
         public List<FishWeight> fishWeights;

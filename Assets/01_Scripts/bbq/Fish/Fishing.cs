@@ -3,8 +3,6 @@ using Unity.Mathematics;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-
-
 public class Fishing : MonoBehaviour
 {
     public enum FishingState
@@ -17,6 +15,8 @@ public class Fishing : MonoBehaviour
     }
 
     private RaycastHit _hit;
+
+    private Action LineUpdate;
 
     public FishingState currentState {get; private set;} = FishingState.Idle;
 
@@ -33,7 +33,7 @@ public class Fishing : MonoBehaviour
     private float _distance = 1;
 
     private event Action Stepped;
-    private Vector3 _destination;
+    public Vector3 destination;
 
     [SerializeField] private LayerMask _toAimLayer;
     [SerializeField] private LineRenderer _rodLine;
@@ -48,6 +48,8 @@ public class Fishing : MonoBehaviour
             Debug.LogWarning("Something's Wrong...");
             Destroy(gameObject);
         }
+
+        _rodLine.useWorldSpace = true;
 
         player.playerInput.FishingDown += handleHoldStart;
         player.playerInput.FishingUp += handleHoldEnd;
@@ -66,16 +68,19 @@ public class Fishing : MonoBehaviour
         if (currentState == FishingState.Fishing)
         {
             PullReel();
+            return;
         }
-        if (currentState == FishingState.Idle)
+        else if (currentState == FishingState.Idle)
         {
             Aim();
+            return;
         }
             
     }
 
     private void Aim()
     {
+        playerMovement.StopMoveTarget();
         var Rig = transform.parent.GetComponentInChildren<Animator>().gameObject;
 
         _aim.SetActive(true);
@@ -92,7 +97,7 @@ public class Fishing : MonoBehaviour
             if (currentState != FishingState.Aiming)
             {
                 Stepped -= AimUpdate;
-                _destination = trans.position;
+                destination = trans.position;
                 return;
             }
             trans.position = origin + dir * _distance;
@@ -106,7 +111,11 @@ public class Fishing : MonoBehaviour
 
     void handleHoldEnd()
     {
-        CastRod();
+        if (currentState == FishingState.Aiming)
+        {
+            CastRod();
+        }
+        
     }
 
     private void CastRod()
@@ -120,11 +129,12 @@ public class Fishing : MonoBehaviour
         currentState = FishingState.Reeling;
         var v = 0.0f;
 
-        var goal = transform.localPosition;
+        var goal = transform.position;
         goal.y = _rodLine.GetPosition(1).y;
 
         Action RodUpdate = null; RodUpdate = () => {
             v = math.min(v+Time.deltaTime*0.5f, 1);
+            _rodLine.SetPosition(0, transform.position);
             _rodLine.SetPosition(1, Vector3.Lerp(_rodLine.GetPosition(1), goal, v));
             if (v == 1)
             {
@@ -138,6 +148,7 @@ public class Fishing : MonoBehaviour
 
     private void EndReel()
     {
+        _rodLine.enabled = false;
         currentState = FishingState.Idle;
     }
 
@@ -151,10 +162,11 @@ public class Fishing : MonoBehaviour
         _rodLine.enabled = true;
 
         Action RodUpdate = null; RodUpdate = () => {
-            v = math.min(v+Time.deltaTime * 8 / ((_destination - transform.position).magnitude/2.3f), 1);
-            var p1 = (_destination - transform.position) / 2;
-            p1.y += (_destination - transform.position).magnitude/2.3f; // Increase the y value of p1
-            var point = quadBezier(transform.localPosition, p1, _destination - transform.position, v);
+            v = math.min(v+Time.deltaTime * 8 / ((destination - transform.position).magnitude/2.3f), 1);
+            var p1 = (destination + transform.position) / 2;
+            p1.y += (destination - transform.position).magnitude/2.3f; // Increase the y value of p1
+            var point = quadBezier(transform.position, p1, destination, v);
+            _rodLine.SetPosition(0, transform.position);
             _rodLine.SetPosition(1, point);
             if(v == 1)
             {
