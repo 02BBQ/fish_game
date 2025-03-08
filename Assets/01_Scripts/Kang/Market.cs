@@ -5,7 +5,7 @@ public class Market : MapEntity, IInteractable
 {
     public List<Item> items;
     public Transform shopUIRoot;
-    public Transform shopUIParent;
+    public Transform[] shopUIParents;
     public GameObject goods;
     public MeshRenderer outlineMesh;
     Material outlineMaterial;
@@ -22,9 +22,14 @@ public class Market : MapEntity, IInteractable
 
         foreach (Item item in items)
         {
-            Goods copyGoods = Instantiate(goods, shopUIParent).GetComponent<Goods>();
-            copyGoods.SetItem(item);
+            AddGoodsInMarket(item);
         }
+    }
+
+    private void AddGoodsInMarket(Item item)
+    {
+        Goods copyGoods = Instantiate(goods, shopUIParents[(int)item.type]).GetComponent<Goods>();
+        copyGoods.SetItem(item);
     }
 
     private void OnTriggerEnter(Collider other)
