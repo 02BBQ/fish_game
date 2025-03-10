@@ -12,8 +12,8 @@ public class FishingRegionManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    public FishingRegion GetRegion(string regionName)
-    {
-        return fishingRegions.Find(region => region.regionName == regionName);
-    }
+    // public FishingRegion GetRegion(string regionName)
+    // {
+    //     return fishingRegions.Find(region => region.regionName == regionName);
+    // }
 }

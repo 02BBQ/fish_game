@@ -9,12 +9,41 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 743a1f9125e1bcb4293c2fcd1b35e655, type: 3}
   m_Name: Default
   m_EditorClassIdentifier: Assembly-CSharp::FishingRegion
-  regionName: None
   fishWeights:
-  - fish: {fileID: 11400000, guid: fe4257027e635be4a86faf25ad1ecd97, type: 2}
-    weight: 5
-  - fish: {fileID: 11400000, guid: fe4257027e635be4a86faf25ad1ecd97, type: 2}
-    weight: 1
+  - regionName: 1
+    fishWeights:
+    - fish: {fileID: 11400000, guid: bf4f385c14eee7748874c5b5dee73c02, type: 2}
+      weight: 5
+    - fish: {fileID: 11400000, guid: d817b12ea1f34f842897ab5aabc6fe5a, type: 2}
+      weight: 1
+  - regionName: 2
+    fishWeights:
+    - fish: {fileID: 11400000, guid: fe4257027e635be4a86faf25ad1ecd97, type: 2}
+      weight: 1
+    - fish: {fileID: 11400000, guid: d817b12ea1f34f842897ab5aabc6fe5a, type: 2}
+      weight: 1
+  - regionName: 3
+    fishWeights:
+    - fish: {fileID: 11400000, guid: bf4f385c14eee7748874c5b5dee73c02, type: 2}
+      weight: 1
+    - fish: {fileID: 11400000, guid: d817b12ea1f34f842897ab5aabc6fe5a, type: 2}
+      weight: 15
+  - regionName: 4
+    fishWeights:
+    - fish: {fileID: 11400000, guid: bf4f385c14eee7748874c5b5dee73c02, type: 2}
+      weight: 1
+    - fish: {fileID: 11400000, guid: d817b12ea1f34f842897ab5aabc6fe5a, type: 2}
+      weight: 1
+    - fish: {fileID: 11400000, guid: fe4257027e635be4a86faf25ad1ecd97, type: 2}
+      weight: 1
+  - regionName: 5
+    fishWeights:
+    - fish: {fileID: 11400000, guid: bf4f385c14eee7748874c5b5dee73c02, type: 2}
+      weight: 1
+    - fish: {fileID: 11400000, guid: d817b12ea1f34f842897ab5aabc6fe5a, type: 2}
+      weight: 5
+    - fish: {fileID: 11400000, guid: fe4257027e635be4a86faf25ad1ecd97, type: 2}
+      weight: 5

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
 public class InventoryManager : SingleTon<InventoryManager>
@@ -6,6 +8,7 @@ public class InventoryManager : SingleTon<InventoryManager>
     public int maxStackedItems = 16;
     public InventorySlot[] inventorySlots;
     public GameObject inventoryItemPrefab;
+    [field: SerializeField] public List<Item> Items {get; private set;} = new List<Item>();
 
     int selectedSlot = -1;
 
@@ -35,6 +38,7 @@ public class InventoryManager : SingleTon<InventoryManager>
 
     public bool AddItem(Item item)
     {
+        if (Items.Count >= inventorySlots.Length) return false;
         for (int i = 0; i < inventorySlots.Length; i++)
         {
             InventorySlot slot = inventorySlots[i];
@@ -45,6 +49,7 @@ public class InventoryManager : SingleTon<InventoryManager>
                 itemInSlot.count < maxStackedItems &&
                 itemInSlot.item.stackable)
             {
+
                 itemInSlot.count++;
                 itemInSlot.RefreshCount();
                 return true;
@@ -59,6 +64,8 @@ public class InventoryManager : SingleTon<InventoryManager>
     }
     void SpawnNewItem(Item item, InventorySlot slot)
     {
+        item = Instantiate(item);
+        Items.Add(item);
         GameObject newItemGo = Instantiate(inventoryItemPrefab, slot.transform);
         InventoryItem inventoryItem = newItemGo.GetComponent<InventoryItem>();
         inventoryItem.InitializeItem(item);

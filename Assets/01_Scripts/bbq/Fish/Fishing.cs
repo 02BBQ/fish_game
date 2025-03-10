@@ -38,6 +38,18 @@ public class Fishing : MonoBehaviour
     [SerializeField] private LayerMask _toAimLayer;
     [SerializeField] private LineRenderer _rodLine;
 
+    [SerializeField] private FishingRegion _fishingRegion;
+
+    private int _currentRegionIndex => player.GetCurrentOcean();
+
+    private FishData getFish => _fishingRegion.fishWeights[_currentRegionIndex].GetFish();
+    private FishData _fishingFish;
+
+    [SerializeField] private FishSO _fishSOBase;
+
+    private FishSO fish;
+
+    public bool Suc;
 
     void Awake()
     {
@@ -125,6 +137,8 @@ public class Fishing : MonoBehaviour
 
     private void PullReel()
     {
+        fish = Instantiate(_fishSOBase);
+        fish.Initialize(_fishingFish);   
         player.playerAnim.SetBool("Fishing", false);
         currentState = FishingState.Reeling;
         var v = 0.0f;
@@ -149,6 +163,14 @@ public class Fishing : MonoBehaviour
     private void EndReel()
     {
         _rodLine.enabled = false;
+        if (Suc)
+        {
+            InventoryManager.Instance.AddItem(fish);
+        }
+        else
+        {
+            Destroy(fish);
+        }
         currentState = FishingState.Idle;
     }
 
@@ -172,6 +194,26 @@ public class Fishing : MonoBehaviour
             {
                 Stepped -= RodUpdate;
                 currentState = FishingState.Fishing;
+
+                _fishingFish = getFish;
+
+                float timeout = 5f;
+                Action FishingUpdate = null; FishingUpdate = () => {
+                    timeout -= Time.deltaTime;
+                    if (timeout <= 0 && FishingState.Fishing == currentState)
+                    {
+                        Stepped -= FishingUpdate;
+                        return;
+                    }    
+                    if (FishingState.Fishing != currentState)
+                    {
+                        Stepped -= FishingUpdate;
+                        return;
+                    }
+                };
+
+                Stepped += FishingUpdate;
+
                 if (_hit.collider != null && _hit.collider.gameObject.layer != LayerMask.NameToLayer("Suimono_Water"))
                 {
                     PullReel();
