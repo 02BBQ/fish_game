@@ -1,7 +1,9 @@
 using System;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Debug = UnityEngine.Debug;
+using DG.Tweening;
 
 public class Fishing : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class Fishing : MonoBehaviour
         Casting,
         Reeling,
         Fishing,
+        Fighting,
         Idle,    
     }
 
@@ -50,6 +53,8 @@ public class Fishing : MonoBehaviour
     private FishSO fish;
 
     public bool Suc;
+
+
 
     void Awake()
     {
@@ -132,6 +137,8 @@ public class Fishing : MonoBehaviour
 
     private void CastRod()
     {
+        // player.playerMovement.enabled = false;
+        playerMovement.movable = false;
         player.playerAnim.SetBool("Fishing", true);
     }
 
@@ -171,6 +178,8 @@ public class Fishing : MonoBehaviour
         {
             Destroy(fish);
         }
+        // player.playerMovement.enabled = true;
+        playerMovement.movable = true;
         currentState = FishingState.Idle;
     }
 
@@ -203,6 +212,7 @@ public class Fishing : MonoBehaviour
                     if (timeout <= 0 && FishingState.Fishing == currentState)
                     {
                         Stepped -= FishingUpdate;
+                        FishingEvent();
                         return;
                     }    
                     if (FishingState.Fishing != currentState)
@@ -230,4 +240,107 @@ public class Fishing : MonoBehaviour
     {
         return (Mathf.Pow((1 - t), 2) * p0) + (2 * (1 - t) * t * p1) + (Mathf.Pow(t,2) * p2);
     }
+
+    public CanvasGroup canvasGroup;
+    public void ToggleCanvasGroup(bool obj)
+    {
+        canvasGroup.interactable = obj;
+        canvasGroup.blocksRaycasts = obj;
+        canvasGroup.alpha = obj ? 1 : 0;
+    }
+    public RectTransform target;
+    
+    public RectTransform bar;
+
+    float barWidth => (bar.transform as RectTransform).rect.width;
+    float targetWidth => target.rect.width;
+    float halfBarWidth => barWidth * 0.5f;
+    float halfTargetWidth => targetWidth * 0.5f;
+
+    private void FishingEvent()
+    {
+        if (currentState == FishingState.Fishing)
+        {
+            currentState = FishingState.Fighting;
+            ToggleCanvasGroup(true);
+
+            target.position = Vector3.zero;
+
+            float xMove = 0;
+
+            float time = Time.time;
+            float initTime = time;
+
+            float timeout = 10f;
+            float speed = 0.5f;
+            float health = 2f;
+            float goal = 2f;
+            float current = 0f;
+
+            Action FishingUpdate = null; FishingUpdate = () => {
+                time += Time.deltaTime* speed;
+                float noise = Mathf.PerlinNoise(time, initTime) -.5f; noise *= 2500;
+                xMove = Mathf.Lerp(xMove, noise, Time.deltaTime * 2);
+                xMove = Mathf.Clamp(xMove, -halfBarWidth + halfTargetWidth, halfBarWidth - halfTargetWidth);
+                target.anchoredPosition = new Vector2(xMove * halfBarWidth, 0);
+
+                Vector2 pos = target.anchoredPosition;
+                pos.x = xMove;
+                target.anchoredPosition = pos;
+
+                timeout -= Time.deltaTime;
+
+                float targetCenterX = target.position.x;
+                float halfWidth = target.rect.width * 0.5f;
+                float xMin = targetCenterX - halfWidth;
+                float xMax = targetCenterX + halfWidth;
+
+                // 현재 마우스의 x 좌표
+                float mouseX = Input.mousePosition.x;
+
+                if (time - initTime > 0.5f)
+                {
+                    if (mouseX >= xMin && mouseX <= xMax)
+                    {
+                        current += Time.deltaTime;
+                    }
+                    else
+                    {
+                        health -= Time.deltaTime;
+                    }
+                }
+
+                if (current >= goal)
+                {
+                    Suc = true;
+                    Stepped -= FishingUpdate;
+                    ToggleCanvasGroup(false);
+                    PullReel();
+                    return;
+                }
+
+                // 실패
+                if (timeout <= 0 || health <= 0)
+                {
+                    Suc = false;
+                    Stepped -= FishingUpdate;
+                    ToggleCanvasGroup(false);
+                    PullReel();
+                    return;
+                }
+            };
+
+            Stepped += FishingUpdate;
+        }
+        else
+        {
+            ToggleCanvasGroup(false);
+        }
+    }
+
+    // private ienumrator FishEvent()
+    // {
+    //     yield return new WaitForSeconds(5);
+    //     ToggleCanvasGroup(false);
+    // }
 }
