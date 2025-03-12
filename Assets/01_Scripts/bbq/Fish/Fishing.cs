@@ -45,7 +45,7 @@ public class Fishing : MonoBehaviour
 
     private int _currentRegionIndex => player.GetCurrentOcean();
 
-    private FishData getFish => _fishingRegion.fishWeights[_currentRegionIndex].GetFish();
+    private FishData getFish => _fishingRegion.fishWeights[_currentRegionIndex-1].GetFish();
     private FishData _fishingFish;
 
     [SerializeField] private FishSO _fishSOBase;
@@ -53,6 +53,8 @@ public class Fishing : MonoBehaviour
     private FishSO fish;
 
     public bool Suc;
+
+    public bool isMosueDown = false;
 
 
 
@@ -82,6 +84,7 @@ public class Fishing : MonoBehaviour
 
     void handleHoldStart()
     {
+        isMosueDown = true;
         if (currentState == FishingState.Fishing)
         {
             PullReel();
@@ -110,7 +113,7 @@ public class Fishing : MonoBehaviour
         currentState = FishingState.Aiming;
 
         Action AimUpdate = null; AimUpdate = () => {
-            _distance = math.min(_distance+Time.deltaTime * 25, _maxDistance);
+            _distance = isMosueDown ? math.min(_distance+Time.deltaTime * 25, _maxDistance) : _distance;
             if (currentState != FishingState.Aiming)
             {
                 Stepped -= AimUpdate;
@@ -128,6 +131,7 @@ public class Fishing : MonoBehaviour
 
     void handleHoldEnd()
     {
+        isMosueDown = false;
         if (currentState == FishingState.Aiming)
         {
             CastRod();
@@ -238,8 +242,9 @@ public class Fishing : MonoBehaviour
                 }
                 else
                 {
+                    // print(_currentRegionIndex);
+                    // print(_fishingRegion.fishWeights[_currentRegionIndex]);
                     _fishingFish = getFish;
-                    // _fishingFish = getFish;
                 }
                 return;
             }
