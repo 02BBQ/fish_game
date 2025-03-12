@@ -14,6 +14,7 @@ public class FishSO : Item
     {
         this.id = Guid.NewGuid().ToString();
         this.species = fishSO.spec;
+        this.name = fishSO.name;
         this.nameStr = fishSO.name;
         this.weight = fishSO.baseWeight * Random.Range(fishSO.MinWeightMultiplier, fishSO.MaxWeightMultiplier);
         this.price = (int)CalculatePrice(fishSO);
