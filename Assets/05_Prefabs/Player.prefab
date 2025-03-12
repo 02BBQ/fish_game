@@ -4609,6 +4609,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 55
   grounded: 0
+  movable: 1
   direction: {x: 0, y: 0, z: 0}
 --- !u!114 &7663197675994694898
 MonoBehaviour:
