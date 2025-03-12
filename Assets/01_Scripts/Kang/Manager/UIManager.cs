@@ -26,10 +26,12 @@ public class UIManager : SingleTon<UIManager>
     public UI[] settingUI;
     public UI[] mainUI;
     public UI[] playUI;
+    public UI[] pauseUI;
     public GameObject block;
     public TextMeshProUGUI oceanText;
     public Image playerIcon;
     public List<string> oceanNames;
+    public UIInput uiInput;
 
     [SerializeField] private Image image;
 
@@ -39,6 +41,14 @@ public class UIManager : SingleTon<UIManager>
     private void Start()
     {
         currentOcean = Definder.Player.GetCurrentOcean();
+    }
+    private void OnEnable()
+    {
+        uiInput.ClickESC += Definder.GameManager.PauseGame;
+    }
+    private void OnDisable()
+    {
+        uiInput.ClickESC -= Definder.GameManager.PauseGame;
     }
     private void Update()
     {
@@ -92,6 +102,14 @@ public class UIManager : SingleTon<UIManager>
     public void PlayUIOut()
     {
         Out(playUI);
+    }
+    public void PauseUIIn()
+    {
+        In(pauseUI);
+    }
+    public void PauseUIOut()
+    {
+        Out(pauseUI);
     }
     private void In(UI[] lst)
     {

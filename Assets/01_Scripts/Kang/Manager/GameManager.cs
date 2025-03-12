@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,9 +20,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI coinText;
     public GameObject[] boats;
     public Transform spawnPoint;
+    public bool startGame = false;
 
     private void Start()
     {
+        Time.timeScale = 1f;
         Coin = 100000;
         SetCoinText();
     }
@@ -29,6 +32,7 @@ public class GameManager : MonoBehaviour
     {
         EventBus.Publish(EventBusType.Start);
         Definder.Player.playerMovement.movable = true;
+        startGame = true;
         UIManager.Instance.PlayUIIn();
         UIManager.Instance.MainUIOut();
     }
@@ -51,5 +55,21 @@ public class GameManager : MonoBehaviour
         {
             boats[result].SetActive(true);
         }
+    }
+    public void PauseGame()
+    {
+        if (!startGame) return; 
+
+        Time.timeScale = 0f;
+        UIManager.Instance.PauseUIIn();
+    }
+    public void UnpauseGame()
+    {
+        Time.timeScale = 1f;
+        UIManager.Instance.PauseUIOut();
+    }
+    public void ReloadScene()
+    {
+        SceneManager.LoadSceneAsync(gameObject.scene.name);
     }
 }

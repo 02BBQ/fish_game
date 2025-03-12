@@ -3796,6 +3796,7 @@ MonoBehaviour:
   _fishingRegion: {fileID: 11400000, guid: 0e7ae8db90688e440be86709d1733548, type: 2}
   _fishSOBase: {fileID: 11400000, guid: 6955fbb6100623b4aa5e6008c49e59e6, type: 2}
   Suc: 0
+  isMosueDown: 0
   canvasGroup: {fileID: 0}
   target: {fileID: 0}
   bar: {fileID: 0}
@@ -4820,7 +4821,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeed: 5
   _camSpeed: 0.5
-  _jumpPower: 9
+  _jumpPower: 13
   _rotateSpeed: 360
   _camTrm: {fileID: 8324371203742673735}
   visual: {fileID: 0}
