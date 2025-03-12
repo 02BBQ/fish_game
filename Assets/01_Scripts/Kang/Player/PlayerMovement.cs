@@ -191,7 +191,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 worldMovement = transform.TransformDirection(direction);
         if(Physics.Raycast(new Ray(transform.position + worldMovement * 2f + Vector3.up * 3f, Vector3.down), out RaycastHit hit, 8f))
         {
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Suimono_Water"))
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Water"))
             {
                 _player.playerAnim.SetFloat("Y", Mathf.Lerp(_player.playerAnim.anim.GetFloat("Y"), 0f, Time.deltaTime * 8f));
                 return;
