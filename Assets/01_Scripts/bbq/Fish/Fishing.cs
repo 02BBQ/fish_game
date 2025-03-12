@@ -144,8 +144,11 @@ public class Fishing : MonoBehaviour
 
     private void PullReel()
     {
-        fish = Instantiate(_fishSOBase);
-        fish.Initialize(_fishingFish);   
+        if (Suc && _fishingFish != null)
+        {
+            fish = Instantiate(_fishSOBase);
+            fish.Initialize(_fishingFish);      
+        }
         player.playerAnim.SetBool("Fishing", false);
         currentState = FishingState.Reeling;
         var v = 0.0f;
@@ -192,6 +195,8 @@ public class Fishing : MonoBehaviour
 
         _rodLine.enabled = true;
 
+        Suc = false;
+
         Action RodUpdate = null; RodUpdate = () => {
             v = math.min(v+Time.deltaTime * 8 / ((destination - transform.position).magnitude/2.3f), 1);
             var p1 = (destination + transform.position) / 2;
@@ -204,11 +209,13 @@ public class Fishing : MonoBehaviour
                 Stepped -= RodUpdate;
                 currentState = FishingState.Fishing;
 
-                _fishingFish = getFish;
+                // print(player.GetCurrentOcean());
+                
 
-                float timeout = 5f;
+                float timeout = UnityEngine.Random.Range(5f, 21f);
                 Action FishingUpdate = null; FishingUpdate = () => {
                     timeout -= Time.deltaTime;
+                    _rodLine.SetPosition(0, transform.position);
                     if (timeout <= 0 && FishingState.Fishing == currentState)
                     {
                         Stepped -= FishingUpdate;
@@ -228,6 +235,11 @@ public class Fishing : MonoBehaviour
                 {
                     PullReel();
                     return;
+                }
+                else
+                {
+                    _fishingFish = getFish;
+                    // _fishingFish = getFish;
                 }
                 return;
             }
@@ -259,7 +271,7 @@ public class Fishing : MonoBehaviour
 
     private void FishingEvent()
     {
-        if (currentState == FishingState.Fishing)
+        if (currentState == FishingState.Fishing && _fishingFish != null)
         {
             currentState = FishingState.Fighting;
             ToggleCanvasGroup(true);
@@ -299,6 +311,8 @@ public class Fishing : MonoBehaviour
 
                 // 현재 마우스의 x 좌표
                 float mouseX = Input.mousePosition.x;
+
+                _rodLine.SetPosition(0, transform.position);
 
                 if (time - initTime > 0.5f)
                 {

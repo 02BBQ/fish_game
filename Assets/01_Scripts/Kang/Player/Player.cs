@@ -77,7 +77,7 @@ public class Player : MonoBehaviour
     {
         if (Physics.Raycast(playerMovement.visual.position, Vector3.up, out RaycastHit hit, 1000f, mapLayer))
         {
-            return hit.collider.name[hit.collider.name.Length - 1];
+            return hit.collider.name[hit.collider.name.Length - 1]-48;
         }
         return -1;
     }
