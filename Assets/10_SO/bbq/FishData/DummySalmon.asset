@@ -19,3 +19,5 @@ MonoBehaviour:
   fishPrefab: {fileID: 919132149155446097, guid: 3763a610870991740befe42354bfeb4a, type: 3}
   MaxWeightMultiplier: 1
   MinWeightMultiplier: 1.25
+  DancingStepMax: 0.5
+  DancingStepMin: 1

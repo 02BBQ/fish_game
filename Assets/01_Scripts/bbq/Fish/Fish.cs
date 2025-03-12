@@ -14,6 +14,14 @@ public class FishData : ScriptableObject
     [Header("Info")]
     public float MaxWeightMultiplier;
     public float MinWeightMultiplier;
+
+    public float DancingStepMax;
+    public float DancingStepMin;
+
+    public float GetDancingStep()
+    {
+        return Random.Range(DancingStepMin, DancingStepMax);
+    }
 }
 
 // public class Fish

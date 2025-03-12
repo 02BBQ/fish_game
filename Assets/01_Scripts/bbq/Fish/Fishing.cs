@@ -154,7 +154,7 @@ public class Fishing : MonoBehaviour
         goal.y = _rodLine.GetPosition(1).y;
 
         Action RodUpdate = null; RodUpdate = () => {
-            v = math.min(v+Time.deltaTime*0.5f, 1);
+            v = math.min(v+Time.deltaTime*0.75f, 1);
             _rodLine.SetPosition(0, transform.position);
             _rodLine.SetPosition(1, Vector3.Lerp(_rodLine.GetPosition(1), goal, v));
             if (v == 1)
@@ -277,9 +277,11 @@ public class Fishing : MonoBehaviour
             float goal = 2f;
             float current = 0f;
 
+            float power = _fishingFish.GetDancingStep();
+
             Action FishingUpdate = null; FishingUpdate = () => {
-                time += Time.deltaTime* speed;
-                float noise = Mathf.PerlinNoise(time, initTime) -.5f; noise *= 2500;
+                time += Time.deltaTime* power;
+                float noise = Mathf.PerlinNoise(time, initTime) -.5f; noise *= 4000 * power;
                 xMove = Mathf.Lerp(xMove, noise, Time.deltaTime * 2);
                 xMove = Mathf.Clamp(xMove, -halfBarWidth + halfTargetWidth, halfBarWidth - halfTargetWidth);
                 target.anchoredPosition = new Vector2(xMove * halfBarWidth, 0);
