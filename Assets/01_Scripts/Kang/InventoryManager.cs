@@ -14,13 +14,19 @@ public class InventoryManager : SingleTon<InventoryManager>
 
     private void Start()
     {
+        EventBus.Subscribe(EventBusType.Start, Init);
+    }
+    private void Init()
+    {
         ChangeSelectedSlot(0);
         Definder.Player.playerInput.downKeyPad += OnKeypadDown;
     }
+
     private void OnDestroy()
     {
         if(Definder.Player)
             Definder.Player.playerInput.downKeyPad -= OnKeypadDown;
+        EventBus.Unsubscribe(EventBusType.Start, Init);
     }
     private void OnKeypadDown(int key)
     {

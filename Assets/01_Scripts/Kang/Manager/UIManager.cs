@@ -14,8 +14,7 @@ public enum Dir : short
 public struct UI
 {
     public RectTransform changeUI;
-    public Image fadeUI;
-    public TextMeshProUGUI fadeText;
+    public CanvasGroup fadeUI;
     public Dir dir;
     public Vector2 inAndOut;
     public float time;
@@ -24,7 +23,7 @@ public struct UI
 }
 public class UIManager : SingleTon<UIManager>
 {
-    public UI[] gameOverUI;
+    public UI[] settingUI;
     public UI[] mainUI;
     public UI[] playUI;
     public GameObject block;
@@ -69,13 +68,13 @@ public class UIManager : SingleTon<UIManager>
         return true;
     }
 
-    public void GameOverUIIn()
+    public void SettingUIIn()
     {
-        In(gameOverUI);
+        In(settingUI);
     }
-    public void GameOverUIOut()
+    public void SettingUIOut()
     {
-        Out(gameOverUI);
+        Out(settingUI);
     }
     public void MainUIIn()
     {
@@ -100,22 +99,30 @@ public class UIManager : SingleTon<UIManager>
         float max = 0;
         for (int i = 0; i < lst.Length; i++)
         {
-            if (max < lst[i].time) max = lst[i].time;
-            if (lst[i].changeUI != null)
+            UI currentLst = lst[i];
+
+            if (max < currentLst.time) max = currentLst.time;
+
+            if (currentLst.changeUI != null)
             {
-                if (lst[i].setActive) lst[i].changeUI.gameObject.SetActive(true);
-                if (lst[i].dir == Dir.y) lst[i].changeUI.DOAnchorPosY(lst[i].inAndOut.x, lst[i].time).SetUpdate(true).SetEase(Ease.Linear);
-                else lst[i].changeUI.DOAnchorPosX(lst[i].inAndOut.x, lst[i].time).SetUpdate(true).SetEase(Ease.Linear);
+                if (currentLst.setActive)
+                {
+                    currentLst.changeUI.gameObject.SetActive(true);
+                }
+                if (currentLst.dir == Dir.y) 
+                    currentLst.changeUI.DOAnchorPosY(currentLst.inAndOut.x, currentLst.time).SetUpdate(true).SetEase(Ease.Linear);
+                else 
+                    currentLst.changeUI.DOAnchorPosX(currentLst.inAndOut.x, currentLst.time).SetUpdate(true).SetEase(Ease.Linear);
             }
-            else if (lst[i].fadeUI != null)
+            else if (currentLst.fadeUI != null)
             {
-                if (lst[i].setActive) lst[i].fadeUI.gameObject.SetActive(true);
-                lst[i].fadeUI.DOFade(lst[i].fadeFloat / 255f, lst[i].time).SetUpdate(true).SetEase(Ease.Linear);
-            }
-            else
-            {
-                if (lst[i].setActive) lst[i].changeUI.gameObject.SetActive(true);
-                lst[i].fadeText.DOFade(lst[i].fadeFloat / 255f, lst[i].time).SetUpdate(true).SetEase(Ease.Linear);
+                if (currentLst.setActive)
+                {
+                    currentLst.fadeUI.gameObject.SetActive(true);
+                    currentLst.fadeUI.interactable = true;
+                    currentLst.fadeUI.blocksRaycasts = true;
+                }
+                currentLst.fadeUI.DOFade(currentLst.fadeFloat / 255f, currentLst.time).SetUpdate(true).SetEase(Ease.Linear);
             }
         }
         StartCoroutine(BlockTime(max));
@@ -127,37 +134,44 @@ public class UIManager : SingleTon<UIManager>
         float max = 0;
         for (int i = 0; i < lst.Length; i++)
         {
-            if (max < lst[i].time) max = lst[i].time;
-            int index = i;
-            if (lst[i].changeUI != null)
+            UI currentLst = lst[i];
+
+            if (max < currentLst.time) max = currentLst.time;
+            
+            UI lambdaUI = currentLst;
+            if (currentLst.changeUI != null)
             {
-                if (lst[i].dir == Dir.y)
+                if (currentLst.dir == Dir.y)
                 {
-                    lst[i].changeUI.DOAnchorPosY(lst[i].inAndOut.y, lst[i].time).SetEase(Ease.Linear).SetUpdate(true).OnComplete(() =>
+                    currentLst.changeUI.DOAnchorPosY(currentLst.inAndOut.y, currentLst.time).SetEase(Ease.Linear).SetUpdate(true).OnComplete(() =>
                     {
-                        if (lst[index].setActive) lst[index].changeUI.gameObject.SetActive(false);
+                        if (lambdaUI.setActive)
+                        {
+                            lambdaUI.changeUI.gameObject.SetActive(false);
+                        }
                     });
                 }
                 else
                 {
-                    lst[i].changeUI.DOAnchorPosX(lst[i].inAndOut.y, lst[i].time).SetEase(Ease.Linear).SetUpdate(true).OnComplete(() =>
+                    currentLst.changeUI.DOAnchorPosX(currentLst.inAndOut.y, currentLst.time).SetEase(Ease.Linear).SetUpdate(true).OnComplete(() =>
                     {
-                        if (lst[index].setActive) lst[index].changeUI.gameObject.SetActive(false);
+                        if (lambdaUI.setActive)
+                        {
+                            lambdaUI.changeUI.gameObject.SetActive(false);
+                        }
                     });
                 }
             }
-            else if (lst[i].fadeUI != null)
+            else if (currentLst.fadeUI != null)
             {
-                lst[i].fadeUI.DOFade(0, lst[i].time).SetEase(Ease.Linear).SetUpdate(true).OnComplete(() =>
+                currentLst.fadeUI.DOFade(0, currentLst.time).SetEase(Ease.Linear).SetUpdate(true).OnComplete(() =>
                 {
-                    if (lst[index].setActive) lst[index].fadeUI.gameObject.SetActive(false);
-                });
-            }
-            else
-            {
-                lst[i].fadeText.DOFade(0, lst[i].time).SetEase(Ease.Linear).SetUpdate(true).OnComplete(() =>
-                {
-                    if (lst[index].setActive) lst[index].changeUI.gameObject.SetActive(false);
+                    if (lambdaUI.setActive)
+                    {
+                        lambdaUI.fadeUI.gameObject.SetActive(false);
+                        lambdaUI.fadeUI.interactable = false;
+                        lambdaUI.fadeUI.blocksRaycasts = false;
+                    }
                 });
             }
         }
