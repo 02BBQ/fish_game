@@ -1,6 +1,7 @@
 using System;
 using System.Net.Sockets;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -24,7 +25,21 @@ public class GameManager : MonoBehaviour
         Coin = 100000;
         SetCoinText();
     }
-
+    public void OnClickStart()
+    {
+        EventBus.Publish(EventBusType.Start);
+        Definder.Player.playerMovement.movable = true;
+        UIManager.Instance.PlayUIIn();
+        UIManager.Instance.MainUIOut();
+    }
+    public void OnClickQuit()
+    {
+#if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();  // 에디터에서 실행 중이면 Play 모드 종료
+#else
+        Application.Quit();  // 빌드된 게임에서는 정상 종료
+#endif
+    }
     private void SetCoinText()
     {
         coinText.text = _coin.ToString("0");
