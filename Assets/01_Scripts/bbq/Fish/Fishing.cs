@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Debug = UnityEngine.Debug;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 public class Fishing : MonoBehaviour
 {
@@ -75,6 +76,12 @@ public class Fishing : MonoBehaviour
 
         player.playerAnim.OnCastRod += HandleCast;  
         // player.playerInput
+    }
+
+    private void OnDestroy() {
+        player.playerInput.FishingDown -= handleHoldStart;
+        player.playerInput.FishingUp -= handleHoldEnd;
+        player.playerAnim.OnCastRod -= HandleCast;  
     }
 
     void Update()
@@ -289,16 +296,17 @@ public class Fishing : MonoBehaviour
             float initTime = time;
 
             float timeout = 10f;
-            float speed = 0.5f;
             float health = 2f;
             float goal = 2f;
             float current = 0f;
 
             float power = _fishingFish.GetDancingStep();
 
+            target.sizeDelta = new Vector2(target.sizeDelta.x / power, target.sizeDelta.y);
+
             Action FishingUpdate = null; FishingUpdate = () => {
-                time += Time.deltaTime* power;
-                float noise = Mathf.PerlinNoise(time, initTime) -.5f; noise *= 4000 * power;
+                time += Time.deltaTime* power*.75f;
+                float noise = Mathf.PerlinNoise(time, initTime) -.5f; noise *= 3200 * power;
                 xMove = Mathf.Lerp(xMove, noise, Time.deltaTime * 2);
                 xMove = Mathf.Clamp(xMove, -halfBarWidth + halfTargetWidth, halfBarWidth - halfTargetWidth);
                 target.anchoredPosition = new Vector2(xMove * halfBarWidth, 0);

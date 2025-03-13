@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,6 +14,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [HideInInspector] public Item item;
     [HideInInspector] public int count = 1;
     [HideInInspector] public Transform parentAfterDrag;
+    [HideInInspector] public Transform parentBeforeDrag;
 
     private void Awake()
     {
@@ -35,6 +37,15 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnBeginDrag(PointerEventData eventData)
     {
         image.raycastTarget = false;
+        if (parentAfterDrag != null)
+        {
+            var slot = parentAfterDrag.GetComponent<InventorySlot>();
+            if (slot)
+            {
+                slot.ResetItem();
+            }   
+        }
+        parentBeforeDrag = transform.parent;
         parentAfterDrag = transform.parent;
         transform.SetParent(transform.root);
     }
@@ -48,7 +59,13 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         image.raycastTarget = true;
         transform.SetParent(parentAfterDrag);
-        rectTrm.anchoredPosition = Vector2.zero;
-        
+        rectTrm.anchoredPosition = Vector2.zero;        
+    }
+
+    public void SetSlotItem()
+    {
+        var slot = transform.parent.GetComponent<InventorySlot>();
+        if (slot == null) return;
+        slot.slotItem = this;
     }
 }

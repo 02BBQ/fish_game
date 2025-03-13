@@ -73,6 +73,7 @@ public class InventoryManager : SingleTon<InventoryManager>
         Items.Add(item);
         GameObject newItemGo = Instantiate(inventoryItemPrefab, slot.transform);
         InventoryItem inventoryItem = newItemGo.GetComponent<InventoryItem>();
+        slot.slotItem = inventoryItem;
         inventoryItem.InitializeItem(item);
     }
 
