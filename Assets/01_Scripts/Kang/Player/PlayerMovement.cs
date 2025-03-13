@@ -29,8 +29,8 @@ public class PlayerMovement : MonoBehaviour
 
     float _pitch = 0f;
     float _yaw = 0f;
+    bool jumping = false;
 
-    int _triggerCnt = 0;
     public Vector3 direction = Vector3.zero;
 
     //Target
@@ -38,7 +38,6 @@ public class PlayerMovement : MonoBehaviour
     Action _chaseEndAction;
     Transform _targetPos;
     Transform _forward;
-
     #region UNITY_EVENTS
     private void Awake()
     {
@@ -115,39 +114,6 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
-    private void TriggerEnter(Collider other)
-    {
-        if (other.isTrigger) return;
-
-        if (_triggerCnt == 0)
-        {
-            grounded = true;
-            _player.playerAnim.SetBool("Ground", true);
-        }
-        _triggerCnt++;
-    }
-    private void TriggerStay(Collider other)
-    {
-        if (other.isTrigger) return;
-
-        if (!grounded)
-        {
-            grounded = true;
-            _player.playerAnim.SetBool("Ground", true);
-        }
-    }
-    private void TriggerExit(Collider other)
-    {
-        if (other.isTrigger) return;
-
-        _triggerCnt--;
-        if (_triggerCnt == 0)
-        {
-            grounded = false;
-            _player.playerAnim.SetBool("Ground", false);
-        }
-    }
-
     void Aim(Vector2 pos)
     {
         if (_chaseState != AutoMoveState.None || _player.boating) return;
@@ -163,13 +129,48 @@ public class PlayerMovement : MonoBehaviour
             _camTrm.localEulerAngles = new Vector3(-_pitch, 0f, 0f);
         }
     }
+    private void TriggerEnter(Collider other)
+    {
+        if (other.isTrigger) return;
 
+    }
+    private void TriggerStay(Collider other)
+    {
+        if (other.isTrigger) return;
+
+    }
+    private void TriggerExit(Collider other)
+    {
+        if (other.isTrigger) return;
+    }
     private void FallingCheck()
     {
-        if (_triggerCnt == 0 && grounded)
+        Vector3 startPos = transform.position + Vector3.up * 0.5f;
+        if (jumping)
         {
-            grounded = false;
-            _player.playerAnim.SetBool("Ground", false);
+            if (Physics.SphereCast(startPos, 0.5f, Vector3.down, out _, 0.385f, groundLayer))
+            {
+                grounded = true;
+                _player.playerAnim.SetBool("Ground", true);
+            }
+            else
+            {
+                grounded = false;
+                _player.playerAnim.SetBool("Ground", false);
+            }
+        }
+        else
+        {
+            if (Physics.SphereCast(startPos, 0.5f, Vector3.down, out _, 0.8f, groundLayer))
+            {
+                grounded = true;
+                _player.playerAnim.SetBool("Ground", true);
+            }
+            else
+            {
+                grounded = false;
+                _player.playerAnim.SetBool("Ground", false);
+            }
         }
     }
 
@@ -228,8 +229,11 @@ public class PlayerMovement : MonoBehaviour
         if (grounded && _rb.isKinematic == false)
         {
             _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, _jumpPower, _rb.linearVelocity.z);
+            jumping = true;
+            Invoke("JumpFalse", 0.3f);
         }
     }
+    void JumpFalse() => jumping = false;
     public void StopMoveTarget()
     {
         _chaseState = AutoMoveState.None;

@@ -21,7 +21,7 @@ public class JsonManager : SingleTon<JsonManager>
     //프로퍼티로 외부에서 변경하면 바로 저장
     public float SFX { get { return _settingData._SFX; } set { _settingData._SFX = value; SaveData(_settingData, _settingFile); } }
     public float BGM { get { return _settingData._BGM; } set { _settingData._BGM = value; SaveData(_settingData, _settingFile); } }
-    public float Sensitivity { get { return _settingData._sensitivity; } set { _settingData._sensitivity = value; SaveData(_settingData, _settingFile); } }
+    //public float Sensitivity { get { return _settingData._sensitivity; } set { _settingData._sensitivity = value; SaveData(_settingData, _settingFile); } }
 
     [HideInInspector] public bool dataIsNull = false;
 
@@ -56,7 +56,6 @@ public class JsonManager : SingleTon<JsonManager>
 
         File.WriteAllText(fileName, encodedJson);
     }
-
 
     public T LoadData<T>(string fileName) where T : class
     {

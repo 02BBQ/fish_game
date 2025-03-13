@@ -62,11 +62,13 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 0f;
         UIManager.Instance.PauseUIIn();
+        SoundManager.Instance.Pause();
     }
     public void UnpauseGame()
     {
         Time.timeScale = 1f;
         UIManager.Instance.PauseUIOut();
+        SoundManager.Instance.Unpause();
     }
     public void ReloadScene()
     {
