@@ -12,14 +12,34 @@ public class InventorySlot : MonoBehaviour, IDropHandler
     private void Awake()
     {
         image = GetComponent<Image>();
+        // Deselect();
+    }
+
+    private void Start()
+    {
         Deselect();
     }
+
     public void Select()
     {
+        var plr = Definder.Player;
+        if (plr.playerSlot.currentEquip != null)
+        {
+            plr.playerSlot.currentEquip.Unequip();
+        }
+        if (slotItem is IEquipable equipable)
+        {
+            equipable.Equip(plr);
+        }
         image.color = selectedColor;
     }
     public void Deselect()
     {
+        var plr = Definder.Player;
+        if (plr.playerSlot.currentEquip != null)
+        {
+            plr.playerSlot.currentEquip.Unequip();
+        }
         image.color = normalColor;
     }
 

@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     public PlayerMovement playerMovement;
     public PlayerBoat playerBoat;
     public Trigger playerTrigger;
+    public PlayerSlot playerSlot;
 
     [HideInInspector] public bool boating = false;
 
@@ -29,6 +30,10 @@ public class Player : MonoBehaviour
         _rigid = GetComponent<Rigidbody>();
         // playerAnim = GetComponentInChildren<PlayerAnimation>();
         _capsuleCollider = transform.Find("Collider").GetComponent<CapsuleCollider>();
+    }
+    private void Start()
+    {
+        
     }
     private void Update()
     {

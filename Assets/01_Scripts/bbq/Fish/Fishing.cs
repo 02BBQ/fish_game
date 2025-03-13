@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 
 public class Fishing : MonoBehaviour
 {
+    // public FishRodStat FishRodStat;
     public enum FishingState
     {
         Aiming,
@@ -265,16 +266,13 @@ public class Fishing : MonoBehaviour
         return (Mathf.Pow((1 - t), 2) * p0) + (2 * (1 - t) * t * p1) + (Mathf.Pow(t,2) * p2);
     }
 
-    public CanvasGroup canvasGroup;
-    public void ToggleCanvasGroup(bool obj)
-    {
-        canvasGroup.interactable = obj;
-        canvasGroup.blocksRaycasts = obj;
-        canvasGroup.alpha = obj ? 1 : 0;
-    }
-    public RectTransform target;
+    public FishCanvas fishCanvas;
+
+    private CanvasGroup canvasGroup;
+
+    private RectTransform target;
     
-    public RectTransform bar;
+    private RectTransform bar;
 
     float barWidth => (bar.transform as RectTransform).rect.width;
     float targetWidth => target.rect.width;
@@ -286,7 +284,7 @@ public class Fishing : MonoBehaviour
         if (currentState == FishingState.Fishing && _fishingFish != null)
         {
             currentState = FishingState.Fighting;
-            ToggleCanvasGroup(true);
+            fishCanvas.ToggleCanvasGroup(true);
 
             target.position = Vector3.zero;
 
@@ -343,7 +341,7 @@ public class Fishing : MonoBehaviour
                 {
                     Suc = true;
                     Stepped -= FishingUpdate;
-                    ToggleCanvasGroup(false);
+                    fishCanvas.ToggleCanvasGroup(false);
                     PullReel();
                     return;
                 }
@@ -353,7 +351,7 @@ public class Fishing : MonoBehaviour
                 {
                     Suc = false;
                     Stepped -= FishingUpdate;
-                    ToggleCanvasGroup(false);
+                    fishCanvas.ToggleCanvasGroup(false);
                     PullReel();
                     return;
                 }
@@ -363,7 +361,7 @@ public class Fishing : MonoBehaviour
         }
         else
         {
-            ToggleCanvasGroup(false);
+            fishCanvas.ToggleCanvasGroup(false);
         }
     }
 
