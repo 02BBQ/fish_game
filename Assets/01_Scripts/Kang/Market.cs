@@ -3,10 +3,13 @@ using UnityEngine;
 
 public class Market : MapEntity, IInteractable
 {
-    public List<Item> items;
-    public Transform shopUIRoot;
-    public Transform[] shopUIParents;
-    public GameObject goods;
+    public List<Item> buyItems;
+    public List<Item> sellItems;
+    public Transform marketUI;
+    public Transform[] buyUIParents;
+    public Transform[] sellUIParents;
+    public GameObject buyGoods;
+    public GameObject sellGoods;
     public MeshRenderer outlineMesh;
     Material outlineMaterial;
     Material[] materials;
@@ -20,15 +23,24 @@ public class Market : MapEntity, IInteractable
         materials[1] = null;
         outlineMesh.materials = materials;
 
-        foreach (Item item in items)
+        foreach (Item item in buyItems)
         {
-            AddGoodsInMarket(item);
+            AddGoodsInBuy(item);
+        }
+        foreach (Item item in sellItems)
+        {
+            AddGoodsInSell(item);
         }
     }
 
-    private void AddGoodsInMarket(Item item)
+    private void AddGoodsInBuy(Item item)
     {
-        Goods copyGoods = Instantiate(goods, shopUIParents[(int)item.type]).GetComponent<Goods>();
+        BuyGoods copyGoods = Instantiate(buyGoods, buyUIParents[(int)item.type]).GetComponent<BuyGoods>();
+        copyGoods.SetItem(item);
+    }
+    private void AddGoodsInSell(Item item)
+    {
+        SellGoods copyGoods = Instantiate(sellGoods, sellUIParents[(int)item.type]).GetComponent<SellGoods>();
         copyGoods.SetItem(item);
     }
 
@@ -52,6 +64,6 @@ public class Market : MapEntity, IInteractable
     }
     public void OnInterect()
     {
-        shopUIRoot.gameObject.SetActive(true);
+        marketUI.gameObject.SetActive(true);
     }
 }

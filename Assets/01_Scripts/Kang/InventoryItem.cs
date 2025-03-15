@@ -10,7 +10,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     RectTransform rectTrm;
     public TextMeshProUGUI countText;
 
-    [HideInInspector] public Item item;
+     public Item item;
     [HideInInspector] public int count = 1;
     [HideInInspector] public Transform parentAfterDrag;
 

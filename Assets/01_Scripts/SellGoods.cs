@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class Goods : MonoBehaviour
+public class SellGoods : MonoBehaviour
 {
     Button button;
     public Item item;
@@ -16,21 +16,15 @@ public class Goods : MonoBehaviour
     private void Awake()
     {
         button = GetComponent<Button>();
-        button.onClick.AddListener(ClickBuy);    
+        button.onClick.AddListener(ClickSell);    
     }
 
-    private void ClickBuy()
+    private void ClickSell()
     {
-        if (Definder.GameManager.Coin >= item.cost)
+        if (item.type != ItemType.Boat)
         {
-            if(item.type == ItemType.Boat)
-            {
-                Definder.GameManager.UnlockBoat(item.nameStr);
-                Destroy(gameObject);
-            }
-            else
-                InventoryManager.Instance.AddItem(item);
-            Definder.GameManager.Coin -= item.cost;
+            if(InventoryManager.Instance.RemoveItem(item))
+                Definder.GameManager.Coin += item.cost;
         }
     }
 

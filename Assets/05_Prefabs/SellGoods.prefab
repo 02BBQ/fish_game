@@ -284,9 +284,9 @@ GameObject:
   - component: {fileID: 2925376686283645942}
   - component: {fileID: 5632632416901472930}
   - component: {fileID: 4340685361074569804}
-  - component: {fileID: 3632954770644155810}
+  - component: {fileID: 3983494729177071921}
   m_Layer: 5
-  m_Name: Goods
+  m_Name: SellGoods
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -398,7 +398,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &3632954770644155810
+--- !u!114 &3983494729177071921
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -407,11 +407,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 838427159513665605}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f637766f77def2438ecafb24edee591, type: 3}
+  m_Script: {fileID: 11500000, guid: 9616111bf8051b34daa3f42aefb52fc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 082a9852c6669b540b724b762e987317, type: 2}
-  cost: 122
   image: {fileID: 3745835882537118806}
   description: {fileID: 1040239507775032825}
   costText: {fileID: 8800609762641673866}

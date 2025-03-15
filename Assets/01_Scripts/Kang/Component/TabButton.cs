@@ -9,7 +9,7 @@ public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandl
     [HideInInspector] public Image background;
 
 
-    private void Start()
+    private void Awake()
     {
         background = GetComponent<Image>();
     }
