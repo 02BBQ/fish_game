@@ -21,13 +21,13 @@ public class InventorySlot : MonoBehaviour, IDropHandler
     }
 
     public void Select()
-    {
+    {   
         var plr = Definder.Player;
         if (plr.playerSlot.currentEquip != null)
         {
             plr.playerSlot.currentEquip.Unequip();
         }
-        if (slotItem is IEquipable equipable)
+        if (slotItem != null &&slotItem.item is IEquipable equipable)
         {
             equipable.Equip(plr);
         }

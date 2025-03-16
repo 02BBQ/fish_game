@@ -64,7 +64,7 @@ public class Fishing : MonoBehaviour
     {
         _rodLine.enabled = false;
         _aim.SetActive(false);
-        player = GetComponentInParent<Player>();
+        player = Definder.Player;
         if (player == null){
             Debug.LogWarning("Something's Wrong...");
             Destroy(gameObject);
@@ -151,6 +151,7 @@ public class Fishing : MonoBehaviour
     {
         // player.playerMovement.enabled = false;
         playerMovement.movable = false;
+        player.playerSlot.CanChange = false;
         player.playerAnim.SetBool("Fishing", true);
     }
 
@@ -196,6 +197,7 @@ public class Fishing : MonoBehaviour
         // player.playerMovement.enabled = true;
         playerMovement.movable = true;
         currentState = FishingState.Idle;
+        player.playerSlot.CanChange = true;
     }
 
     private void HandleCast()

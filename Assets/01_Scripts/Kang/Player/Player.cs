@@ -31,9 +31,10 @@ public class Player : MonoBehaviour
         // playerAnim = GetComponentInChildren<PlayerAnimation>();
         _capsuleCollider = transform.Find("Collider").GetComponent<CapsuleCollider>();
     }
+    public Item debugItem;
     private void Start()
     {
-        
+        InventoryManager.Instance.AddItem(debugItem);
     }
     private void Update()
     {

@@ -17,7 +17,7 @@ public class InventoryManager : SingleTon<InventoryManager>
     }
     private void Init()
     {
-        ChangeSelectedSlot(0);
+        // ChangeSelectedSlot(0);
         Definder.Player.playerInput.downKeyPad += OnKeypadDown;
     }
 
@@ -34,6 +34,10 @@ public class InventoryManager : SingleTon<InventoryManager>
 
     void ChangeSelectedSlot(int newValue)
     {
+        if (!Definder.Player.playerSlot.CanChange)
+        {
+            return;
+        }
         if (selectedSlot >= 0)
             inventorySlots[selectedSlot].Deselect();
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem.Interactions;
 
 [CreateAssetMenu(fileName = "FishingRod", menuName = "Items/FishingRod")]
 public class FishingRod : Item, IEquipable
@@ -22,8 +23,8 @@ public class FishingRod : Item, IEquipable
 
     public void Unequip()
     {
-        Destroy(fisher);
-        Destroy(fishCanvas);  
+        Destroy(fisher.gameObject);
+        Destroy(fishCanvas.gameObject);  
     }
 }
 
