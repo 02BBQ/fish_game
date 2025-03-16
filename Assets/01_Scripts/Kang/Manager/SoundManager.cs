@@ -8,10 +8,6 @@ using UnityEngine;
 public struct Clips
 {
     public AudioClip button;
-    public AudioClip endLearn;
-    public AudioClip jump;
-    public AudioClip reload;
-    public AudioClip gun;
 }
 
 [Serializable]
@@ -24,11 +20,9 @@ public struct Clips3D
 public class SoundManager : SingleTon<SoundManager>
 {
     [Header("Sound")]
-    public AudioClip inGameBGM;
-    public AudioClip mainBGM;
-    public AudioClip learnBGM;
     public AudioSource bgmSource;
     public AudioSource sfxSource;
+    public AudioSource buttonSource;
 
     public Clips3D clips3D;
     public Clips clips;
@@ -40,29 +34,7 @@ public class SoundManager : SingleTon<SoundManager>
     }
     public void PlayButton(float volumn)
     {
-        PlayAudio(clips.button, volumn);
-    }
-    public void PlayBGM(AudioClip clip)
-    {
-        bgmSource.clip = clip;
-        bgmSource.Play();
-    }
-    public void ChangeSmooth(AudioClip clip)
-    {
-        bgmSource.DOFade(0f, 0.1f).OnComplete(() =>
-        {
-            bgmSource.Stop();
-            bgmSource.volume = 0.1f;
-            bgmSource.clip = clip;
-            bgmSource.Play();
-        });
-    }
-    public void StopSmooth()
-    {
-        bgmSource.DOFade(0f, 0.1f).OnComplete(() =>
-        {
-            bgmSource.Stop();
-        });
+        buttonSource.PlayOneShot(clips.button, volumn);
     }
     public void Pause()
     {

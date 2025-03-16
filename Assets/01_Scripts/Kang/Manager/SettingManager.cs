@@ -22,7 +22,7 @@ public class SettingManager : SingleTon<SettingManager>
     {
         _BGMSlider.value = JsonManager.Instance.BGM;
         _SFXSlider.value = JsonManager.Instance.SFX;
-        _sensSlider.value = JsonManager.Instance.Sensitivity;
+        //_sensSlider.value = JsonManager.Instance.Sensitivity;
         _audioMixer.SetFloat("BGM", Mathf.Log10(_BGMSlider.value) * 20f);
         _audioMixer.SetFloat("SFX", Mathf.Log10(_SFXSlider.value) * 20f);
         //_rotCam.sens = _sensSlider.value;
