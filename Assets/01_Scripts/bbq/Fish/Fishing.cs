@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 using Debug = UnityEngine.Debug;
 using DG.Tweening;
 using Unity.VisualScripting;
+using System.Numerics;
+using Vector3 = UnityEngine.Vector3;
+using Vector2 = UnityEngine.Vector2;
 
 public class Fishing : MonoBehaviour
 {
@@ -211,20 +214,25 @@ public class Fishing : MonoBehaviour
 
         Suc = false;
 
+        var yDiff = transform.position.y - destination .y;
+
+        
+
+        var p0 = transform.position - transform.forward;
+        var p3 = destination;
+
         Action RodUpdate = null; RodUpdate = () => {
-            v = math.min(v+Time.deltaTime * 8 / ((destination - transform.position).magnitude/2.3f), 1);
-            var p1 = (destination + transform.position) / 2;
-            p1.y += (destination - transform.position).magnitude/2.3f; // Increase the y value of p1
-            var point = quadBezier(transform.position, p1, destination, v);
+            v = math.min(v+Time.deltaTime * 8 / ((destination - p0).magnitude/2.3f), 1);
+            var p1 = p0 + Vector3.up * Vector3.Distance(p0, p3)/1.75f;
+            Vector3 p2 = (p1+destination)/2; 
+            p2.y = p1.y;
+            var point = QuadBeizer(p0, p1, p2, destination, v);
             _rodLine.SetPosition(0, transform.position);
             _rodLine.SetPosition(1, point);
             if(v == 1)
             {
                 Stepped -= RodUpdate;
                 currentState = FishingState.Fishing;
-
-                // print(player.GetCurrentOcean());
-                
 
                 float timeout = UnityEngine.Random.Range(5f, 21f);
                 Action FishingUpdate = null; FishingUpdate = () => {
@@ -263,9 +271,16 @@ public class Fishing : MonoBehaviour
     }
 
 
-    private Vector3 quadBezier(Vector3 p0, Vector3 p1, Vector3 p2, float t)
+    private Vector3 Bezier(Vector3 p0, Vector3 p1, Vector3 p2, float t)
     {
         return (Mathf.Pow((1 - t), 2) * p0) + (2 * (1 - t) * t * p1) + (Mathf.Pow(t,2) * p2);
+    }
+
+    private Vector3 QuadBeizer(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
+    {
+        var q0 = Bezier(p0, p1, p2, t);
+        var q1 = Bezier(p1, p2, p3, t);
+        return Vector3.Lerp(q0, q1, t);
     }
 
     public FishCanvas fishCanvas;

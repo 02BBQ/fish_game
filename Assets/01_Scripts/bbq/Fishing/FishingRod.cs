@@ -17,8 +17,10 @@ public class FishingRod : Item, IEquipable
         owner = player;
         owner.playerSlot.currentEquip = this;
         fisher = Instantiate(fisherBase);   
-        fisher.transform.SetParent(owner.transform);
+        fisher.transform.SetParent(owner.transform,false);
+        fisher.transform.localPosition = Vector3.zero + Vector3.up * 1f;
         fishCanvas = Instantiate(fishCanvasBase);
+        fisher.fishCanvas = fishCanvas;
     }
 
     public void Unequip()
