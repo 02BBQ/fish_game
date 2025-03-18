@@ -14,6 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boatMass: 10.09
   boatSpeed: 9000
-  boatWeight: 12.86
   boatTurn: 46.03
   boatDamp: 0.5
