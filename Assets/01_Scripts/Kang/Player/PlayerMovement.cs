@@ -148,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 startPos = transform.position + Vector3.up * 0.5f;
         if (jumping)
         {
-            if (Physics.SphereCast(startPos, 0.5f, Vector3.down, out _, 0.385f, groundLayer))
+            if (Physics.SphereCast(startPos, 0.25f, Vector3.down, out _, 0.385f, groundLayer))
             {
                 grounded = true;
                 _player.playerAnim.SetBool("Ground", true);
@@ -161,7 +161,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            if (Physics.SphereCast(startPos, 0.5f, Vector3.down, out _, 0.8f, groundLayer))
+            if (Physics.SphereCast(startPos, 0.25f, Vector3.down, out _, 0.8f, groundLayer))
             {
                 grounded = true;
                 _player.playerAnim.SetBool("Ground", true);
