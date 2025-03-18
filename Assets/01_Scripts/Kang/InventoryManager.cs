@@ -36,7 +36,7 @@ public class InventoryManager : SingleTon<InventoryManager>
     void ChangeSelectedSlot(int newValue)
     {
 
-        if (!Definder.Player.playerSlot.CanChange && newValue > 3)
+        if (!Definder.Player.playerSlot.CanChange || newValue > 3)
         {
             return;
         }
