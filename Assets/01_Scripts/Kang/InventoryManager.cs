@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 public class InventoryManager : SingleTon<InventoryManager>
@@ -47,25 +48,47 @@ public class InventoryManager : SingleTon<InventoryManager>
 
     public bool AddItem(Item item)
     {
-        if (Items.Count >= inventorySlots.Length) return false;
         for (int i = 0; i < inventorySlots.Length; i++)
         {
             InventorySlot slot = inventorySlots[i];
             InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
 
             if (itemInSlot != null && 
-                itemInSlot.item == item && 
+                itemInSlot.item.nameStr == item.nameStr && 
                 itemInSlot.count < maxStackedItems &&
-                itemInSlot.item.stackable)
+                itemInSlot.item.stackable)//°ãÄ¥¼ö ÀÖ´Â ¾ÆÀÌÅÛÀÌ¸é
             {
 
                 itemInSlot.count++;
                 itemInSlot.RefreshCount();
                 return true;
             }
-            else if (itemInSlot == null)
+            else if (itemInSlot == null)//ºóÄ­ ÀÖÀ¸¸é
             {
                 SpawnNewItem(item, slot);
+                return true;
+            }
+        }
+        return false;
+    }
+    public bool RemoveItem(Item item)
+    {
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            InventorySlot slot = inventorySlots[i];
+            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+            if (itemInSlot != null &&
+                itemInSlot.item.nameStr == item.nameStr)
+            {
+                if (item.stackable == true && itemInSlot.count > 1)
+                {
+                    itemInSlot.count--;
+                    itemInSlot.RefreshCount();
+                }
+                else
+                {
+                    DeleteItem(itemInSlot);
+                }
                 return true;
             }
         }
@@ -79,6 +102,11 @@ public class InventoryManager : SingleTon<InventoryManager>
         InventoryItem inventoryItem = newItemGo.GetComponent<InventoryItem>();
         slot.slotItem = inventoryItem;
         inventoryItem.InitializeItem(item);
+    }
+    void DeleteItem(InventoryItem slot)
+    {
+        Items.Remove(slot.item);
+        Destroy(slot.gameObject);
     }
 
     public Item GetSelectedItem(bool use)
