@@ -148,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 startPos = transform.position + Vector3.up * 0.5f;
         if (jumping)
         {
-            if (Physics.SphereCast(startPos, 0.5f, Vector3.down, out _, 0.385f, groundLayer))
+            if (Physics.SphereCast(startPos, 0.25f, Vector3.down, out _, 0.385f, groundLayer))
             {
                 grounded = true;
                 _player.playerAnim.SetBool("Ground", true);
@@ -161,7 +161,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            if (Physics.SphereCast(startPos, 0.5f, Vector3.down, out _, 0.8f, groundLayer))
+            if (Physics.SphereCast(startPos, 0.25f, Vector3.down, out _, 0.8f, groundLayer))
             {
                 grounded = true;
                 _player.playerAnim.SetBool("Ground", true);
@@ -187,8 +187,6 @@ public class PlayerMovement : MonoBehaviour
 
         direction = Vector3.Lerp(direction, localMovement, 7f * Time.deltaTime);
 
-
-
         Vector3 worldMovement = transform.TransformDirection(direction);
         if(Physics.Raycast(new Ray(transform.position + worldMovement * 2f + Vector3.up * 3f, Vector3.down), out RaycastHit hit, 8f))
         {
@@ -199,7 +197,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         _player.playerAnim.SetFloat("Y", direction.magnitude);
-        // _player.playerAnim.SetDirection(_visual.forward*direction.magnitude);
 
         Vector3 velocity = _rb.linearVelocity;
 
@@ -207,10 +204,6 @@ public class PlayerMovement : MonoBehaviour
 
         Quaternion targetRotation = Quaternion.LookRotation(localMovement);
         visual.localRotation = Quaternion.RotateTowards(visual.localRotation, targetRotation, _rotateSpeed * Time.deltaTime);
-
-        // Quaternion targetRotation = Quaternion.Euler(0f, 90f, 0f);
-        // _visual.localRotation = Quaternion.RotateTowards(_visual.localRotation, targetRotation, _rotateSpeed * Time.deltaTime);
-
 
         velocity.x = worldMovement.x * _moveSpeed;
         velocity.z = worldMovement.z * _moveSpeed;
