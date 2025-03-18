@@ -11,18 +11,18 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     RectTransform rectTrm;
     public TextMeshProUGUI countText;
 
-    [HideInInspector] public Item item;
+     public Item item;
     [HideInInspector] public int count = 1;
     [HideInInspector] public Transform parentAfterDrag;
     [HideInInspector] public Transform parentBeforeDrag;
 
-    private void Awake()
-    {
-        image = GetComponent<Image>();
-        rectTrm = GetComponent<RectTransform>();
-    }
     public void InitializeItem(Item newItem)
     {
+        if (image == null)
+        {
+            image = GetComponent<Image>();
+            rectTrm = GetComponent<RectTransform>();
+        }
         item = newItem;
         image.sprite = newItem.image;
         RefreshCount();
