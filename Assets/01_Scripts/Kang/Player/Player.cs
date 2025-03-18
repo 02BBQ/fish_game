@@ -21,7 +21,6 @@ public class Player : MonoBehaviour
     public LayerMask mapLayer;
 
     CapsuleCollider _capsuleCollider;
-    [SerializeField] List<Collider> bodyCollider;
 
     public Action<Collision> CollisionEnter;
 
@@ -50,29 +49,12 @@ public class Player : MonoBehaviour
     public void StartPhysics()
     {
         _capsuleCollider.enabled = false;
-        OnBodyCollider();
         _rigid.isKinematic = true;
     }
     public void EndPhysics()
     {
         _capsuleCollider.enabled = true;
         _rigid.isKinematic = false;
-        OffBodyCollider();
-    }
-
-    public void OffBodyCollider()
-    {
-        foreach(Collider collider in bodyCollider)
-        {
-            collider.enabled = false;
-        }
-    }
-    public void OnBodyCollider()
-    {
-        foreach (Collider collider in bodyCollider)
-        {
-            collider.enabled = true;
-        }
     }
     private void OnCollisionEnter(Collision collision)
     {
