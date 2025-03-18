@@ -50,7 +50,7 @@ public class InventoryManager : SingleTon<InventoryManager>
             InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
 
             if (itemInSlot != null && 
-                itemInSlot.item == item && 
+                itemInSlot.item.nameStr == item.nameStr && 
                 itemInSlot.count < maxStackedItems &&
                 itemInSlot.item.stackable)//°ãÄ¥¼ö ÀÖ´Â ¾ÆÀÌÅÛÀÌ¸é
             {

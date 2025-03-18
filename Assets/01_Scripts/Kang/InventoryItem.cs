@@ -14,13 +14,13 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [HideInInspector] public int count = 1;
     [HideInInspector] public Transform parentAfterDrag;
 
-    private void Awake()
-    {
-        image = GetComponent<Image>();
-        rectTrm = GetComponent<RectTransform>();
-    }
     public void InitializeItem(Item newItem)
     {
+        if (image == null)
+        {
+            image = GetComponent<Image>();
+            rectTrm = GetComponent<RectTransform>();
+        }
         item = newItem;
         image.sprite = newItem.image;
         RefreshCount();
