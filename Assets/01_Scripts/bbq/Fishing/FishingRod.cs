@@ -40,7 +40,7 @@ public class FishingRod : Item, IEquipable
     public void TryDestroy(Object obj)
     {
         try{
-            if (obj != null && obj.IsDestroyed()) return;
+            if (obj == null || obj.IsDestroyed()) return;
             Destroy(obj.GameObject());
             // obj = null;
         }   
