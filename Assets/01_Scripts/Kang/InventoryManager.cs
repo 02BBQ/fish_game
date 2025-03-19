@@ -131,4 +131,10 @@ public class InventoryManager : SingleTon<InventoryManager>
         }
         return null;
     }
+
+    public void UpdateInfo(Item item)
+    {
+        if (item == null) return;
+        
+    }
 }

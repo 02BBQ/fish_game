@@ -1,9 +1,10 @@
 using System;
+using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventorySlot : MonoBehaviour, IDropHandler
+public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
 {
     Image image;
     public Color selectedColor, normalColor;
@@ -71,5 +72,20 @@ public class InventorySlot : MonoBehaviour, IDropHandler
     public void ResetItem()
     {
         slotItem = null;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (slotItem != null && slotItem.item != null)
+        {
+            string desc = slotItem.item.GetDescription().ToString();
+            string name = slotItem.item.nameStr;
+
+        }
+        else
+        {
+            string desc = "Empty";
+            string name = "Empty";
+        }
     }
 }

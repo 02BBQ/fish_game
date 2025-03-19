@@ -73,7 +73,7 @@ public class Fishing : MonoBehaviour
     float halfBarWidth => barWidth * 0.5f;
     float halfTargetWidth => targetWidth * 0.5f; 
 
-    void Awake()
+    private void OnEnable() 
     {
         // _rodLine.enabled = false;
         _aim.SetActive(false);
@@ -92,7 +92,7 @@ public class Fishing : MonoBehaviour
         // player.playerInput
     }
 
-    private void OnDestroy() {
+    private void OnDisable() {
         player.playerInput.FishingDown -= handleHoldStart;
         player.playerInput.FishingUp -= handleHoldEnd;
         player.playerAnim.OnCastRod -= HandleCast;  
@@ -134,7 +134,7 @@ public class Fishing : MonoBehaviour
         currentState = FishingState.Aiming;
 
         Action AimUpdate = null; AimUpdate = () => {
-            _distance = isMosueDown ? math.min(_distance+Time.deltaTime * 25, _maxDistance) : _distance;
+            _distance = isMosueDown ? math.min(_distance+Time.deltaTime * 1, _maxDistance) : _distance;
             if (currentState != FishingState.Aiming)
             {
                 Stepped -= AimUpdate;
@@ -235,7 +235,7 @@ public class Fishing : MonoBehaviour
 
         Action RodUpdate = null; RodUpdate = () => {
             v = math.min(v+Time.deltaTime * 8 / ((destination - p0).magnitude/2.3f), 1);
-            var p1 = p0 + Vector3.up * Vector3.Distance(p0, p3)/1.75f;
+            var p1 = p0 + Vector3.up * Vector3.Distance(p0, p3)/4f;
             Vector3 p2 = (p1+destination)/2; 
             p2.y = p1.y;
             var point = QuadBeizer(p0, p1, p2, destination, v);
