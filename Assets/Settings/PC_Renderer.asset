@@ -71,11 +71,11 @@ MonoBehaviour:
     overrideMode: 2
     overrideDepthState: 0
     depthCompareFunction: 4
-    enableWrite: 1
+    enableWrite: 0
     stencilSettings:
-      overrideStencilState: 0
+      overrideStencilState: 1
       stencilReference: 0
-      stencilCompareFunction: 8
+      stencilCompareFunction: 1
       passOperation: 0
       failOperation: 0
       zFailOperation: 0
