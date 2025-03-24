@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishSprite: {fileID: 21300000, guid: 2b9ad4e1f43ac5d499d0b533ec55e833, type: 3}
   baseWeight: 25
-  spec: Chicken
+  spec: "\uB2ED\uB3C4\uB9AC\uD0D5"
   basePrice: 1000
   fishPrefab: {fileID: 1358884188700616248, guid: c702d9f2cdb3c5c4e8c8c1b713a0881b, type: 3}
   MaxWeightMultiplier: 1

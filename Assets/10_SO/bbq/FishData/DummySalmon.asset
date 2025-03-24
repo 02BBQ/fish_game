@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishSprite: {fileID: 21300000, guid: eb30febb540271e4a883c6df828b799b, type: 3}
   baseWeight: 1
-  spec: DummySalmon
+  spec: "\uC5F0\uC5B4"
   basePrice: 50
   fishPrefab: {fileID: 919132149155446097, guid: 3763a610870991740befe42354bfeb4a, type: 3}
   MaxWeightMultiplier: 1

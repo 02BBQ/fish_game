@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 using System.Numerics;
 using Vector3 = UnityEngine.Vector3;
 using Vector2 = UnityEngine.Vector2;
+using Unity.Cinemachine;
 
 public class Fishing : MonoBehaviour
 {
@@ -298,119 +299,120 @@ public class Fishing : MonoBehaviour
 
     private void FishingEvent()
     {
-        if (currentState == FishingState.Fishing && _fishingFish != null)
+        if (currentState != FishingState.Fishing || _fishingFish == null)
         {
-            fishingVisual.SetAnchor(true, destination);
-            currentState = FishingState.Fighting;
-            fishCanvas.StartEvent();
+            fishCanvas.ToggleCanvasGroup(false); 
+            return;
+        }
+        GetComponent<CinemachineImpulseSource>().GenerateImpulse();
 
-            target.position = Vector3.zero;
+        fishingVisual.SetAnchor(true, destination);
+        currentState = FishingState.Fighting;
+        fishCanvas.StartEvent();
 
-            float xMove = 0;
+        target.position = Vector3.zero;
 
-            float time = Time.time;
-            float initTime = time;
+        float xMove = 0;
 
-            float timeout = 10f;
-            float health = 2f;
-            float goal = 2f;
-            float current = 0f;
+        float time = Time.time;
+        float initTime = time;
 
-            float power = _fishingFish.GetDancingStep();
+        float timeout = 10f;
+        float health = 2f;
+        float goal = 2f;
+        float current = 0f;
 
-            target.sizeDelta = new Vector2(target.sizeDelta.x / power, target.sizeDelta.y);
+        float power = _fishingFish.GetDancingStep();
 
-            Action FishingUpdate = null; FishingUpdate = () => {
-                time += Time.deltaTime* power*.75f;
-                float noise = Mathf.PerlinNoise(time, initTime) -.5f; noise *= 3200 * power;
-                xMove = Mathf.Lerp(xMove, noise, Time.deltaTime * 2);
-                xMove = Mathf.Clamp(xMove, -halfBarWidth + halfTargetWidth, halfBarWidth - halfTargetWidth);
-                target.anchoredPosition = new Vector2(0 , xMove * halfBarWidth);
+        target.sizeDelta = new Vector2(target.sizeDelta.x, target.sizeDelta.y / power);
 
-                Vector2 pos = target.anchoredPosition;
-                pos.x = xMove;
-                target.anchoredPosition = pos;
+        Action FishingUpdate = null; FishingUpdate = () => {
+            time += Time.deltaTime* power*.75f;
+            float noise = Mathf.PerlinNoise(time, initTime) -.5f; noise *= 3200 * power;
+            xMove = Mathf.Lerp(xMove, noise, Time.deltaTime * 2);
+            xMove = Mathf.Clamp(xMove, -halfBarWidth + halfTargetWidth, halfBarWidth - halfTargetWidth);
+            target.anchoredPosition = new Vector2(0 , xMove * halfBarWidth);
 
-                timeout -= Time.deltaTime;
+            Vector2 pos = target.anchoredPosition;
+            pos.y = xMove;
+            target.anchoredPosition = pos;
 
-                float targetCenterX = target.position.y;
-                float halfWidth = target.rect.width * 0.5f;
-                float xMin = targetCenterX - halfWidth;
-                float xMax = targetCenterX + halfWidth;
+            timeout -= Time.deltaTime;
 
-                // 현재 마우스의 x 좌표
-                float mouseX = Input.mousePosition.x;
+            float targetCenterX = target.position.y;
+            float halfWidth = target.rect.height * 0.5f;
+            float xMin = targetCenterX - halfWidth;
+            float xMax = targetCenterX + halfWidth;
 
-                // _rodLine.SetPosition(0, transform.position);
+            // 현재 마우스의 x 좌표
+            float mouseX = Input.mousePosition.y;
 
-                if (time - initTime > 0.5f)
+            // _rodLine.SetPosition(0, transform.position);
+
+            if (time - initTime > 0.5f)
+            {
+                if (mouseX >= xMin && mouseX <= xMax)
                 {
-                    if (mouseX >= xMin && mouseX <= xMax)
-                    {
-                        current += Time.deltaTime;
-                    }
-                    else
-                    {
-                        health -= Time.deltaTime;
-                    }
+                    current += Time.deltaTime;
                 }
-
-                if (current >= goal)
+                else
                 {
-                    Suc = true;
-                    Stepped -= FishingUpdate;
-                    fishCanvas.ToggleCanvasGroup(false);
-                    PullReel();
-                    return;
+                    health -= Time.deltaTime;
                 }
+            }
 
-                // 실패
-                if (timeout <= 0 || health <= 0)
+            if (current >= goal)
+            {
+                Suc = true;
+                Stepped -= FishingUpdate;
+                fishCanvas.ToggleCanvasGroup(false);
+                PullReel();
+                return;
+            }
+
+            // 실패
+            if (timeout <= 0 || health <= 0)
+            {
+                Suc = false;
+                Stepped -= FishingUpdate;
+                fishCanvas.ToggleCanvasGroup(false);
+                PullReel();
+                return;
+            }
+        };
+
+        float startTimeout = 5f;
+        float hoverTimeout = 1f;
+        Action StartFishing = null; StartFishing = () => {
+            startTimeout -= Time.deltaTime;
+            target.anchoredPosition = new Vector2(0 , xMove * halfBarWidth);
+            float targetCenterX = target.position.y;
+            float halfWidth = target.rect.height * 0.5f;
+            float xMin = targetCenterX - halfWidth;
+            float xMax = targetCenterX + halfWidth;
+
+            // 현재 마우스의 x 좌표
+            float mouseX = Input.mousePosition.y;
+
+            // _rodLine.SetPosition(0, transform.position);
+
+            if (time - initTime > 0.5f)
+            {
+                if (mouseX >= xMin && mouseX <= xMax)
                 {
-                    Suc = false;
-                    Stepped -= FishingUpdate;
-                    fishCanvas.ToggleCanvasGroup(false);
-                    PullReel();
-                    return;
+                    hoverTimeout -= Time.deltaTime;
                 }
-            };
+            }
 
-            float startTimeout = 5f;
-            float hoverTimeout = 1f;
-            Action StartFishing = null; StartFishing = () => {
-                startTimeout -= Time.deltaTime;
-
-                float targetCenterX = target.position.y;
-                float halfWidth = target.rect.width * 0.5f;
-                float xMin = targetCenterX - halfWidth;
-                float xMax = targetCenterX + halfWidth;
-
-                // 현재 마우스의 x 좌표
-                float mouseX = Input.mousePosition.x;
-
-                // _rodLine.SetPosition(0, transform.position);
-
-                if (time - initTime > 0.5f)
-                {
-                    if (mouseX >= xMin && mouseX <= xMax)
-                    {
-                        hoverTimeout -= Time.deltaTime;
-                    }
-                }
-
-                if (startTimeout <= 0 || hoverTimeout <= 0)
-                {
-                    Stepped -= StartFishing;
-                    Stepped += FishingUpdate;
-                };
-
+            if (startTimeout <= 0 || hoverTimeout <= 0)
+            {
+                Stepped -= StartFishing;
                 Stepped += FishingUpdate;
             };
-        }
-        else
-        {
-            fishCanvas.ToggleCanvasGroup(false);
-        }
+
+            // Stepped += FishingUpdate;
+        };
+        Stepped += StartFishing;
     }
 
     // private ienumrator FishEvent()

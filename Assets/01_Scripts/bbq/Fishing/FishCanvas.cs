@@ -11,7 +11,7 @@ public class FishCanvas : MonoBehaviour
     {
         canvasGroup.interactable = obj;
         canvasGroup.blocksRaycasts = obj;
-        // canvasGroup.alpha = obj ? 1 : 0;
+        canvasGroup.alpha = obj ? 1 : 0;
     }
 
     public void StartEvent()

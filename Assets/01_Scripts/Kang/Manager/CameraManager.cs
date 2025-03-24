@@ -6,6 +6,8 @@ public class CameraManager : SingleTon<CameraManager>
     private CinemachineBrain camBrain;
     public CinemachineCamera camVirtual;
 
+    private CinemachineImpulseSource impulseSource;
+
     private void Awake()
     {
         camBrain = GetComponent<CinemachineBrain>();
@@ -14,4 +16,6 @@ public class CameraManager : SingleTon<CameraManager>
     {
         return (CinemachineCamera)camBrain.ActiveVirtualCamera;
     }
+
+    
 }
