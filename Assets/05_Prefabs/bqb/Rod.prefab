@@ -53,6 +53,7 @@ MonoBehaviour:
   fishingRod: {fileID: 842091963337499262}
   fishingRodTip: {fileID: 1884694934822234379}
   bobber: {fileID: 8846401139343823445}
+  <shakeParticleBase>k__BackingField: {fileID: 6854126403879113214, guid: 42dd03ebf3a61464580cc8e839e69ff1, type: 3}
   <linerenderer>k__BackingField: {fileID: 1665215614263982792}
   vertexCount: 12
   catenaryA: 25

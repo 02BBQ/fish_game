@@ -8,6 +8,8 @@ public class InventoryManager : SingleTon<InventoryManager>
     public int maxStackedItems = 16;
     public InventorySlot[] inventorySlots;
     public GameObject inventoryItemPrefab;
+    public ItemInfo itemInfo;
+
     [field: SerializeField] public List<Item> Items {get; private set;} = new List<Item>();
 
     int selectedSlot = -1;
@@ -136,5 +138,6 @@ public class InventoryManager : SingleTon<InventoryManager>
     {
         if (item == null) return;
         
+        itemInfo.UpdateItemInfo(item.nameStr, item.GetDescription().ToString());
     }
 }

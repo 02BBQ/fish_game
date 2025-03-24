@@ -68,8 +68,8 @@ public class Fishing : MonoBehaviour
     
     private RectTransform bar => fishCanvas.bar;
 
-    float barWidth => (bar.transform as RectTransform).rect.width;
-    float targetWidth => target.rect.width;
+    float barWidth => (bar.transform as RectTransform).rect.height;
+    float targetWidth => target.rect.height;
     float halfBarWidth => barWidth * 0.5f;
     float halfTargetWidth => targetWidth * 0.5f; 
 
@@ -128,13 +128,14 @@ public class Fishing : MonoBehaviour
         var dir = Rig.transform.forward;
         var origin = player.transform.position;
         var trans = _aim.transform;
-        // player.transform.position = origin;
         trans.position = origin;
         _distance = 1;
         currentState = FishingState.Aiming;
 
-        Action AimUpdate = null; AimUpdate = () => {
-            _distance = isMosueDown ? math.min(_distance+Time.deltaTime * 1, _maxDistance) : _distance;
+        Action AimUpdate = null;
+        AimUpdate = () =>
+        {
+            _distance = isMosueDown ? math.min(_distance + Time.deltaTime * 1, _maxDistance) : _distance;
             if (currentState != FishingState.Aiming)
             {
                 Stepped -= AimUpdate;
@@ -142,7 +143,7 @@ public class Fishing : MonoBehaviour
                 return;
             }
             trans.position = origin + dir * _distance;
-            if (Physics.Raycast(trans.position + Vector3.up*4, -Vector3.up, out _hit, 50, _toAimLayer))
+            if (Physics.Raycast(trans.position + Vector3.up * 4, -Vector3.up, out _hit, 50, _toAimLayer))
             {
                 trans.position = new Vector3(trans.position.x, -_hit.point.y, trans.position.z);
             }
@@ -170,6 +171,7 @@ public class Fishing : MonoBehaviour
 
     private void PullReel()
     {
+        fishingVisual.SetAnchor(false);
         if (Suc && _fishingFish != null)
         {
             fish = Instantiate(_fishSOBase);
@@ -180,12 +182,9 @@ public class Fishing : MonoBehaviour
         var v = 0.0f;
 
         var goal = transform.position;
-        // goal.y = _rodLine.GetPosition(1).y;
 
         Action RodUpdate = null; RodUpdate = () => {
             v = math.min(v+Time.deltaTime*0.75f, 1);
-            // _rodLine.SetPosition(0, transform.position);
-            // _rodLine.SetPosition(1, Vector3.Lerp(_rodLine.GetPosition(1), goal, v));
             fishingVisual.bobber.position = Vector3.Lerp(fishingVisual.bobber.position, goal, v);
             if (v == 1)
             {
@@ -200,6 +199,7 @@ public class Fishing : MonoBehaviour
     private void EndReel()
     {
         // _rodLine.enabled = false;
+        
         if (Suc)
         {
             InventoryManager.Instance.AddItem(fish);
@@ -300,8 +300,9 @@ public class Fishing : MonoBehaviour
     {
         if (currentState == FishingState.Fishing && _fishingFish != null)
         {
+            fishingVisual.SetAnchor(true, destination);
             currentState = FishingState.Fighting;
-            fishCanvas.ToggleCanvasGroup(true);
+            fishCanvas.StartEvent();
 
             target.position = Vector3.zero;
 
@@ -324,7 +325,7 @@ public class Fishing : MonoBehaviour
                 float noise = Mathf.PerlinNoise(time, initTime) -.5f; noise *= 3200 * power;
                 xMove = Mathf.Lerp(xMove, noise, Time.deltaTime * 2);
                 xMove = Mathf.Clamp(xMove, -halfBarWidth + halfTargetWidth, halfBarWidth - halfTargetWidth);
-                target.anchoredPosition = new Vector2(xMove * halfBarWidth, 0);
+                target.anchoredPosition = new Vector2(0 , xMove * halfBarWidth);
 
                 Vector2 pos = target.anchoredPosition;
                 pos.x = xMove;
@@ -332,7 +333,7 @@ public class Fishing : MonoBehaviour
 
                 timeout -= Time.deltaTime;
 
-                float targetCenterX = target.position.x;
+                float targetCenterX = target.position.y;
                 float halfWidth = target.rect.width * 0.5f;
                 float xMin = targetCenterX - halfWidth;
                 float xMax = targetCenterX + halfWidth;
@@ -374,7 +375,37 @@ public class Fishing : MonoBehaviour
                 }
             };
 
-            Stepped += FishingUpdate;
+            float startTimeout = 5f;
+            float hoverTimeout = 1f;
+            Action StartFishing = null; StartFishing = () => {
+                startTimeout -= Time.deltaTime;
+
+                float targetCenterX = target.position.y;
+                float halfWidth = target.rect.width * 0.5f;
+                float xMin = targetCenterX - halfWidth;
+                float xMax = targetCenterX + halfWidth;
+
+                // 현재 마우스의 x 좌표
+                float mouseX = Input.mousePosition.x;
+
+                // _rodLine.SetPosition(0, transform.position);
+
+                if (time - initTime > 0.5f)
+                {
+                    if (mouseX >= xMin && mouseX <= xMax)
+                    {
+                        hoverTimeout -= Time.deltaTime;
+                    }
+                }
+
+                if (startTimeout <= 0 || hoverTimeout <= 0)
+                {
+                    Stepped -= StartFishing;
+                    Stepped += FishingUpdate;
+                };
+
+                Stepped += FishingUpdate;
+            };
         }
         else
         {

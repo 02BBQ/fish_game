@@ -78,14 +78,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
     {
         if (slotItem != null && slotItem.item != null)
         {
-            string desc = slotItem.item.GetDescription().ToString();
-            string name = slotItem.item.nameStr;
-
-        }
-        else
-        {
-            string desc = "Empty";
-            string name = "Empty";
+            InventoryManager.Instance.UpdateInfo(slotItem.item);
         }
     }
 }
