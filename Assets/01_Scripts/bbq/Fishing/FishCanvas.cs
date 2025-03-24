@@ -1,11 +1,19 @@
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class FishCanvas : MonoBehaviour
 {
     public CanvasGroup canvasGroup;
     public RectTransform bar;
     public RectTransform target;
+
+    private Image targetImage;
+
+    private void OnEnable()
+    {
+        targetImage = target.GetComponent<Image>();
+    }
 
     public void ToggleCanvasGroup(bool obj)
     {
@@ -14,11 +22,16 @@ public class FishCanvas : MonoBehaviour
         canvasGroup.alpha = obj ? 1 : 0;
     }
 
+    public void SetColor(bool v)
+    {
+        targetImage.color = new Color(1,1,1, v ? 1 : .5f);
+    }
+
     public void StartEvent()
     {
         canvasGroup.alpha = 0;
         ToggleCanvasGroup(true);
-        canvasGroup.DOFade(1, 0.5f);
+        canvasGroup.DOFade(1, 1f);
     }
 
     public void EndEvent()

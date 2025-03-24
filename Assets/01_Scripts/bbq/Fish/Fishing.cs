@@ -9,6 +9,7 @@ using System.Numerics;
 using Vector3 = UnityEngine.Vector3;
 using Vector2 = UnityEngine.Vector2;
 using Unity.Cinemachine;
+using Random = UnityEngine.Random;
 
 public class Fishing : MonoBehaviour
 {
@@ -172,6 +173,7 @@ public class Fishing : MonoBehaviour
 
     private void PullReel()
     {
+        fishCanvas.SetColor(false);
         fishingVisual.SetAnchor(false);
         if (Suc && _fishingFish != null)
         {
@@ -184,7 +186,15 @@ public class Fishing : MonoBehaviour
 
         var goal = transform.position;
 
-        Action RodUpdate = null; RodUpdate = () => {
+        Action RodUpdate = null;
+
+        if (Suc)
+        {
+            
+        }
+        else
+        {
+             RodUpdate = () => {
             v = math.min(v+Time.deltaTime*0.75f, 1);
             fishingVisual.bobber.position = Vector3.Lerp(fishingVisual.bobber.position, goal, v);
             if (v == 1)
@@ -194,6 +204,7 @@ public class Fishing : MonoBehaviour
                 return;
             }
         };
+        }
         Stepped += RodUpdate;
     }
 
@@ -235,7 +246,7 @@ public class Fishing : MonoBehaviour
         var p3 = destination;
 
         Action RodUpdate = null; RodUpdate = () => {
-            v = math.min(v+Time.deltaTime * 8 / ((destination - p0).magnitude/2.3f), 1);
+            v = math.min(v+Time.deltaTime * 6 / ((destination - p0).magnitude/10.3f), 1);
             var p1 = p0 + Vector3.up * Vector3.Distance(p0, p3)/4f;
             Vector3 p2 = (p1+destination)/2; 
             p2.y = p1.y;
@@ -318,8 +329,8 @@ public class Fishing : MonoBehaviour
         float initTime = time;
 
         float timeout = 10f;
-        float health = 2f;
-        float goal = 2f;
+        float health = Random.Range(1.5f, 2.5f);
+        float goal = Random.Range(1.5f, 2.5f);
         float current = 0f;
 
         float power = _fishingFish.GetDancingStep();
@@ -349,15 +360,17 @@ public class Fishing : MonoBehaviour
 
             // _rodLine.SetPosition(0, transform.position);
 
-            if (time - initTime > 0.5f)
+            if (time - initTime > 0.1f)
             {
                 if (mouseX >= xMin && mouseX <= xMax)
                 {
                     current += Time.deltaTime;
+                    fishCanvas.SetColor(true);
                 }
                 else
                 {
                     health -= Time.deltaTime;
+                    fishCanvas.SetColor(false);
                 }
             }
 
@@ -382,7 +395,7 @@ public class Fishing : MonoBehaviour
         };
 
         float startTimeout = 5f;
-        float hoverTimeout = 1f;
+        float hoverTimeout = 0.5f;
         Action StartFishing = null; StartFishing = () => {
             startTimeout -= Time.deltaTime;
             target.anchoredPosition = new Vector2(0 , xMove * halfBarWidth);
@@ -396,14 +409,16 @@ public class Fishing : MonoBehaviour
 
             // _rodLine.SetPosition(0, transform.position);
 
-            if (time - initTime > 0.5f)
+            if (mouseX >= xMin && mouseX <= xMax)
             {
-                if (mouseX >= xMin && mouseX <= xMax)
-                {
-                    hoverTimeout -= Time.deltaTime;
-                }
+                fishCanvas.SetColor(true);
+                hoverTimeout -= Time.deltaTime;
             }
-
+            else
+            {
+                fishCanvas.SetColor(false);
+            }
+            
             if (startTimeout <= 0 || hoverTimeout <= 0)
             {
                 Stepped -= StartFishing;

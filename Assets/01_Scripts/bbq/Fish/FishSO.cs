@@ -20,6 +20,7 @@ public class FishSO : Item
         this.weight = fishSO.baseWeight * Random.Range(fishSO.MinWeightMultiplier, fishSO.MaxWeightMultiplier);
         this.price = (int)CalculatePrice(fishSO);
         this.image = fishSO.fishSprite;
+        this.description = fishSO.description;
     }
 
     public override StringBuilder GetDescription()
