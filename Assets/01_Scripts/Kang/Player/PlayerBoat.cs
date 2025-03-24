@@ -76,7 +76,7 @@ public class PlayerBoat : MonoBehaviour
                     visual.localEulerAngles = new Vector3(visual.localEulerAngles.x, 0f, visual.localEulerAngles.z);
                     _player.boating = true;
                     boatCam.Priority = 10;
-                    _currentBoat.IconDisable();
+                    _currentBoat.EnterBoat();
                     UIManager.Instance.playerIcon.color = _ridingColor;
                 });
                 boatCam.transform.SetPositionAndRotation(_currentBoat.transform.position, _currentBoat.transform.rotation);

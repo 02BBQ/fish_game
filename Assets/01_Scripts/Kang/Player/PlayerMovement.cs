@@ -161,7 +161,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            if (Physics.SphereCast(startPos, 0.25f, Vector3.down, out _, 0.8f, groundLayer))
+            if (Physics.SphereCast(startPos, 0.25f, Vector3.down, out _, 0.6f, groundLayer))
             {
                 grounded = true;
                 _player.playerAnim.SetBool("Ground", true);
