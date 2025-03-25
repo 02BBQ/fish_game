@@ -21,7 +21,7 @@ public class Item : ScriptableObject
         return new StringBuilder(this.description);
     }
 
-    public virtual String GetName()
+    public virtual string GetName()
     {
         return this.nameStr;
     }
