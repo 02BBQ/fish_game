@@ -1,5 +1,7 @@
 using System;
+using System.Text;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -68,4 +70,6 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         if (slot == null) return;
         slot.slotItem = this;
     }
+
+    
 }

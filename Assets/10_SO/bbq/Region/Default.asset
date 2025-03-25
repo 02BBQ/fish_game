@@ -18,7 +18,11 @@ MonoBehaviour:
     - fish: {fileID: 11400000, guid: bf4f385c14eee7748874c5b5dee73c02, type: 2}
       weight: 5
     - fish: {fileID: 11400000, guid: d817b12ea1f34f842897ab5aabc6fe5a, type: 2}
-      weight: 1
+      weight: 5
+    - fish: {fileID: 11400000, guid: fe4257027e635be4a86faf25ad1ecd97, type: 2}
+      weight: 5
+    - fish: {fileID: 11400000, guid: b005681db9bece94c93c418662f5409f, type: 2}
+      weight: 5
   - regionName: 2
     fishWeights:
     - fish: {fileID: 11400000, guid: fe4257027e635be4a86faf25ad1ecd97, type: 2}

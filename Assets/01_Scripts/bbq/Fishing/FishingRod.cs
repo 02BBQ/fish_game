@@ -49,6 +49,11 @@ public class FishingRod : Item, IEquipable
             Debug.LogWarning(e);
         }
     }
+
+    void OnDestroy()
+    {
+        Unequip();
+    }
 }
 
 
