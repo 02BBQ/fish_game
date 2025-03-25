@@ -36,7 +36,7 @@ public class InventoryManager : SingleTon<InventoryManager>
     void ChangeSelectedSlot(int newValue)
     {
 
-        if (!Definder.Player.playerSlot.CanChange && newValue > 3)
+        if (!Definder.Player.playerSlot.CanChange || newValue > 3)
         {
             return;
         }
@@ -57,14 +57,14 @@ public class InventoryManager : SingleTon<InventoryManager>
             if (itemInSlot != null && 
                 itemInSlot.item.nameStr == item.nameStr && 
                 itemInSlot.count < maxStackedItems &&
-                itemInSlot.item.stackable)//°ãÄ¥¼ö ÀÖ´Â ¾ÆÀÌÅÛÀÌ¸é
+                itemInSlot.item.stackable)//ï¿½ï¿½Ä¥ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½
             {
 
                 itemInSlot.count++;
                 itemInSlot.RefreshCount();
                 return true;
             }
-            else if (itemInSlot == null)//ºóÄ­ ÀÖÀ¸¸é
+            else if (itemInSlot == null)//ï¿½ï¿½Ä­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             {
                 SpawnNewItem(item, slot);
                 return true;

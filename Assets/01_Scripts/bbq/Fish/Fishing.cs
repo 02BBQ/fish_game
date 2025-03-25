@@ -44,7 +44,7 @@ public class Fishing : MonoBehaviour
     public Vector3 destination;
 
     [SerializeField] private LayerMask _toAimLayer;
-    [SerializeField] private LineRenderer _rodLine;
+    public FishingVisual fishingVisual;
 
     [SerializeField] private FishingRegion _fishingRegion;
 
@@ -61,11 +61,21 @@ public class Fishing : MonoBehaviour
 
     public bool isMosueDown = false;
 
+    [Header("Fishing")]
+    public FishCanvas fishCanvas;
 
+    private RectTransform target => fishCanvas.target;
+    
+    private RectTransform bar => fishCanvas.bar;
+
+    float barWidth => (bar.transform as RectTransform).rect.width;
+    float targetWidth => target.rect.width;
+    float halfBarWidth => barWidth * 0.5f;
+    float halfTargetWidth => targetWidth * 0.5f; 
 
     void Awake()
     {
-        _rodLine.enabled = false;
+        // _rodLine.enabled = false;
         _aim.SetActive(false);
         player = Definder.Player;
         if (player == null){
@@ -73,7 +83,7 @@ public class Fishing : MonoBehaviour
             Destroy(gameObject);
         }
 
-        _rodLine.useWorldSpace = true;
+        // _rodLine.useWorldSpace = true;
 
         player.playerInput.FishingDown += handleHoldStart;
         player.playerInput.FishingUp += handleHoldEnd;
@@ -170,12 +180,13 @@ public class Fishing : MonoBehaviour
         var v = 0.0f;
 
         var goal = transform.position;
-        goal.y = _rodLine.GetPosition(1).y;
+        // goal.y = _rodLine.GetPosition(1).y;
 
         Action RodUpdate = null; RodUpdate = () => {
             v = math.min(v+Time.deltaTime*0.75f, 1);
-            _rodLine.SetPosition(0, transform.position);
-            _rodLine.SetPosition(1, Vector3.Lerp(_rodLine.GetPosition(1), goal, v));
+            // _rodLine.SetPosition(0, transform.position);
+            // _rodLine.SetPosition(1, Vector3.Lerp(_rodLine.GetPosition(1), goal, v));
+            fishingVisual.bobber.position = Vector3.Lerp(fishingVisual.bobber.position, goal, v);
             if (v == 1)
             {
                 Stepped -= RodUpdate;
@@ -188,7 +199,7 @@ public class Fishing : MonoBehaviour
 
     private void EndReel()
     {
-        _rodLine.enabled = false;
+        // _rodLine.enabled = false;
         if (Suc)
         {
             InventoryManager.Instance.AddItem(fish);
@@ -197,6 +208,7 @@ public class Fishing : MonoBehaviour
         {
             Destroy(fish);
         }
+        fishingVisual.ResetBobber();
         // player.playerMovement.enabled = true;
         playerMovement.movable = true;
         currentState = FishingState.Idle;
@@ -210,7 +222,7 @@ public class Fishing : MonoBehaviour
 
         var v = 0.0f;
 
-        _rodLine.enabled = true;
+        // _rodLine.enabled = true;
 
         Suc = false;
 
@@ -227,8 +239,8 @@ public class Fishing : MonoBehaviour
             Vector3 p2 = (p1+destination)/2; 
             p2.y = p1.y;
             var point = QuadBeizer(p0, p1, p2, destination, v);
-            _rodLine.SetPosition(0, transform.position);
-            _rodLine.SetPosition(1, point);
+            // _rodLine.SetPosition(0, transform.position);
+            fishingVisual.bobber.position = point;
             if(v == 1)
             {
                 Stepped -= RodUpdate;
@@ -236,8 +248,9 @@ public class Fishing : MonoBehaviour
 
                 float timeout = UnityEngine.Random.Range(5f, 21f);
                 Action FishingUpdate = null; FishingUpdate = () => {
+                    fishingVisual.bobber.position = point;
                     timeout -= Time.deltaTime;
-                    _rodLine.SetPosition(0, transform.position);
+                    // _rodLine.SetPosition(0, transform.position);
                     if (timeout <= 0 && FishingState.Fishing == currentState)
                     {
                         Stepped -= FishingUpdate;
@@ -283,19 +296,6 @@ public class Fishing : MonoBehaviour
         return Vector3.Lerp(q0, q1, t);
     }
 
-    public FishCanvas fishCanvas;
-
-    private CanvasGroup canvasGroup;
-
-    private RectTransform target;
-    
-    private RectTransform bar;
-
-    float barWidth => (bar.transform as RectTransform).rect.width;
-    float targetWidth => target.rect.width;
-    float halfBarWidth => barWidth * 0.5f;
-    float halfTargetWidth => targetWidth * 0.5f;
-
     private void FishingEvent()
     {
         if (currentState == FishingState.Fishing && _fishingFish != null)
@@ -340,7 +340,7 @@ public class Fishing : MonoBehaviour
                 // 현재 마우스의 x 좌표
                 float mouseX = Input.mousePosition.x;
 
-                _rodLine.SetPosition(0, transform.position);
+                // _rodLine.SetPosition(0, transform.position);
 
                 if (time - initTime > 0.5f)
                 {

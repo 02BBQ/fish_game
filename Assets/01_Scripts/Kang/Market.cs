@@ -11,6 +11,7 @@ public class Market : MapEntity, IInteractable
     public GameObject buyGoods;
     public GameObject sellGoods;
     public MeshRenderer outlineMesh;
+    public Material nullMat;
     Material outlineMaterial;
     Material[] materials;
 
@@ -20,7 +21,7 @@ public class Market : MapEntity, IInteractable
 
         outlineMaterial = outlineMesh.materials[1];
         materials = outlineMesh.materials;
-        materials[1] = null;
+        materials[1] = nullMat;
         outlineMesh.materials = materials;
 
         foreach (Item item in buyItems)
@@ -57,7 +58,7 @@ public class Market : MapEntity, IInteractable
     {
         if (other.CompareTag("Player"))
         {
-            materials[1] = null;
+            materials[1] = nullMat;
             outlineMesh.materials = materials;
             Definder.Player.RemoveInterect(OnInterect);
         }
