@@ -63,8 +63,8 @@ public class PlayerBoat : MonoBehaviour
             UIManager.Instance.playerIcon.color = _originColor;
             boatCam.Follow = null;
             boatCam.Priority = -1;
-            _player.playerMovement.visual.localRotation = transform.rotation;
-            transform.rotation = Quaternion.identity;
+            _player.playerMovement.visual.localRotation = transform.rotation * Quaternion.Euler(0f, 180f, 0f);
+            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
         }
         else
         {
