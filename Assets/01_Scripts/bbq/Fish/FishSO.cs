@@ -28,6 +28,11 @@ public class FishSO : Item
         return new StringBuilder("Weight: " + this.price + "\nWorth: " + this.price + "\n"  + this.description);
     }
 
+    public override string GetName()
+    {
+        return species;
+    }
+
     public virtual float CalculatePrice(FishData fishSO)
     {
         return fishSO.basePrice * weight / fishSO.baseWeight;

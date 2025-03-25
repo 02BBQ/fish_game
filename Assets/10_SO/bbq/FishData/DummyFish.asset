@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6522fc69616c13c4891c6b3959f595aa, type: 3}
   m_Name: DummyFish
   m_EditorClassIdentifier: 
-  fishSprite: {fileID: 21300000, guid: 51fdaa6702a25a74995c7892aa2a1feb, type: 3}
+  fishSprite: {fileID: 21300000, guid: 7f667e0b4e3606745a383aea9be1dbba, type: 3}
   baseWeight: 100
   spec: "\uB178\uBB3C\uACE0"
   basePrice: 150

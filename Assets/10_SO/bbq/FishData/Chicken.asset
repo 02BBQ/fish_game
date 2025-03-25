@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6522fc69616c13c4891c6b3959f595aa, type: 3}
   m_Name: Chicken
   m_EditorClassIdentifier: 
-  fishSprite: {fileID: 21300000, guid: 2b9ad4e1f43ac5d499d0b533ec55e833, type: 3}
+  fishSprite: {fileID: 21300000, guid: 7f667e0b4e3606745a383aea9be1dbba, type: 3}
   baseWeight: 25
-  spec: "\uB2ED\uB3C4\uB9AC\uD0D5"
+  spec: "\uAC15\uC724\uAD6C"
   basePrice: 1000
   fishPrefab: {fileID: 1358884188700616248, guid: c702d9f2cdb3c5c4e8c8c1b713a0881b, type: 3}
   MaxWeightMultiplier: 1
   MinWeightMultiplier: 1.25
   DancingStepMax: 0.6
   DancingStepMin: 2
-  description: "\uB2ED\uB3C4\uB9AC\uD0D5\uC774 \uBA39\uACE0\uC2F6\uB178"
+  description: "\uAC15\uC724\uAD6C \uAC1C++++++\uC0C9 "

@@ -20,6 +20,11 @@ public class Item : ScriptableObject
     {
         return new StringBuilder(this.description);
     }
+
+    public virtual String GetName()
+    {
+        return this.nameStr;
+    }
 }
 
 

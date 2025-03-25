@@ -10,6 +10,7 @@ using Vector3 = UnityEngine.Vector3;
 using Vector2 = UnityEngine.Vector2;
 using Unity.Cinemachine;
 using Random = UnityEngine.Random;
+using System.Text;
 
 public class Fishing : MonoBehaviour
 {
@@ -61,7 +62,7 @@ public class Fishing : MonoBehaviour
 
     public bool Suc;
 
-    public bool isMosueDown = false;
+    public bool isMouseDown = false;
 
     [Header("Fishing")]
     public FishCanvas fishCanvas;
@@ -107,7 +108,7 @@ public class Fishing : MonoBehaviour
 
     void handleHoldStart()
     {
-        isMosueDown = true;
+        isMouseDown = true;
         if (currentState == FishingState.Fishing)
         {
             PullReel();
@@ -137,7 +138,9 @@ public class Fishing : MonoBehaviour
         Action AimUpdate = null;
         AimUpdate = () =>
         {
-            _distance = isMosueDown ? math.min(_distance + Time.deltaTime * 1, _maxDistance) : _distance;
+            origin = player.transform.position;
+            dir = Rig.transform.forward;
+            _distance = isMouseDown ? math.min(_distance + Time.deltaTime * 1, _maxDistance) : _distance;
             if (currentState != FishingState.Aiming)
             {
                 Stepped -= AimUpdate;
@@ -155,7 +158,7 @@ public class Fishing : MonoBehaviour
 
     void handleHoldEnd()
     {
-        isMosueDown = false;
+        isMouseDown = false;
         if (currentState == FishingState.Aiming)
         {
             CastRod();
@@ -188,22 +191,35 @@ public class Fishing : MonoBehaviour
 
         Action RodUpdate = null;
 
+        var p0 = fishingVisual.bobber.position;
+        var p2 = fishingVisual.fishingRodTip.position;
+        var p1 = (p0 + p2)/2; p1.y = p2.y + 2f + Vector3.Distance(p0, p2)/8;
+
         if (Suc)
         {
-            
+            RodUpdate = () => {
+                v = math.min(v+Time.deltaTime, 1);
+                fishingVisual.bobber.position = Bezier(p0, p1, p2, v);
+                if (v == 1)
+                {
+                    Stepped -= RodUpdate;
+                    EndReel();
+                    return;
+                }
+            };
         }
         else
         {
-             RodUpdate = () => {
-            v = math.min(v+Time.deltaTime*0.75f, 1);
-            fishingVisual.bobber.position = Vector3.Lerp(fishingVisual.bobber.position, goal, v);
-            if (v == 1)
-            {
-                Stepped -= RodUpdate;
-                EndReel();
-                return;
-            }
-        };
+            RodUpdate = () => {
+                v = math.min(v+Time.deltaTime*0.75f, 1);
+                fishingVisual.bobber.position = Vector3.Lerp(fishingVisual.bobber.position, goal, v);
+                if (v == 1)
+                {
+                    Stepped -= RodUpdate;
+                    EndReel();
+                    return;
+                }
+            };
         }
         Stepped += RodUpdate;
     }
@@ -214,6 +230,9 @@ public class Fishing : MonoBehaviour
         
         if (Suc)
         {
+            StringBuilder v = new(fish.weight + "kg <color=yellow>" + fish.species + "</color>를 낚았다!");
+            Events.NotificationEvent.text = v.ToString();
+            EventManager.Broadcast(Events.NotificationEvent);
             InventoryManager.Instance.AddItem(fish);
         }
         else
@@ -246,8 +265,8 @@ public class Fishing : MonoBehaviour
         var p3 = destination;
 
         Action RodUpdate = null; RodUpdate = () => {
-            v = math.min(v+Time.deltaTime * 6 / ((destination - p0).magnitude/10.3f), 1);
-            var p1 = p0 + Vector3.up * Vector3.Distance(p0, p3)/4f;
+            v = math.min(v+ Time.deltaTime / math.max((destination - p0).magnitude/10.3f, 0.8f), 1);
+            var p1 = p0 + Vector3.up * Mathf.Min(Vector3.Distance(p0, p3)/4f, 3f);
             Vector3 p2 = (p1+destination)/2; 
             p2.y = p1.y;
             var point = QuadBeizer(p0, p1, p2, destination, v);
@@ -258,7 +277,7 @@ public class Fishing : MonoBehaviour
                 Stepped -= RodUpdate;
                 currentState = FishingState.Fishing;
 
-                float timeout = UnityEngine.Random.Range(5f, 21f);
+                float timeout = Random.Range(5f, 21f);
                 Action FishingUpdate = null; FishingUpdate = () => {
                     fishingVisual.bobber.position = point;
                     timeout -= Time.deltaTime;
@@ -285,8 +304,6 @@ public class Fishing : MonoBehaviour
                 }
                 else
                 {
-                    // print(_currentRegionIndex);
-                    // print(_fishingRegion.fishWeights[_currentRegionIndex]);
                     _fishingFish = getFish;
                 }
                 return;
@@ -335,17 +352,18 @@ public class Fishing : MonoBehaviour
 
         float power = _fishingFish.GetDancingStep();
 
-        target.sizeDelta = new Vector2(target.sizeDelta.x, target.sizeDelta.y / power);
+        target.sizeDelta = new Vector2(target.sizeDelta.x, target.sizeDelta.y / Mathf.Max(power,.7f));
 
         Action FishingUpdate = null; FishingUpdate = () => {
-            time += Time.deltaTime* power*.75f;
-            float noise = Mathf.PerlinNoise(time, initTime) -.5f; noise *= 3200 * power;
-            xMove = Mathf.Lerp(xMove, noise, Time.deltaTime * 2);
+            time += Time.deltaTime * power * .75f;
+            float noise = Mathf.PerlinNoise(Time.time * 3f * power, initTime) -.5f; noise *= 3200 * power;
+            xMove = Mathf.Lerp(xMove, noise, Time.deltaTime *2);
             xMove = Mathf.Clamp(xMove, -halfBarWidth + halfTargetWidth, halfBarWidth - halfTargetWidth);
             target.anchoredPosition = new Vector2(0 , xMove * halfBarWidth);
 
             Vector2 pos = target.anchoredPosition;
             pos.y = xMove;
+            Debug.Log(xMove);
             target.anchoredPosition = pos;
 
             timeout -= Time.deltaTime;
@@ -360,16 +378,18 @@ public class Fishing : MonoBehaviour
 
             // _rodLine.SetPosition(0, transform.position);
 
-            if (time - initTime > 0.1f)
+            if (Time.time - initTime > 0.3f)
             {
                 if (mouseX >= xMin && mouseX <= xMax)
                 {
                     current += Time.deltaTime;
+                    fishCanvas.ToggleRotator(true);
                     fishCanvas.SetColor(true);
                 }
                 else
                 {
                     health -= Time.deltaTime;
+                    fishCanvas.ToggleRotator(false);
                     fishCanvas.SetColor(false);
                 }
             }
@@ -427,7 +447,7 @@ public class Fishing : MonoBehaviour
 
             // Stepped += FishingUpdate;
         };
-        Stepped += StartFishing;
+        DOVirtual.DelayedCall(1.2f, () => Stepped += StartFishing);
     }
 
     // private ienumrator FishEvent()

@@ -56,7 +56,7 @@ MonoBehaviour:
   _fishingRegion: {fileID: 11400000, guid: 0e7ae8db90688e440be86709d1733548, type: 2}
   _fishSOBase: {fileID: 11400000, guid: 6955fbb6100623b4aa5e6008c49e59e6, type: 2}
   Suc: 0
-  isMosueDown: 0
+  isMouseDown: 0
   fishCanvas: {fileID: 0}
 --- !u!114 &1429987295122406917
 MonoBehaviour:
@@ -79,7 +79,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    ImpulseDuration: 0.2
+    ImpulseDuration: 0.3
     ImpulseType: 0
     DissipationRate: 0.25
     RawSignal: {fileID: 0}
@@ -110,7 +110,7 @@ MonoBehaviour:
     DissipationMode: 2
     DissipationDistance: 100
     PropagationSpeed: 343
-  DefaultVelocity: {x: 0, y: -1, z: 0}
+  DefaultVelocity: {x: 0, y: 0.5, z: 0}
 --- !u!1001 &4413600904075922069
 PrefabInstance:
   m_ObjectHideFlags: 0
