@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba88c1a61429c7148b83af1a22ea0e37, type: 3}
   m_Name: BoatDataSO 2
   m_EditorClassIdentifier: 
-  boatMass: 20
-  boatSpeed: 9000
-  boatWeight: 12.86
+  boatMass: 50
+  boatSpeed: 12000
   boatTurn: 46.03
   boatDamp: 0.5

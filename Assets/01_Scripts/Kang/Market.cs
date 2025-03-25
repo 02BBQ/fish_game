@@ -58,7 +58,7 @@ public class Market : MapEntity, IInteractable
     {
         if (other.CompareTag("Player"))
         {
-            materials[1] = null;
+            materials[1] = nullMat;
             outlineMesh.materials = materials;
             Definder.Player.RemoveInterect(OnInterect);
         }

@@ -59,6 +59,8 @@ public class BoatController : MapEntity
     }
 
     private void OnDisable()
+
+
     {
         EventBus.Unsubscribe(EventBusType.Drowning, OnDrowning);
 
