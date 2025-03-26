@@ -68,8 +68,6 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Update()
     {
-        FallingCheck();
-
         if (!movable) return;
         switch (_chaseState)
         {
@@ -131,47 +129,26 @@ public class PlayerMovement : MonoBehaviour
     private void TriggerEnter(Collider other)
     {
         if (other.isTrigger) return;
-
+        grounded = true;
+        _player.playerAnim.SetBool("Ground", true);
     }
     private void TriggerStay(Collider other)
     {
         if (other.isTrigger) return;
-
+        grounded = true;
+        _player.playerAnim.SetBool("Ground", true);
     }
     private void TriggerExit(Collider other)
     {
         if (other.isTrigger) return;
+        Vector3 startPos = transform.position + Vector3.up * 0.2f;
+        if (Physics.OverlapSphere(startPos, 0.3f, groundLayer).Length > 0)
+            return;
+
+        grounded = false;
+        _player.playerAnim.SetBool("Ground", false);
     }
-    private void FallingCheck()
-    {
-       /* Vector3 startPos = transform.position + Vector3.up * 0.5f;
-        if (jumping)
-        {
-            if (Physics.SphereCast(startPos, 0.25f, Vector3.down, out _, 0.385f, groundLayer))
-            {
-                grounded = true;
-                _player.playerAnim.SetBool("Ground", true);
-            }
-            else
-            {
-                grounded = false;
-                _player.playerAnim.SetBool("Ground", false);
-            }
-        }
-        else
-        {
-            if (Physics.SphereCast(startPos, 0.25f, Vector3.down, out _, 0.6f, groundLayer))
-            {
-                grounded = true;
-                _player.playerAnim.SetBool("Ground", true);
-            }
-            else
-            {
-                grounded = false;
-                _player.playerAnim.SetBool("Ground", false);
-            }
-        }*/
-    }
+
 
     public void Move(Vector2 input)
     {
@@ -220,8 +197,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (grounded && _rb.isKinematic == false)
         {
+            grounded = false;
             _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, _jumpPower, _rb.linearVelocity.z);
-            Invoke("JumpFalse", 0.3f);
         }
     }
     public void StopMoveTarget()
