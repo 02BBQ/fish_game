@@ -17,7 +17,7 @@ MonoBehaviour:
   nameStr: None
   cost: 0
   description: this is base of fish SO that will be stored in server
-  stackable: 1
+  stackable: 0
   price: 0
   weight: 0
   id: 
