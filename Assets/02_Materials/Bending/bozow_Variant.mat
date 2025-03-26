@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5483789328471284626
+--- !u!114 &-2038199251861843044
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,13 +20,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_Outline
-  m_Shader: {fileID: -6465566751694194690, guid: 22d827596911d3e44943d40257e1b44f, type: 3}
+  m_Name: bozow_Variant
+  m_Shader: {fileID: -6465566751694194690, guid: 8eecd573450be8944b4af8cb71d6e243, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -37,6 +37,18 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BumbMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -51,11 +63,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Bend: 0.085
+    - _Amount: 0.0297
+    - _Metalic: 0
+    - _NormalFloat: 1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Width: 0.03
+    - _Smoothness: 0
     m_Colors:
-    - _Color: {r: 6.498019, g: 6.498019, b: 6.498019, a: 0}
+    - _Color: {r: 0.57861626, g: 0.57861626, b: 0.57861626, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
