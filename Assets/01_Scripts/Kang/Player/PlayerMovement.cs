@@ -29,7 +29,6 @@ public class PlayerMovement : MonoBehaviour
 
     float _pitch = 0f;
     float _yaw = 0f;
-    bool jumping = false;
 
     public Vector3 direction = Vector3.zero;
 
@@ -145,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void FallingCheck()
     {
-        Vector3 startPos = transform.position + Vector3.up * 0.5f;
+       /* Vector3 startPos = transform.position + Vector3.up * 0.5f;
         if (jumping)
         {
             if (Physics.SphereCast(startPos, 0.25f, Vector3.down, out _, 0.385f, groundLayer))
@@ -171,7 +170,7 @@ public class PlayerMovement : MonoBehaviour
                 grounded = false;
                 _player.playerAnim.SetBool("Ground", false);
             }
-        }
+        }*/
     }
 
     public void Move(Vector2 input)
@@ -188,14 +187,14 @@ public class PlayerMovement : MonoBehaviour
         direction = Vector3.Lerp(direction, localMovement, 7f * Time.deltaTime);
 
         Vector3 worldMovement = transform.TransformDirection(direction);
-        if(Physics.Raycast(new Ray(transform.position + worldMovement * 2f + Vector3.up * 3f, Vector3.down), out RaycastHit hit, 8f))
+/*        if(Physics.Raycast(new Ray(transform.position + worldMovement * 2f + Vector3.up * 3f, Vector3.down), out RaycastHit hit, 8f))
         {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Water"))
             {
                 _player.playerAnim.SetFloat("Y", Mathf.Lerp(_player.playerAnim.anim.GetFloat("Y"), 0f, Time.deltaTime * 8f));
                 return;
             }
-        }
+        }*/
         _player.playerAnim.SetFloat("Y", direction.magnitude);
 
         Vector3 velocity = _rb.linearVelocity;
@@ -222,11 +221,9 @@ public class PlayerMovement : MonoBehaviour
         if (grounded && _rb.isKinematic == false)
         {
             _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, _jumpPower, _rb.linearVelocity.z);
-            jumping = true;
             Invoke("JumpFalse", 0.3f);
         }
     }
-    void JumpFalse() => jumping = false;
     public void StopMoveTarget()
     {
         _chaseState = AutoMoveState.None;

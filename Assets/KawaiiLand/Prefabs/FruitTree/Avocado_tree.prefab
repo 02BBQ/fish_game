@@ -26,16 +26,17 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 877029048179264089}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1597393244832054586}
   - {fileID: 1606878210720989531}
   - {fileID: 8003213243352732557}
   - {fileID: 9024799495184364612}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3517274458539941702
 MeshFilter:
@@ -56,16 +57,20 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 18298bdce85181d4b8f1bc3b1651fa8f, type: 2}
-  - {fileID: 2100000, guid: a2d4244476eebb243a2f6b89def0674a, type: 2}
+  - {fileID: 2100000, guid: e20fec9723533574dbbed1dbbaa39aa7, type: 2}
+  - {fileID: 2100000, guid: 500fcf75020db8c4bbc42e072b148cf5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -95,9 +100,17 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 877029048179264089}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -7561070456997400500, guid: 0ae1ccf9040748c45a3de2a0b75bd2a5, type: 3}
@@ -106,6 +119,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 531431255671886051}
     m_Modifications:
     - target: {fileID: 279344931459515062, guid: dd324597d148b8447a3fc9ba60a2c31a, type: 3}
@@ -169,6 +183,9 @@ PrefabInstance:
       value: Avocado
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd324597d148b8447a3fc9ba60a2c31a, type: 3}
 --- !u!4 &1606878210720989531 stripped
 Transform:
@@ -180,6 +197,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 531431255671886051}
     m_Modifications:
     - target: {fileID: 279344931459515062, guid: dd324597d148b8447a3fc9ba60a2c31a, type: 3}
@@ -243,6 +261,9 @@ PrefabInstance:
       value: Avocado
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd324597d148b8447a3fc9ba60a2c31a, type: 3}
 --- !u!4 &1597393244832054586 stripped
 Transform:
@@ -254,6 +275,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 531431255671886051}
     m_Modifications:
     - target: {fileID: 279344931459515062, guid: dd324597d148b8447a3fc9ba60a2c31a, type: 3}
@@ -317,6 +339,9 @@ PrefabInstance:
       value: Avocado
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd324597d148b8447a3fc9ba60a2c31a, type: 3}
 --- !u!4 &8003213243352732557 stripped
 Transform:
@@ -328,6 +353,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 531431255671886051}
     m_Modifications:
     - target: {fileID: 279344931459515062, guid: dd324597d148b8447a3fc9ba60a2c31a, type: 3}
@@ -391,6 +417,9 @@ PrefabInstance:
       value: Avocado
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd324597d148b8447a3fc9ba60a2c31a, type: 3}
 --- !u!4 &9024799495184364612 stripped
 Transform:
