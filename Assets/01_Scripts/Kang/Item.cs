@@ -1,3 +1,5 @@
+using System;
+using System.Text;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Item", menuName = "SO/Item")]
@@ -13,6 +15,16 @@ public class Item : ScriptableObject
     public string description;
 
     public bool stackable = true;
+
+    public virtual StringBuilder GetDescription()
+    {
+        return new StringBuilder(this.description);
+    }
+
+    public virtual String GetName()
+    {
+        return this.nameStr;
+    }
 }
 
 

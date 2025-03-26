@@ -8,9 +8,11 @@ public class FishingVisual : MonoBehaviour
     public Transform fishingRod;
     public Transform fishingRodTip;
     public Transform bobber;
+    [field: SerializeField] public ParticleSystem shakeParticleBase { get; private set; }
 
     private bool isAnchored;
     private Vector3 anchorPosition;
+    private ParticleSystem shakeParticle;
 
     private Vector3 zero = new Vector3(0, 0, 0);
 
@@ -72,5 +74,17 @@ public class FishingVisual : MonoBehaviour
         }
         this.isAnchored = isAnchored;
         this.anchorPosition = (Vector3)anchorPosition;
+
+        if (shakeParticle != null)
+        {
+            shakeParticle.Stop();
+            Destroy(shakeParticle.gameObject, 1f);
+        }
+
+        if (isAnchored)
+        {
+            shakeParticle = Instantiate(shakeParticleBase, this.anchorPosition, UnityEngine.Quaternion.identity);
+            shakeParticle.Play();
+        }
     }
 }

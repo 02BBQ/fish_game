@@ -1,4 +1,4 @@
-using UnityEditor;
+/*using UnityEditor;
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
@@ -79,4 +79,4 @@ public class SetBindingObj
         if (source.HasProperty("_NormalFloat"))
             target.SetFloat("_NormalFloat", source.GetFloat("_NormalFloat"));
     }
-}
+}*/

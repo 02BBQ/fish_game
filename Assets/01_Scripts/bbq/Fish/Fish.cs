@@ -18,6 +18,8 @@ public class FishData : ScriptableObject
     public float DancingStepMax;
     public float DancingStepMin;
 
+    [TextArea] public string description;
+
     public float GetDancingStep()
     {
         return Random.Range(DancingStepMin, DancingStepMax);

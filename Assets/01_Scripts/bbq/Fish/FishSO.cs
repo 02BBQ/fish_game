@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
+using System.Text;
 
 [CreateAssetMenu(fileName = "Item", menuName = "SO/Fishing/FishSO")]
 public class FishSO : Item
@@ -19,6 +20,17 @@ public class FishSO : Item
         this.weight = fishSO.baseWeight * Random.Range(fishSO.MinWeightMultiplier, fishSO.MaxWeightMultiplier);
         this.price = (int)CalculatePrice(fishSO);
         this.image = fishSO.fishSprite;
+        this.description = fishSO.description;
+    }
+
+    public override StringBuilder GetDescription()
+    {
+        return new StringBuilder("Weight: " + this.price + "\nWorth: " + this.price + "\n"  + this.description);
+    }
+
+    public override string GetName()
+    {
+        return species;
     }
 
     public virtual float CalculatePrice(FishData fishSO)
