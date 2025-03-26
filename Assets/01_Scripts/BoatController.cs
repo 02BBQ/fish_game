@@ -25,18 +25,19 @@ public class BoatController : MapEntity
 
         boatEdges = GetComponentsInChildren<BoatEdge>();
         transform.GetPositionAndRotation(out originPos, out originRot);
+        isDynamic = true;
     }
     protected override void Start()
     {
-        isDynamic = true;
         base.Start();
 
         rigid.angularDamping = _boatData.boatDamp;
         rigid.linearDamping = _boatData.boatDamp;
         rigid.mass = 10000;
     }
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         if (!fast && rigid.linearVelocity.sqrMagnitude > 70f)
         {
             fast = true;

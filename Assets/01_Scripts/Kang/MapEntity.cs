@@ -22,9 +22,9 @@ public abstract class MapEntity : MonoBehaviour
     {
         CreateMapIcon(); // 게임 시작 시 아이콘 생성
     }
-    private void Update()
+    protected virtual void Update()
     {
-        if (isDynamic)
+        if (isDynamic && iconObj.activeSelf == true)
         {
             iconObj.transform.position = transform.position + Vector3.up * 400f; // 아이콘 위치 조정
         }
