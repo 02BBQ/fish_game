@@ -24,6 +24,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
     public void Select()
     {   
         var plr = Definder.Player;
+        if (!plr.playerSlot.CanChange) return;
         if (plr.playerSlot.currentEquip != null)
         {
             plr.playerSlot.currentEquip.Unequip();
@@ -37,6 +38,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
     public void Deselect()
     {
         var plr = Definder.Player;
+        if (!plr.playerSlot.CanChange) return;
         if (plr.playerSlot.currentEquip != null)
         {
             plr.playerSlot.currentEquip.Unequip();
