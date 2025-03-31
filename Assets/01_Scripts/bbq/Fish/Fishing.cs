@@ -240,7 +240,6 @@ public class Fishing : MonoBehaviour
             Destroy(fish);
         }
         fishingVisual.ResetBobber();
-        print("ASDFADF");
 
         // player.playerMovement.enabled = true;
         playerMovement.movable = true;

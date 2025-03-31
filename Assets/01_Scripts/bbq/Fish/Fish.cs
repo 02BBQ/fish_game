@@ -1,4 +1,4 @@
-using UnityEngine;
+ using UnityEngine;
 
 [CreateAssetMenu(fileName = "Item", menuName = "SO/Fishing/FishData")]
 public class FishData : ScriptableObject
