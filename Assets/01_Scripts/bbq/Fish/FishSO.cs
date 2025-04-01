@@ -10,6 +10,7 @@ public class FishSO : Item
     public float weight;
     public string id;
     public string species;
+    public GameObject visual;
 
     public void Initialize(FishData fishSO)
     {
@@ -21,6 +22,7 @@ public class FishSO : Item
         this.price = (int)CalculatePrice(fishSO);
         this.image = fishSO.fishSprite;
         this.description = fishSO.description;
+        this.visual = fishSO.visual;
     }
 
     public override StringBuilder GetDescription()

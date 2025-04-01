@@ -9,7 +9,7 @@ public class FishData : ScriptableObject
     // public float size;
     public string spec;
     public float basePrice;
-    public GameObject fishPrefab;
+    public GameObject visual;
 
     [Header("Info")]
     public float MaxWeightMultiplier;
