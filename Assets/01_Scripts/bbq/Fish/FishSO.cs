@@ -27,7 +27,7 @@ public class FishSO : Item
 
     public override StringBuilder GetDescription()
     {
-        return new StringBuilder("Weight: " + this.price + "\nWorth: " + this.price + "\n"  + this.description);
+        return new StringBuilder("Weight: " + this.weight + "kg" + "\nWorth: " + this.price + "\n"  + this.description);
     }
 
     public override string GetName()
