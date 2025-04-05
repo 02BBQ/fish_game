@@ -203,6 +203,7 @@ public class Fishing : MonoBehaviour
                 if (v == 1)
                 {
                     Stepped -= RodUpdate;
+                    player.playerAnim.SetTrigger("BackFlip");
                     EndReel();
                     return;
                 }
@@ -240,7 +241,6 @@ public class Fishing : MonoBehaviour
             Destroy(fish);
         }
         fishingVisual.ResetBobber();
-        print("ASDFADF");
 
         // player.playerMovement.enabled = true;
         playerMovement.movable = true;
