@@ -203,6 +203,7 @@ public class Fishing : MonoBehaviour
                 if (v == 1)
                 {
                     Stepped -= RodUpdate;
+                    player.playerAnim.SetTrigger("BackFlip");
                     EndReel();
                     return;
                 }

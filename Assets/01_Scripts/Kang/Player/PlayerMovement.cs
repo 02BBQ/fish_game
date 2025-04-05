@@ -161,7 +161,7 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 localMovement = new Vector3(input.x * weight, 0f, input.y * weight);
 
-        direction = Vector3.Lerp(direction, localMovement, 7f * Time.deltaTime);
+        direction = Vector3.Lerp(direction, localMovement, 8f * Time.deltaTime);
 
         Vector3 worldMovement = transform.TransformDirection(direction);
 /*        if(Physics.Raycast(new Ray(transform.position + worldMovement * 2f + Vector3.up * 3f, Vector3.down), out RaycastHit hit, 8f))
