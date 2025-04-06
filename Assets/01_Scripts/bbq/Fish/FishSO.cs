@@ -4,13 +4,15 @@ using Random = UnityEngine.Random;
 using System.Text;
 
 [CreateAssetMenu(fileName = "Item", menuName = "SO/Fishing/FishSO")]
-public class FishSO : Item
+public class FishSO : Item, ModelView
 {
     public int price;
     public float weight;
     public string id;
     public string species;
     public GameObject visual;
+
+    [field: SerializeField] public string addressPath { get; set; }
 
     public void Initialize(FishData fishSO)
     {

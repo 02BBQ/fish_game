@@ -4,8 +4,9 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections.Generic;
 using UnityEngine.ResourceManagement.ResourceLocations;
+using System;
 
-public class ItemInfo : MonoBehaviour, IItemInfoView
+public class ItemInfo : MonoBehaviour //, IItemInfoView
 {
     [field: SerializeField] public TMP_Text nameText { get; private set; }
     [field: SerializeField] public TMP_Text descText { get; private set; }
@@ -20,11 +21,25 @@ public class ItemInfo : MonoBehaviour, IItemInfoView
     private const string defaultModelAddress = "Fish/Default";
 
 
-    public void UpdateItemInfo(string name, string description)
+    public void UpdateItemInfo(Item item)
     {
-        nameText.text = name;
-        descText.text = description;
-        LoadModel("Fish/Default");
+        
+        nameText.text = item.GetName();
+        descText.text = item.GetDescription().ToString();
+        if (item is ModelView itemModel)
+        {
+            modelAddress = itemModel.addressPath;
+            LoadModel(modelAddress);
+        }
+        else
+        {
+            LoadSprite(item.image);
+        }
+    }
+
+    private void LoadSprite(Sprite image)
+    {
+        throw new NotImplementedException();
     }
 
     public void LoadModel(string key)
