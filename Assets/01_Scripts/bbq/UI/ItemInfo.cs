@@ -5,6 +5,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections.Generic;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using System;
+using System.Linq.Expressions;
 
 public class ItemInfo : MonoBehaviour //, IItemInfoView
 {
@@ -20,13 +21,29 @@ public class ItemInfo : MonoBehaviour //, IItemInfoView
 
     private const string defaultModelAddress = "Fish/Default";
 
+    private Item currentItem;
+
+    private SpriteRenderer spriteModel;
+
+    private void Start()
+    {
+        spriteModel = new GameObject("Sprite").AddComponent<SpriteRenderer>();
+        spriteModel.transform.SetParent(modelPosition.transform);
+        spriteModel.transform.localPosition = Vector3.zero;
+        spriteModel.transform.localRotation = Quaternion.identity;
+        spriteModel.transform.localScale *= .25f;
+
+        spriteModel.sortingLayerName = "UI";
+        spriteModel.sortingOrder = 1;
+    }
 
     public void UpdateItemInfo(Item item)
     {
         
         nameText.text = item.GetName();
         descText.text = item.GetDescription().ToString();
-        if (item is ModelView itemModel)
+        currentItem = item;
+        if (item is ModelView itemModel && itemModel.addressPath != null && itemModel.addressPath != string.Empty)
         {
             modelAddress = itemModel.addressPath;
             LoadModel(modelAddress);
@@ -39,43 +56,78 @@ public class ItemInfo : MonoBehaviour //, IItemInfoView
 
     private void LoadSprite(Sprite image)
     {
-        throw new NotImplementedException();
+        if (loadedModel != null)
+        {
+            Destroy(loadedModel);
+            loadedModel = null;
+
+            ReleaseHandle();
+        }
+
+        spriteModel.gameObject.SetActive(true);
+        
+        if (image != null)
+        {
+            loadedModel = new GameObject("Sprite");
+            loadedModel.transform.SetParent(modelPosition.transform);
+            loadedModel.transform.localPosition = Vector3.zero;
+            loadedModel.transform.localRotation = Quaternion.identity;
+
+            loadedModel.transform.localScale *= .25f;
+
+            SpriteRenderer spriteRenderer = loadedModel.AddComponent<SpriteRenderer>();
+            spriteRenderer.sprite = image;
+            spriteRenderer.sortingLayerName = "UI";
+            spriteRenderer.sortingOrder = 1;
+
+            SetLayerRecursively(loadedModel, viewLayer);
+        }
+        else
+        {
+            Debug.LogError("이미지를 로드할 수 없습니다.");
+        }
     }
 
-    public void LoadModel(string key)
+    private void LoadModel(string key)
     {
         if (loadedModel != null)
         {
             Destroy(loadedModel);
             loadedModel = null;
 
-            Addressables.Release(handle);
+            ReleaseHandle();
         }
+
+        spriteModel.gameObject.SetActive(false);
         
         modelAddress = key;
         
         Addressables.LoadResourceLocationsAsync(modelAddress).Completed += OnResourceLocationLoaded;
     }
 
+    private void OnDestroy()
+    {
+        Destroy(spriteModel);
+    }
+
     private void OnResourceLocationLoaded(AsyncOperationHandle<IList<IResourceLocation>> locationHandle)
     {
         if (locationHandle.Status == AsyncOperationStatus.Succeeded && locationHandle.Result.Count > 0)
         {
-            // 에셋이 존재하면 로드
             handle = Addressables.LoadAssetAsync<GameObject>(modelAddress);
             handle.Completed += OnModelLoaded;
         }
         else
         {
-            // 에셋이 존재하지 않으면 기본 모델 로드
             if (modelAddress != defaultModelAddress)
             {
                 Debug.LogWarning($"모델 '{modelAddress}'을(를) 찾을 수 없습니다. 기본 모델을 로드합니다.");
-                LoadModel(defaultModelAddress);
+                // LoadModel(defaultModelAddress);
+                LoadSprite(currentItem.image);
             }
             else
             {
-                Debug.LogError("기본 모델도 찾을 수 없습니다.");
+                // Debug.LogError("기본 모델도 찾을 수 없습니다.");
             }
         }
 
@@ -96,6 +148,13 @@ public class ItemInfo : MonoBehaviour //, IItemInfoView
         }
     }
 
+    private void ReleaseHandle()
+    {
+        if (handle.IsValid())
+        {
+            Addressables.Release(handle);
+        }
+    }
 
     public static void SetLayerRecursively(GameObject obj, int newLayer)
     {

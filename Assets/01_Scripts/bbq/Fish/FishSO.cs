@@ -10,7 +10,6 @@ public class FishSO : Item, ModelView
     public float weight;
     public string id;
     public string species;
-    public GameObject visual;
 
     [field: SerializeField] public string addressPath { get; set; }
 
@@ -24,7 +23,6 @@ public class FishSO : Item, ModelView
         this.price = (int)CalculatePrice(fishSO);
         this.image = fishSO.fishSprite;
         this.description = fishSO.description;
-        this.visual = fishSO.visual;
     }
 
     public override StringBuilder GetDescription()

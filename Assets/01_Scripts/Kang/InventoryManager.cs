@@ -139,10 +139,5 @@ public class InventoryManager : SingleTon<InventoryManager>
         if (item == null) return;
         
         itemInfo.UpdateItemInfo(item);
-        
-        if (item is FishSO fish)
-        {
-            var model = fish.visual;
-        }
     }
 }
