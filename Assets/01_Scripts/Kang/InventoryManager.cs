@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UI;
+using static UnityEngine.UI.Dropdown;
 
 public class InventoryManager : SingleTon<InventoryManager>
 {
@@ -9,10 +12,23 @@ public class InventoryManager : SingleTon<InventoryManager>
     public InventorySlot[] inventorySlots;
     public GameObject inventoryItemPrefab;
     public ItemInfo itemInfo;
+    public TMP_Dropdown category;
 
     [field: SerializeField] public List<Item> Items {get; private set;} = new List<Item>();
 
     int selectedSlot = -1;
+
+    private void Awake()
+    {
+        category.ClearOptions();
+        List<string> types = new List<string>();
+        types.Add("All");
+        foreach (ItemType type in Enum.GetValues(typeof(ItemType)))
+        {
+            types.Add(type.ToString());
+        }
+        category.AddOptions(types);
+    }
 
     private void Start()
     {

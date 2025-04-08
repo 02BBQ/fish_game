@@ -57,6 +57,8 @@ public class PlayerBoat : MonoBehaviour
 
         if (_player.boating)
         {
+            GuideText.Instance.RemoveGuide("ExitBoat");
+            GuideText.Instance.AddGuide("EnterBoat");
             _player.boating = false;
             _player.playerMovement.StopMoveTarget();
             _currentBoat.ExitBoat();
@@ -74,6 +76,8 @@ public class PlayerBoat : MonoBehaviour
             {
                 _player.playerMovement.LookTarget(_currentBoat.ridePoint, () =>
                 {
+                    GuideText.Instance.AddGuide("ExitBoat");
+                    GuideText.Instance.RemoveGuide("EnterBoat");
                     Transform visual = _player.playerMovement.visual;
                     visual.localEulerAngles = new Vector3(visual.localEulerAngles.x, 0f, visual.localEulerAngles.z);
                     _player.boating = true;
@@ -93,6 +97,7 @@ public class PlayerBoat : MonoBehaviour
         if (boat != null)
         {
             _currentBoat = boat;
+            GuideText.Instance.AddGuide("EnterBoat");
             _ridable = true;
         }
     }
@@ -100,6 +105,7 @@ public class PlayerBoat : MonoBehaviour
     {
         if (_currentBoat && other.transform.root == _currentBoat.transform)
         {
+            GuideText.Instance.RemoveGuide("EnterBoat");
             _ridable = false;
         }
     }

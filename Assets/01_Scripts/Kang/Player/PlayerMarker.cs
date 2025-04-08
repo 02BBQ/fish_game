@@ -9,6 +9,6 @@ public class PlayerMarker : MonoBehaviour
     }
     void Update()
     {
-        transform.eulerAngles = new Vector3(0f, 0f, -visual.eulerAngles.y);
+        transform.eulerAngles = new Vector3(0f, 0f, -visual.eulerAngles.y + 180);
     }
 }

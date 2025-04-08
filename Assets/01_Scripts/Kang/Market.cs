@@ -52,6 +52,7 @@ public class Market : MapEntity, IInteractable
             materials[1] = outlineMaterial;
             outlineMesh.materials = materials;
             Definder.Player.AddInteract(OnInterect);
+            GuideText.Instance.AddGuide("Market");
         }
     }
     private void OnTriggerExit(Collider other)
@@ -61,6 +62,7 @@ public class Market : MapEntity, IInteractable
             materials[1] = nullMat;
             outlineMesh.materials = materials;
             Definder.Player.RemoveInterect(OnInterect);
+            GuideText.Instance.RemoveGuide("Market");
         }
     }
     public void OnInterect()
