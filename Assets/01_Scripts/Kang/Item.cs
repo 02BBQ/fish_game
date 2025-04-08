@@ -15,6 +15,9 @@ public class Item : ScriptableObject
     public string description;
 
     public bool stackable = true;
+    
+    [Header("Visual")]
+    public string visualPath;
 
     public virtual StringBuilder GetDescription()
     {

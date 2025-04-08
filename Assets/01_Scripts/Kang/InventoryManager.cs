@@ -154,6 +154,6 @@ public class InventoryManager : SingleTon<InventoryManager>
     {
         if (item == null) return;
         
-        itemInfo.UpdateItemInfo(item.GetName(), item.GetDescription().ToString());
+        itemInfo.UpdateItemInfo(item);
     }
 }

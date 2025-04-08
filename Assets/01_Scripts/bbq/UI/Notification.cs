@@ -32,6 +32,7 @@ public class Notification : MonoBehaviour
         string data = evt.text;
         
         var text = GetBase();
+        text.transform.SetSiblingIndex(0);
 
         text.fontSize = 0f;
         DOTween.To(
@@ -43,13 +44,14 @@ public class Notification : MonoBehaviour
 
         text.text = data;
         DOVirtual.DelayedCall(3f, () => {
-            var text = GetBase();
             DOTween.To(
                 () => text.fontSize,           // 현재 값 가져오기
                 x => text.fontSize = x,        // 값 설정하기
                 0f,                              // 목표 크기
                 .3f                                // 지속 시간
-            ).SetEase(Ease.InQuad);
+            ).SetEase(Ease.InQuad).OnComplete(() => {
+                DestroyBase(text);
+            });
         }
         );
     }
