@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// this class is in gray background image, this is slot
+/// </summary>
 public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
 {
     Image image;
@@ -75,7 +78,11 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
     {
         slotItem = null;
     }
-
+    public void SetItem(InventoryItem item)
+    {
+        slotItem = item;
+        item.SetParent(transform);
+    }
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (slotItem != null && slotItem.item != null)
