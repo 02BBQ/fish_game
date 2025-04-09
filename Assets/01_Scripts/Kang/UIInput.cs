@@ -11,12 +11,14 @@ public class UIInput : ScriptableObject
     public InputSystem_Actions InputAction => _inputAction;
 
     public event Action ClickESC;
+    public event Action InventoryEvent;
 
     private void OnEnable()
     {
         _inputAction = new InputSystem_Actions();
         _inputAction.UI.Enable();
-        _inputAction.UI.Esc.performed += Esc_performed; ;
+        _inputAction.UI.Esc.performed += Esc_performed; 
+        _inputAction.UI.Inventory.performed += (obj) => InventoryManager.Instance.inventoryUI.SetActive(!InventoryManager.Instance.inventoryUI.activeSelf);
     }
 
     private void Esc_performed(InputAction.CallbackContext obj)
