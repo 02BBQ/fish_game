@@ -11,6 +11,7 @@ using static UnityEngine.UI.Dropdown;
 public class InventoryManager : SingleTon<InventoryManager>
 {
     public int maxStackedItems = 16;
+    public GameObject inventoryUI;
     public InventorySlot[] inventorySlots;
     public ItemInfo itemInfo;
     [SerializeField] private GameObject inventoryItemPrefab;
