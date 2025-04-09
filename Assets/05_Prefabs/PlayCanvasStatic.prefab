@@ -4767,7 +4767,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6216628594168359426}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -5375,6 +5375,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5ac83911c206224893f655dd7d14448, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coments:
+  - key: EnterBoat
+    value: "F\uB97C \uB20C\uB7EC\uC11C \uD0C0\uC138\uC694"
+  - key: ExitBoat
+    value: "F\uB97C \uB20C\uB7EC \uB0B4\uB9AC\uC138\uC694"
+  - key: Market
+    value: "F\uB97C \uB20C\uB7EC \uC0C1\uC810\uC744 \uC5EC\uC138\uC694"
 --- !u!1 &7119768772639154354
 GameObject:
   m_ObjectHideFlags: 0
