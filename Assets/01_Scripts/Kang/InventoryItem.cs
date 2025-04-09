@@ -6,6 +6,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// this class is in inventory item image, this is Instantiate item image
+/// </summary>
 public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
 
@@ -34,6 +37,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         countText.text = count.ToString("0");
         bool textActive = count > 1;
         countText.gameObject.SetActive(textActive);
+        
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -49,7 +53,17 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
         parentBeforeDrag = transform.parent;
         parentAfterDrag = transform.parent;
-        transform.SetParent(transform.root);
+
+        ItemType currentType = InventoryManager.Instance.GetCurrentCategory();
+        if (item.type == currentType || currentType == ItemType.None)
+        {
+            transform.SetParent(transform.root);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+            InventoryManager.Instance.RefreshFillter();
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -60,8 +74,13 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnEndDrag(PointerEventData eventData)
     {
         image.raycastTarget = true;
-        transform.SetParent(parentAfterDrag);
-        rectTrm.anchoredPosition = Vector2.zero;        
+        parentAfterDrag.GetComponent<InventorySlot>().SetItem(this);
+    }
+
+    public void SetParent(Transform slot)
+    {
+        transform.SetParent(slot);
+        rectTrm.anchoredPosition = Vector2.zero;
     }
 
     public void SetSlotItem()

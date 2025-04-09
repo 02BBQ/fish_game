@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,14 +12,17 @@ public class InventoryManager : SingleTon<InventoryManager>
 {
     public int maxStackedItems = 16;
     public InventorySlot[] inventorySlots;
-    public GameObject inventoryItemPrefab;
     public ItemInfo itemInfo;
-    public TMP_Dropdown category;
+    [SerializeField] private GameObject inventoryItemPrefab;
+    [SerializeField] private TMP_Dropdown category;
+    [SerializeField] private int quickSlotCount = 3;
 
     [field: SerializeField] public List<Item> Items {get; private set;} = new List<Item>();
+    private List<InventoryItem> inventoryItems = new List<InventoryItem>();
 
     int selectedSlot = -1;
 
+#region UNITY_EVENTS
     private void Awake()
     {
         category.ClearOptions();
@@ -25,19 +30,16 @@ public class InventoryManager : SingleTon<InventoryManager>
         types.Add("All");
         foreach (ItemType type in Enum.GetValues(typeof(ItemType)))
         {
-            types.Add(type.ToString());
+            if(type != ItemType.Boat && type != ItemType.None)
+                types.Add(type.ToString());
         }
         category.AddOptions(types);
     }
 
     private void Start()
     {
+        category.onValueChanged.AddListener(OnChangeCategory);
         EventBus.Subscribe(EventBusType.Start, Init);
-    }
-    private void Init()
-    {
-        // ChangeSelectedSlot(0);
-        Definder.Player.playerInput.downKeyPad += OnKeypadDown;
     }
 
     private void OnDestroy()
@@ -45,6 +47,13 @@ public class InventoryManager : SingleTon<InventoryManager>
         if(Definder.Player)
             Definder.Player.playerInput.downKeyPad -= OnKeypadDown;
         EventBus.Unsubscribe(EventBusType.Start, Init);
+    }
+#endregion
+
+    private void Init()
+    {
+        // ChangeSelectedSlot(0);
+        Definder.Player.playerInput.downKeyPad += OnKeypadDown;
     }
     private void OnKeypadDown(int key)
     {
@@ -67,10 +76,9 @@ public class InventoryManager : SingleTon<InventoryManager>
 
     public bool AddItem(Item item)
     {
-        for (int i = 0; i < inventorySlots.Length; i++)
+        for (int i = 0; i < inventoryItems.Count; i++)
         {
-            InventorySlot slot = inventorySlots[i];
-            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+            InventoryItem itemInSlot = inventoryItems[i];
 
             if (itemInSlot != null && 
                 itemInSlot.item.nameStr == item.nameStr && 
@@ -82,11 +90,11 @@ public class InventoryManager : SingleTon<InventoryManager>
                 itemInSlot.RefreshCount();
                 return true;
             }
-            else if (itemInSlot == null)//��ĭ ������
-            {
-                SpawnNewItem(item, slot);
-                return true;
-            }
+        }
+        if (inventoryItems.Count < inventorySlots.Length)//��ĭ ������
+        {
+            SpawnNewItem(item);
+            return true;
         }
         return false;
     }
@@ -113,17 +121,23 @@ public class InventoryManager : SingleTon<InventoryManager>
         }
         return false;
     }
-    void SpawnNewItem(Item item, InventorySlot slot)
+    void SpawnNewItem(Item item)
     {
         item = Instantiate(item);
         Items.Add(item);
-        GameObject newItemGo = Instantiate(inventoryItemPrefab, slot.transform);
+        GameObject newItemGo = Instantiate(inventoryItemPrefab);
         InventoryItem inventoryItem = newItemGo.GetComponent<InventoryItem>();
-        slot.slotItem = inventoryItem;
         inventoryItem.InitializeItem(item);
+        inventoryItems.Add(inventoryItem);
+        newItemGo.SetActive(false);
+        RefreshFillter();
     }
+
+    
+
     void DeleteItem(InventoryItem slot)
     {
+        inventoryItems.Add(slot);
         Items.Remove(slot.item);
         Destroy(slot.gameObject);
     }
@@ -131,7 +145,7 @@ public class InventoryManager : SingleTon<InventoryManager>
     public Item GetSelectedItem(bool use)
     {
         InventorySlot slot = inventorySlots[selectedSlot];
-        InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+        InventoryItem itemInSlot = slot.slotItem;
 
         if (itemInSlot != null)
         {
@@ -153,7 +167,85 @@ public class InventoryManager : SingleTon<InventoryManager>
     public void UpdateInfo(Item item)
     {
         if (item == null) return;
-        
+
         itemInfo.UpdateItemInfo(item);
     }
+
+    #region Fillter
+    public ItemType GetCurrentCategory()
+    {
+        int index = category.value;
+        if (index == 0) return ItemType.None;
+        string str = category.options[index].text;
+
+        return Enum.Parse<ItemType>(str);
+    }
+    public void RefreshFillter()
+    {
+        if (category.value == 0)
+            RefreshItemAll();
+        else
+        {
+            int index = category.value;
+            string str = category.options[index].text;
+            RefreshItembyCategory(Enum.Parse<ItemType>(str));//find itemtype with dropbox value
+        }
+    }
+    void RefreshItembyCategory(ItemType type)
+    {
+        CleanSlot();
+
+        int slotIndex = quickSlotCount;//그냥 밑에 떠있는 슬롯은 제외하기 위한 것
+        for (int i = 0; i < inventoryItems.Count; i++)
+        {
+            InventoryItem invItem = inventoryItems[i];
+            if (invItem.item.type == type && invItem.gameObject.activeSelf == false)
+            {
+                print("afdasfsdfsdf");
+                invItem.gameObject.SetActive(true);
+                inventorySlots[slotIndex].SetItem(invItem);
+                slotIndex++;
+            }
+        }
+    }
+
+    void RefreshItemAll()
+    {
+        CleanSlot();
+
+        int slotIndex = quickSlotCount;
+        for (int i = 0; i < inventoryItems.Count; i++)
+        {
+            InventoryItem invItem = inventoryItems[i];
+            if (invItem.gameObject.activeSelf == false)
+            {
+                invItem.gameObject.SetActive(true);
+                inventorySlots[slotIndex].SetItem(invItem);
+                slotIndex++;
+            }
+        }
+    }
+    private void CleanSlot()
+    {
+        for (int i = quickSlotCount; i < inventorySlots.Length; i++)
+        {
+            InventorySlot slot = inventorySlots[i];
+
+            if (slot.slotItem == null) continue;
+            
+            InventoryItem slotItem = slot.slotItem;
+            slotItem.gameObject.SetActive(false);
+            slot.ResetItem();
+        }
+    }
+    private void OnChangeCategory(int index)
+    {
+        if (index == 0)
+        {
+            RefreshItemAll();
+            return;
+        }
+        RefreshItembyCategory((ItemType)index);
+    }
+    #endregion
 }

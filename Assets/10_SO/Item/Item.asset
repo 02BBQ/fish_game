@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 21300000, guid: 2b9ad4e1f43ac5d499d0b533ec55e833, type: 3}
   type: 1
-  nameStr: fake item
+  nameStr: FISH1
   cost: 101
   description: This is BEST fishing rod buy now!!!!
   stackable: 1
+  visualPath: 
