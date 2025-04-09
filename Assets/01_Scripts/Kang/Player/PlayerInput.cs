@@ -24,6 +24,7 @@ public class PlayerInput : ScriptableObject
     public event Action<int> downKeyPad;
     public event Action FishingDown;
     public event Action FishingUp;
+    public event Action CamereLock;
     public Vector2 Movement { get; private set; }
     public bool Shift { get; private set; }
     public bool Jumping { get; private set; }
@@ -51,6 +52,8 @@ public class PlayerInput : ScriptableObject
 
         _inputAction.Player.Fishing.performed += (obj) => FishingDown?.Invoke();
         _inputAction.Player.Fishing.canceled += (obj) => FishingUp?.Invoke();
+
+        _inputAction.Player.CameraLock.performed += (obj) => CamereLock?.Invoke();
     }
 
     private void KeyPad_performed(InputAction.CallbackContext obj)
