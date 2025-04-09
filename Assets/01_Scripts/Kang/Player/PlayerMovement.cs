@@ -159,7 +159,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (_player.playerInput.Shift) weight *= 2;
 
-        Vector3 localMovement = new Vector3(input.x * weight, 0f, input.y * weight);
+        Vector3 localMovement = input.x * Camera.main.transform.right + input.y * Camera.main.transform.forward;
+        localMovement.y = 0f;
+        localMovement.Normalize();
+        localMovement *= weight;
 
         direction = Vector3.Lerp(direction, localMovement, 8f * Time.deltaTime);
 
@@ -178,11 +181,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (input.sqrMagnitude < 0.1f) return;
 
-        Quaternion targetRotation = Quaternion.LookRotation(localMovement);
-        visual.localRotation = Quaternion.RotateTowards(visual.localRotation, targetRotation, _rotateSpeed * Time.deltaTime);
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        visual.rotation = Quaternion.RotateTowards(visual.rotation, targetRotation, _rotateSpeed * Time.deltaTime * 2f);
 
-        velocity.x = worldMovement.x * _moveSpeed;
-        velocity.z = worldMovement.z * _moveSpeed;
+        velocity.x = localMovement.x * _moveSpeed;
+        velocity.z = localMovement.z * _moveSpeed;
 
         velocity.y = _rb.linearVelocity.y;
 

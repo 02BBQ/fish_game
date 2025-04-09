@@ -72,6 +72,7 @@ public class ItemInfo : MonoBehaviour //, IItemInfoView
             loadedModel.transform.SetParent(modelPosition.transform);
             loadedModel.transform.localPosition = Vector3.zero;
             loadedModel.transform.localRotation = Quaternion.identity;
+            loadedModel.layer = viewLayer;
 
             loadedModel.transform.localScale *= .25f;
 

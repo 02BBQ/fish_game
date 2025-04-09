@@ -134,6 +134,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CameraLock"",
+                    ""type"": ""Button"",
+                    ""id"": ""02e0c3ff-c4c8-4438-8dea-fe5863952e9a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -651,6 +660,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Fishing"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ec9bbaeb-5dd1-4de3-9bf3-5f233ae371d6"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraLock"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1270,6 +1290,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Ctrl = m_Player.FindAction("Ctrl", throwIfNotFound: true);
         m_Player_KeyPad = m_Player.FindAction("KeyPad", throwIfNotFound: true);
         m_Player_Fishing = m_Player.FindAction("Fishing", throwIfNotFound: true);
+        m_Player_CameraLock = m_Player.FindAction("CameraLock", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1362,6 +1383,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Ctrl;
     private readonly InputAction m_Player_KeyPad;
     private readonly InputAction m_Player_Fishing;
+    private readonly InputAction m_Player_CameraLock;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1378,6 +1400,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @Ctrl => m_Wrapper.m_Player_Ctrl;
         public InputAction @KeyPad => m_Wrapper.m_Player_KeyPad;
         public InputAction @Fishing => m_Wrapper.m_Player_Fishing;
+        public InputAction @CameraLock => m_Wrapper.m_Player_CameraLock;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1423,6 +1446,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Fishing.started += instance.OnFishing;
             @Fishing.performed += instance.OnFishing;
             @Fishing.canceled += instance.OnFishing;
+            @CameraLock.started += instance.OnCameraLock;
+            @CameraLock.performed += instance.OnCameraLock;
+            @CameraLock.canceled += instance.OnCameraLock;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1463,6 +1489,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Fishing.started -= instance.OnFishing;
             @Fishing.performed -= instance.OnFishing;
             @Fishing.canceled -= instance.OnFishing;
+            @CameraLock.started -= instance.OnCameraLock;
+            @CameraLock.performed -= instance.OnCameraLock;
+            @CameraLock.canceled -= instance.OnCameraLock;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1665,6 +1694,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnCtrl(InputAction.CallbackContext context);
         void OnKeyPad(InputAction.CallbackContext context);
         void OnFishing(InputAction.CallbackContext context);
+        void OnCameraLock(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
