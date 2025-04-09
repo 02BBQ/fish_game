@@ -54,16 +54,6 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         parentBeforeDrag = transform.parent;
         parentAfterDrag = transform.parent;
 
-        ItemType currentType = InventoryManager.Instance.GetCurrentCategory();
-        if (item.type == currentType || currentType == ItemType.None)
-        {
-            transform.SetParent(transform.root);
-        }
-        else
-        {
-            gameObject.SetActive(false);
-            InventoryManager.Instance.RefreshFillter();
-        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -74,7 +64,17 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnEndDrag(PointerEventData eventData)
     {
         image.raycastTarget = true;
-        parentAfterDrag.GetComponent<InventorySlot>().SetItem(this);
+
+        ItemType currentType = InventoryManager.Instance.GetCurrentCategory();
+        if (item.type == currentType || currentType == ItemType.None)
+        {
+            parentAfterDrag.GetComponent<InventorySlot>().SetItem(this);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+            InventoryManager.Instance.RefreshFillter();
+        }
     }
 
     public void SetParent(Transform slot)
