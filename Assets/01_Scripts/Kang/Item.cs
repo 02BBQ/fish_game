@@ -33,8 +33,9 @@ public class Item : ScriptableObject
 
 public enum ItemType
 {
+    None = -1,
     Boat = 0,
     Fish = 1,
-    Fishing = 2,
+    FishingRod = 2,
     Bait = 3
 }
