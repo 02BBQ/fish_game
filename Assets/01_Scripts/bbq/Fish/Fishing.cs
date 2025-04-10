@@ -299,6 +299,7 @@ public class Fishing : MonoBehaviour
 
                 Stepped += FishingUpdate;
 
+                _fishingFish = getFish;
                 if (_hit.collider != null && _hit.collider.gameObject.layer != LayerMask.NameToLayer("Suimono_Water"))
                 {
                     PullReel();
@@ -306,7 +307,7 @@ public class Fishing : MonoBehaviour
                 }
                 else
                 {
-                    _fishingFish = getFish;
+                    // _fishingFish = getFish;
                 }
                 return;
             }

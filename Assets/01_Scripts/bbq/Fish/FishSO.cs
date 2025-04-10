@@ -11,18 +11,19 @@ public class FishSO : Item, ModelView
     public string id;
     public string species;
 
-    [field: SerializeField] public string addressPath { get; set; }
+    public string addressPath { get ; set ; }
 
-    public void Initialize(FishData fishSO)
+    public void Initialize(FishData data)
     {
         this.id = Guid.NewGuid().ToString();
-        this.species = fishSO.spec;
-        this.name = fishSO.name;
-        this.nameStr = fishSO.name;
-        this.weight = fishSO.baseWeight * Random.Range(fishSO.MinWeightMultiplier, fishSO.MaxWeightMultiplier);
-        this.price = (int)CalculatePrice(fishSO);
-        this.image = fishSO.fishSprite;
-        this.description = fishSO.description;
+        this.species = data.spec;
+        this.name = data.name;
+        this.nameStr = data.name;
+        this.weight = data.baseWeight * Random.Range(data.MinWeightMultiplier, data.MaxWeightMultiplier);
+        this.price = (int)CalculatePrice(data);
+        this.image = data.fishSprite;
+        this.description = data.description;
+        this.visualPath = data.visualAddress;
     }
 
     public override StringBuilder GetDescription()
