@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 
 public class FishDataLoader : MonoBehaviour
 {
-    public static string dataUrl = "https://script.google.com/macros/s/AKfycbz1OKNdHOS6C0RpJpTd2FKs-Y-_DINfyk6PZkAzhgjqJ8A0OopmOdJPy87_lpOrlN5w/exec";
+    public static string dataUrl = "https://script.google.com/macros/s/AKfycbwE27KNpz2454S9-WWxQlRZ8uicZi0PqdgW4KcdveI70HLZCGHEtRzCkRz826CyIFIW/exec";
 
     public static void LoadData(System.Action<string> onComplete)
     {
@@ -22,7 +22,7 @@ public class FishDataLoader : MonoBehaviour
             if (www.result == UnityWebRequest.Result.Success)
             {
                 string wrappedJson = "{\"characters\":" + www.downloadHandler.text + "}";
-                // print(www.downloadHandler.text);
+                print(www.downloadHandler.text);
                 // FishDataList list = JsonUtility.FromJson<FishDataList>(wrappedJson);
                 onComplete?.Invoke(www.downloadHandler.text);
             }

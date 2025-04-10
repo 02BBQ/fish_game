@@ -11,7 +11,7 @@ public class FishSO : Item, ModelView
     public string id;
     public string species;
 
-    public string addressPath { get ; set ; }
+    public string rarity;
 
     public void Initialize(FishData data)
     {

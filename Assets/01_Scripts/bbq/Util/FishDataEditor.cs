@@ -1,5 +1,7 @@
+using TMPro.EditorUtilities;
 using UnityEditor;
 using UnityEngine;
+using Unity.EditorCoroutines.Editor;
 
 public class FishDataEditor : EditorWindow
 {
@@ -11,26 +13,67 @@ public class FishDataEditor : EditorWindow
 
     private void OnGUI()
     {
-        GUILayout.Label("Google Sheet에서 캐릭터 데이터 불러오기", EditorStyles.boldLabel);
+        GUILayout.Label("🦈 Google Sheet에서 데이터 불러오기", EditorStyles.boldLabel);
 
-        if (GUILayout.Button("불러오기"))
+        if (GUILayout.Button("🐟 Fish 데이터 불러오기"))
         {
-            FishDataLoader.LoadData(OnDataLoaded);
+            FishDataLoader.LoadData(OnFishDataLoaded);
+        }
+
+        if (GUILayout.Button("🎣 Rarity Table 불러오기"))
+        {
+            FishDataLoader.LoadData(OnRarityDataLoaded);
         }
     }
 
-    private void OnDataLoaded(string data)
+    private void OnFishDataLoaded(string rawJson)
     {
-         string wrapped = "{\"items\":" + data + "}";
-        FishStructTable parsed = JsonUtility.FromJson<FishStructTable>(wrapped);
-       
-        
-        // Debug.Log($"{data}");
-        
-        // foreach (var character in data)
-        // {
-        //     // Debug.Log($"{character.id} - {character.spec} / {character.basePrice}₩");
-        // }
+        var arrays = JsonHelper.SplitJsonArray(rawJson);
+        string fishWrapped = "{\"items\":" + arrays[0] + "}";
+
+        FishStructTable parsed = JsonUtility.FromJson<FishStructTable>(fishWrapped);
+        EditorCoroutineUtility.StartCoroutineOwnerless(FishSOGenerator.GenerateFish(parsed.items));
+    }
+
+    private void OnRarityDataLoaded(string rawJson)
+    {
+        var arrays = JsonHelper.SplitJsonArray(rawJson);
+        string rarityWrapped = "{\"items\":" + arrays[1] + "}";
+
+        RarityWeightTable parsed = JsonUtility.FromJson<RarityWeightTable>(rarityWrapped);
+        FishSOGenerator.ProcessRarityTable(parsed.items); // 임시용 처리 함수
+    }
+}
+
+public static class JsonHelper
+{
+    public static string[] SplitJsonArray(string json)
+    {
+        int depth = 0;
+        int splitIndex = -1;
+
+        for (int i = 0; i < json.Length; i++)
+        {
+            if (json[i] == '[') depth++;
+            else if (json[i] == ']') depth--;
+
+            if (depth == 1 && json[i] == ',' && splitIndex == -1)
+            {
+                splitIndex = i;
+                break;
+            }
+        }
+
+        if (splitIndex == -1)
+        {
+            Debug.LogError("⚠️ JSON 구조가 잘못되었습니다.");
+            return new[] { "[]", "[]" };
+        }
+
+        string first = json.Substring(1, splitIndex - 1).Trim();
+        string second = json.Substring(splitIndex + 1, json.Length - splitIndex - 2).Trim();
+
+        return new[] { first, second };
     }
 }
 

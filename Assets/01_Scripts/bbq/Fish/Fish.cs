@@ -20,6 +20,8 @@ public class FishData : ScriptableObject
 
     public string visualAddress;
 
+    public string rarity;
+
     [TextArea] public string description;
 
     public float GetDancingStep()
