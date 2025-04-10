@@ -17,7 +17,7 @@ public class BoatManager : SingleTon<BoatManager>
     public void UnlockBoat(Item item)
     {
         BoatController boat = boats[boatItems.IndexOf(item)];
-        boat.gameObject.SetActive(false);
+        boat.gameObject.SetActive(true);
         UIManager.Instance.MakeBoatLabel(item, boat);
     }
 }

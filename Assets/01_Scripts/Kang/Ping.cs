@@ -11,6 +11,6 @@ public class Ping : MonoBehaviour
     }
     private void Update()
     {
-        myMat.SetFloat("_Alpha", Core.Remap(Vector3.Distance(transform.position, player.position), 30f, 650f, 0f, 0.7f));
+        myMat.SetFloat("_Alpha", Core.Remap(Vector3.Distance(transform.position, player.position), 30f, 65f, 0f, 0.7f));
     }
 }

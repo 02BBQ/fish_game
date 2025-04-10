@@ -27,13 +27,19 @@ public class Market : Interactor
 
     protected override void OnTriggerEnter(Collider other)
     {
-        base.OnTriggerEnter(other);
-        GuideText.Instance.AddGuide("Market");
+        if (other.CompareTag("Player"))
+        {
+            base.OnTriggerEnter(other);
+            GuideText.Instance.AddGuide("Market");
+        }
     }
     protected override void OnTriggerExit(Collider other)
     {
-        base.OnTriggerExit(other);
-        GuideText.Instance.RemoveGuide("Market");
+        if (other.CompareTag("Player"))
+        {
+            base.OnTriggerExit(other);
+            GuideText.Instance.RemoveGuide("Market");
+        }
     }
 
     private void AddGoodsInBuy(Item item)

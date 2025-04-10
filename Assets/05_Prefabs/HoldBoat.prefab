@@ -139,6 +139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: {fileID: 7794344870563892445}
   destriptionText: {fileID: 803702226454713383}
+  buttonText: {fileID: 6229349120852574478}
   icon: {fileID: 1303450249155018370}
   item: {fileID: 0}
   boat: {fileID: 0}
