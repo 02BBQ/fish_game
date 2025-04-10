@@ -101,10 +101,9 @@ public class InventoryManager : SingleTon<InventoryManager>
     }
     public bool RemoveItem(Item item)
     {
-        for (int i = 0; i < inventorySlots.Length; i++)
+        for (int i = 0; i < inventoryItems.Count; i++)
         {
-            InventorySlot slot = inventorySlots[i];
-            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+            InventoryItem itemInSlot = inventoryItems[i];
             if (itemInSlot != null &&
                 itemInSlot.item.nameStr == item.nameStr)
             {
@@ -138,7 +137,7 @@ public class InventoryManager : SingleTon<InventoryManager>
 
     void DeleteItem(InventoryItem slot)
     {
-        inventoryItems.Add(slot);
+        inventoryItems.Remove(slot);
         Items.Remove(slot.item);
         Destroy(slot.gameObject);
     }

@@ -2,10 +2,11 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class Player : MonoBehaviour
+public class Player : MapEntity
 {
     [HideInInspector] private Rigidbody _rigid;
     public Rigidbody Rigidbody { get => _rigid; }
@@ -31,12 +32,17 @@ public class Player : MonoBehaviour
         _capsuleCollider = transform.Find("Collider").GetComponent<CapsuleCollider>();
     }
     public Item debugItem;
-    private void Start()
+    protected override void Start()
     {
+        isMove = true;
+        isRotate = true;
+        base.Start();
         InventoryManager.Instance.AddItem(debugItem);
+        playerBoat.enabled = true;
     }
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
 
         if (boating)
             playerBoat.Move(playerInput.Movement);

@@ -51,15 +51,11 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        // if(transform.childCount == 0)
-        // {
-        //     InventoryItem inventoryItem = eventData.pointerDrag.GetComponent<InventoryItem>();
-        //     inventoryItem.parentAfterDrag = transform;
-        //     slotItem = inventoryItem;
-        // }
         if (slotItem != null)
         {
             InventoryItem inventoryItem = eventData.pointerDrag.GetComponent<InventoryItem>();
+            if (inventoryItem == null) return;
+
             slotItem.parentAfterDrag = inventoryItem.parentBeforeDrag;
             slotItem.transform.SetParent(inventoryItem.parentBeforeDrag, false);
             inventoryItem.parentAfterDrag = transform;
@@ -69,6 +65,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
         else
         {
             InventoryItem inventoryItem = eventData.pointerDrag.GetComponent<InventoryItem>();
+            if (inventoryItem == null) return;
             inventoryItem.parentAfterDrag = transform;
             slotItem = inventoryItem;
         }

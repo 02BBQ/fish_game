@@ -9,7 +9,6 @@ public class BoatController : MapEntity
     [SerializeField] ParticleSystem[] forms;
     private Rigidbody rigid;
     public Transform camPos;
-    //Vector2 currentVelocity;
     BoatEdge[] boatEdges;
 
     [HideInInspector] public Transform ridePoint;
@@ -25,7 +24,7 @@ public class BoatController : MapEntity
 
         boatEdges = GetComponentsInChildren<BoatEdge>();
         transform.GetPositionAndRotation(out originPos, out originRot);
-        isDynamic = true;
+        isMove = true;
     }
     protected override void Start()
     {
@@ -56,15 +55,12 @@ public class BoatController : MapEntity
 
     private void OnEnable()
     {
-        EventBus.Subscribe(EventBusType.Drowning, OnDrowning);
+        EventBus.Subscribe(EventBusType.Drowning, ResetPos);
     }
 
     private void OnDisable()
-
-
     {
-        EventBus.Unsubscribe(EventBusType.Drowning, OnDrowning);
-
+        EventBus.Unsubscribe(EventBusType.Drowning, ResetPos);
     }
     private void OnDestroy()
     {
@@ -100,7 +96,7 @@ public class BoatController : MapEntity
     }
 
 
-    private void OnDrowning()
+    public void ResetPos()
     {
         rigid.linearVelocity = Vector3.zero;
         transform.SetPositionAndRotation(originPos, originRot);
@@ -110,20 +106,4 @@ public class BoatController : MapEntity
     {
         IconDisable();
     }
-    /*    public void Move(Vector2 input)
-   {
-       currentVelocity += input * _boatData.boatWeight * Time.deltaTime;
-       currentVelocity.x = Mathf.Min(currentVelocity.x, _boatData.boatSpeed);
-       currentVelocity.y = Mathf.Min(currentVelocity.y, _boatData.boatSpeed);
-
-   }
-   private void LateUpdate()
-   {
-       rigid.angularVelocity = new Vector3(rigid.angularVelocity.x, currentVelocity.x * 10f, rigid.angularVelocity.z);
-       rigid.linearVelocity = transform.TransformDirection(new Vector3(rigid.linearVelocity.x, rigid.linearVelocity.y, currentVelocity.y * 80f));
-
-       currentVelocity -= Vector2.one * _boatData.boatWeight * Time.deltaTime;
-       currentVelocity.x = Mathf.Max(currentVelocity.x, 0f);
-       currentVelocity.y = Mathf.Max(currentVelocity.y, 0f);
-   }*/
 }

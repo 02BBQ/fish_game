@@ -43,15 +43,12 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnBeginDrag(PointerEventData eventData)
     {
         image.raycastTarget = false;
-        if (parentAfterDrag != null)
-        {
-            var slot = parentAfterDrag.GetComponent<InventorySlot>();
-            if (slot)
-            {
-                slot.ResetItem();
-            }   
-        }
         parentBeforeDrag = transform.parent;
+        var slot = parentBeforeDrag.GetComponent<InventorySlot>();
+        if (slot)
+        {
+            slot.ResetItem();
+        }
         parentAfterDrag = transform.parent;
 
     }

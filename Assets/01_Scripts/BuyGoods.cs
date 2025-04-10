@@ -25,7 +25,8 @@ public class BuyGoods : MonoBehaviour
         {
             if(item.type == ItemType.Boat)
             {
-                Definder.GameManager.UnlockBoat(item.nameStr);
+                if (item.type == ItemType.Boat)
+                    BoatManager.Instance.UnlockBoat(item);
                 Destroy(gameObject);
             }
             else
