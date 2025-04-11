@@ -16,7 +16,7 @@ MonoBehaviour:
   fishSprite: {fileID: 0}
   baseWeight: 420
   spec: "\uBE0C\uB974\uB974 \uBE0C\uB974\uB974 \uD30C\uD0C0\uD54C"
-  basePrice: 900
+  basePrice: 1600
   MaxWeightMultiplier: 3
   MinWeightMultiplier: 1
   DancingStepMax: 0.7

@@ -16,12 +16,12 @@ MonoBehaviour:
   fishSprite: {fileID: 0}
   baseWeight: 550
   spec: "\uD241 \uD241 \uD241 \uD241 \uD241 \uD241 \uD241 \uC0AC\uD6C4\uB974"
-  basePrice: 600
+  basePrice: 12800
   MaxWeightMultiplier: 3
   MinWeightMultiplier: 1
   DancingStepMax: 0.7
   DancingStepMin: 0.4
   visualAddress: 
-  rarity: Legend
+  rarity: Myth
   description: "Legend has it that if you call its name three times and it doesn\u2019t
     respond, it will appear and haunt you"

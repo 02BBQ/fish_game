@@ -1,0 +1,229 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 877fcccba8739564d804a4c86adb2e19, type: 3}
+  m_Name: RarityTable
+  m_EditorClassIdentifier: 
+  rarities:
+  - name: Common
+    weight: 100
+    fishes:
+    - {fileID: 11400000, guid: 81b23299196ec10409c94d39c4f7546e, type: 2}
+    - {fileID: 11400000, guid: 43ea544d9b8c02e47bf8dc762e4cd194, type: 2}
+    - {fileID: 11400000, guid: 2b2e05556665d3248ae2b1915929ec7f, type: 2}
+    - {fileID: 11400000, guid: b62acf3c532551947aa720ddf7a41246, type: 2}
+    - {fileID: 11400000, guid: 9212ed64ae6d32b448a879f5e6449357, type: 2}
+    - {fileID: 11400000, guid: a128ebdb1c20f0f4191d2ecfac5964b4, type: 2}
+    - {fileID: 11400000, guid: 79f3acdc2f09c994495c0a47cf044d1e, type: 2}
+    - {fileID: 11400000, guid: 51ec1f7e2b075ac4bafeeeb8e344c367, type: 2}
+    - {fileID: 11400000, guid: 6eedade7b0936204db4cd30194274c52, type: 2}
+    - {fileID: 11400000, guid: 5ef76f0e04ff68546a8fe4ef5e17e574, type: 2}
+    - {fileID: 11400000, guid: 5b08515b71a4bde4a9117477ab3a6b70, type: 2}
+    - {fileID: 11400000, guid: 853314264c1e7f4409a48915102655a4, type: 2}
+    - {fileID: 11400000, guid: ebacf67629d26f44993366e6b5fe13ec, type: 2}
+    - {fileID: 11400000, guid: f91cd661ad401d04a9585c0727c7c133, type: 2}
+    - {fileID: 11400000, guid: 1c4b98f4289ca5e43849a9f6edbf0ffe, type: 2}
+    - {fileID: 11400000, guid: 4907be62eba59684e898bfe5c11c4782, type: 2}
+    - {fileID: 11400000, guid: 9a78c526c6996254ba2ca93cc4e6c8ee, type: 2}
+    - {fileID: 11400000, guid: c8e8d6bfe449ab24e8f8360cbbc883ef, type: 2}
+    - {fileID: 11400000, guid: 299b9815e9c42364f8836a822db9b1b3, type: 2}
+    - {fileID: 11400000, guid: 2cf2771e39cec3644b2834a8f0cec0dc, type: 2}
+    - {fileID: 11400000, guid: db1a9a909caf08f40ad9977315d33901, type: 2}
+    - {fileID: 11400000, guid: 9071e7a348087ec418c42dc75ef717e1, type: 2}
+    - {fileID: 11400000, guid: ab8f32413ca259d4692d8afdb3fe7f94, type: 2}
+    - {fileID: 11400000, guid: b034c678fa4a14145bf6fa6d3bed3a20, type: 2}
+    - {fileID: 11400000, guid: 517c739f4afedfd45a1367b5200caf7e, type: 2}
+    - {fileID: 11400000, guid: 9bd465c8c8c98454bbd098a8bfec1e78, type: 2}
+    - {fileID: 11400000, guid: b4afc07535cc84c48ac110591c957026, type: 2}
+    - {fileID: 11400000, guid: 9c70d3d461b803847acee6480a31e8d9, type: 2}
+    - {fileID: 11400000, guid: c6877192cfc538f4f97c4a35a7541364, type: 2}
+    - {fileID: 11400000, guid: ba17581a9f65c384a8710fbcbd71d198, type: 2}
+    - {fileID: 11400000, guid: d7afe5e5713541d44b9f013341bda3c9, type: 2}
+    - {fileID: 11400000, guid: a73b13b2c37824a4ca473d7588b293bb, type: 2}
+    - {fileID: 11400000, guid: 73a768304619f52439204a57677fd759, type: 2}
+    - {fileID: 11400000, guid: 2a7a2523d9008974c9cf3f3fb9839fdd, type: 2}
+    - {fileID: 11400000, guid: d34066a935d94084192505e1179f1a38, type: 2}
+    - {fileID: 11400000, guid: 23e8f6a49cd5548439988dc5395056e6, type: 2}
+    - {fileID: 11400000, guid: 62b12cf744259054893ac87d689eed1d, type: 2}
+    - {fileID: 11400000, guid: d9d9c79c88890a34fb23b35cd4abddc0, type: 2}
+    - {fileID: 11400000, guid: ab94c48b0f253c1489e64bec59173671, type: 2}
+    - {fileID: 11400000, guid: d66aa6e2db680a9478bd58c872eecae0, type: 2}
+    - {fileID: 11400000, guid: d7e6073ae1b052442bc069ed364ec27d, type: 2}
+    - {fileID: 11400000, guid: e071fbfbdc372554189f6f6813bf9fee, type: 2}
+    - {fileID: 11400000, guid: 4ed7d99df8674a941b14c54ea8a94812, type: 2}
+    - {fileID: 11400000, guid: 8af40c42f98eba24683d08242f4a89c7, type: 2}
+    - {fileID: 11400000, guid: 69a61b2852871dd4285429231783a064, type: 2}
+    - {fileID: 11400000, guid: 907aa1f055801194d8d2de21baea3b18, type: 2}
+    - {fileID: 11400000, guid: d2d3722fc0678424b8d87d9bddac908a, type: 2}
+    - {fileID: 11400000, guid: ceea9fa07ed9d174bb17941821f0a7f1, type: 2}
+    - {fileID: 11400000, guid: 6fee3925ea9161b42b2785f0d96b4b0b, type: 2}
+    - {fileID: 11400000, guid: 4be354f5644077948a1221f45436d1d7, type: 2}
+    - {fileID: 11400000, guid: 28154fa7ec10099419c3eacc60631515, type: 2}
+    - {fileID: 11400000, guid: e86660f4b06132e458d6c2a3e61d2f7f, type: 2}
+    - {fileID: 11400000, guid: ed87a8f85c7ba5246a954288d1c402ef, type: 2}
+    - {fileID: 11400000, guid: 57e0bbcb03a68894a899e34c452ac0f8, type: 2}
+  - name: Uncommon
+    weight: 40
+    fishes:
+    - {fileID: 11400000, guid: 6cdc777c01522184da5e076d729e9d53, type: 2}
+    - {fileID: 11400000, guid: 4ccc397c538318248aaa304f85e0eff8, type: 2}
+    - {fileID: 11400000, guid: 0cc4edf9f35ed014abd7ffc79303fbbb, type: 2}
+    - {fileID: 11400000, guid: 2447ae580bbeabc4aa05ac81e849e75f, type: 2}
+    - {fileID: 11400000, guid: 0f52ae1236a210545bc39734089bc856, type: 2}
+    - {fileID: 11400000, guid: bea5c61909b866e4fa7fec0dac83f696, type: 2}
+    - {fileID: 11400000, guid: d40ca8092bab4c047a4991bb2931a04e, type: 2}
+    - {fileID: 11400000, guid: d82bd074f30bdd94fa68c9b50ab968f9, type: 2}
+    - {fileID: 11400000, guid: 72bbaee124cc1f3459cc32e588727356, type: 2}
+    - {fileID: 11400000, guid: 745a854d1363d2e4fb360153d282c4ef, type: 2}
+    - {fileID: 11400000, guid: 43d1b39f315482d41a4b4e2ce3e71fa3, type: 2}
+    - {fileID: 11400000, guid: 33fbe55177107a74f8121bb6532d3a76, type: 2}
+    - {fileID: 11400000, guid: 04023b619616a5240bf43bc4d4668a9f, type: 2}
+    - {fileID: 11400000, guid: 988c4ff2a4a68384d801bc98c9ea8b32, type: 2}
+    - {fileID: 11400000, guid: 5955b24d2d0a74e41884c5eb2c8de761, type: 2}
+    - {fileID: 11400000, guid: d08274c2e36ee734ba6e5b4a1d83b73b, type: 2}
+    - {fileID: 11400000, guid: aea38709a1772ab4fb5f227bf5532292, type: 2}
+    - {fileID: 11400000, guid: ea3e57976489c22429bcdd24e56abb09, type: 2}
+    - {fileID: 11400000, guid: c1f89f8bc90338845a0abb941e2b8803, type: 2}
+    - {fileID: 11400000, guid: 1442d0790d78c074981f59e6fba99064, type: 2}
+    - {fileID: 11400000, guid: 7f73f819fe9500d43809b5cf6f1eee07, type: 2}
+    - {fileID: 11400000, guid: 2927e982243670b4bb343651f313e2bf, type: 2}
+    - {fileID: 11400000, guid: 26a65e7a1db8a6041a82329010c272e7, type: 2}
+    - {fileID: 11400000, guid: 237bfbbc2570fc447865b82a278879df, type: 2}
+    - {fileID: 11400000, guid: f030fcefa795ada4bb11ba84344e3131, type: 2}
+  - name: Rare
+    weight: 15
+    fishes:
+    - {fileID: 11400000, guid: bc7e2893654948246a007d2c5b7f39c3, type: 2}
+    - {fileID: 11400000, guid: ed81cb969e0ff98449c2ce921bd4a534, type: 2}
+    - {fileID: 11400000, guid: 195435d4ae7994949bafda4a9e4376ed, type: 2}
+    - {fileID: 11400000, guid: aad19257f41f3804d93b3e00aa41f5c9, type: 2}
+    - {fileID: 11400000, guid: ada5a04b7901a9d4e968ff9f776170bb, type: 2}
+    - {fileID: 11400000, guid: c076226c5a2d80043986517e9d57b83f, type: 2}
+    - {fileID: 11400000, guid: 4b96ad062e881b743a6dc0ce435766c6, type: 2}
+    - {fileID: 11400000, guid: 08127302f42204b4da0fb21deda57ace, type: 2}
+    - {fileID: 11400000, guid: 0064799e4a2c42f4ba2c9139fc6ede02, type: 2}
+    - {fileID: 11400000, guid: 8f8ccb3fccfda644aa2724cb2e5e7c27, type: 2}
+    - {fileID: 11400000, guid: 44bc3d451b1bfa74e916a9fe62538451, type: 2}
+    - {fileID: 11400000, guid: dcf9525f775f86e4cb56c0cf0aded769, type: 2}
+    - {fileID: 11400000, guid: 5327d4fbc9286294899c53177fcff235, type: 2}
+    - {fileID: 11400000, guid: 1da07902797a7d84683ecb1852268deb, type: 2}
+    - {fileID: 11400000, guid: 1c9a6344bd418594fb820bac5f993716, type: 2}
+    - {fileID: 11400000, guid: d3ff95faade06344d8e5c54c803f6f44, type: 2}
+    - {fileID: 11400000, guid: 44dbe7bd03453034bab9330da3f2b59a, type: 2}
+    - {fileID: 11400000, guid: 57b54ca0caedb394ba7f4f242d62b4e9, type: 2}
+    - {fileID: 11400000, guid: 46c64465dbba4804cae253728d64d24e, type: 2}
+    - {fileID: 11400000, guid: fcd687c175f396845a0f593e5484bc91, type: 2}
+    - {fileID: 11400000, guid: acffdd00855189749b182bab6552cf2e, type: 2}
+    - {fileID: 11400000, guid: a96bac7c1d872c349ba0e489444427d4, type: 2}
+    - {fileID: 11400000, guid: 376554fa81e86cc4f8ef66efc50fbbf5, type: 2}
+  - name: SuperRare
+    weight: 7.5
+    fishes:
+    - {fileID: 11400000, guid: dd45c9253435def46ab9fc352449eb10, type: 2}
+    - {fileID: 11400000, guid: 0fb4b16da454aa844a170edd65b5a713, type: 2}
+    - {fileID: 11400000, guid: 540845b3c3b655a458f0f31d4138082b, type: 2}
+    - {fileID: 11400000, guid: 6839de7904ec6d14e8f42aef9307aa55, type: 2}
+    - {fileID: 11400000, guid: ea5820e3b4465d84fbca15a4b2e32827, type: 2}
+    - {fileID: 11400000, guid: 886d3a09be6153c40a6f2e11a46b220b, type: 2}
+    - {fileID: 11400000, guid: b5557b9a3f0edc448a9767830df112ae, type: 2}
+    - {fileID: 11400000, guid: 8cf2a3e79734892469064cde37aa17ae, type: 2}
+    - {fileID: 11400000, guid: a1bbaa79f11e34249af075abc1b2ceb8, type: 2}
+    - {fileID: 11400000, guid: 0d98c6220e393954a92198bf66f6a309, type: 2}
+  - name: UltraSuperRare
+    weight: 2
+    fishes:
+    - {fileID: 11400000, guid: 26d90ea022c6d02428c313367ea3d6c0, type: 2}
+    - {fileID: 11400000, guid: e4a6bef7eb945e34aa8eddbbd744dfc7, type: 2}
+    - {fileID: 11400000, guid: b7522e223be2664418aaa2c6439bcd6a, type: 2}
+    - {fileID: 11400000, guid: 5975d6fe17680254ba0850dbdf3859c2, type: 2}
+    - {fileID: 11400000, guid: 64f7bf5812402d645ad030806357b444, type: 2}
+    - {fileID: 11400000, guid: 21b7ec144ca94c14aa2df6ab0eb6dec1, type: 2}
+    - {fileID: 11400000, guid: 072d150478c51344db1e25f3e83fcdcf, type: 2}
+    - {fileID: 11400000, guid: 30e4ca0beed30e54b8e5202289083ee7, type: 2}
+    - {fileID: 11400000, guid: c6b4612bf9be87a448b8e237b3aeb007, type: 2}
+    - {fileID: 11400000, guid: c21f58848ff3c5b44808c7dfe922e656, type: 2}
+    - {fileID: 11400000, guid: 19903834492540e4d965eca3df40f7f2, type: 2}
+    - {fileID: 11400000, guid: 4865aa916b3215c439759c98d44e39b2, type: 2}
+    - {fileID: 11400000, guid: 036b5c8cce90903448ac2ca4603c9bd6, type: 2}
+    - {fileID: 11400000, guid: 05a3183bff3b52e46810dec6b04209f2, type: 2}
+    - {fileID: 11400000, guid: 47b0ef2a650d0aa4aa41ae48d2af11c6, type: 2}
+    - {fileID: 11400000, guid: 4e2b1937cc359bd468748a6e1d8d60ce, type: 2}
+    - {fileID: 11400000, guid: 0747d82bfc3d02644bcc21c61433b4b8, type: 2}
+    - {fileID: 11400000, guid: b84ae57fde7c2a142ab9e020f3812fae, type: 2}
+    - {fileID: 11400000, guid: 6004a2c86e5b6024898ac8afcb41cdcd, type: 2}
+    - {fileID: 11400000, guid: be8b9ec1284c884409c41f7c1ea13b99, type: 2}
+    - {fileID: 11400000, guid: c835c728ef6614c48a7bb459fdaf2054, type: 2}
+    - {fileID: 11400000, guid: a86dc537b5cd8b645bde5f203e090218, type: 2}
+    - {fileID: 11400000, guid: db5768662e2fa7e4084d8153fb695d3e, type: 2}
+    - {fileID: 11400000, guid: 8649d7a91f875544b8abb5d8df6c54e0, type: 2}
+    - {fileID: 11400000, guid: 4b0266e7f800047489f8350da2499e9c, type: 2}
+    - {fileID: 11400000, guid: c0fdb26b73ee32840894c2fe6345a93c, type: 2}
+    - {fileID: 11400000, guid: 8059a9db30eff2e41aaa7f3abdaf4813, type: 2}
+    - {fileID: 11400000, guid: b6ee3e4a666c8c14d817dec12991b454, type: 2}
+    - {fileID: 11400000, guid: b6850f51c21aeaa43b08012d4413f98a, type: 2}
+  - name: Epic
+    weight: 0.5
+    fishes:
+    - {fileID: 11400000, guid: 91cef4990ca85444f92a4128c1e5bc7c, type: 2}
+    - {fileID: 11400000, guid: c38c31da2b80def40b2e5dea68f09a40, type: 2}
+    - {fileID: 11400000, guid: dbb89c7981a2f1e41a5ab88f6e4a59a1, type: 2}
+    - {fileID: 11400000, guid: 2e573d3f62e449a4ab4d389a47b68da0, type: 2}
+    - {fileID: 11400000, guid: 9befb084d012e334ea0ec5bc68b98ef7, type: 2}
+    - {fileID: 11400000, guid: f0584d869581bb7499c524cbf2c714f3, type: 2}
+    - {fileID: 11400000, guid: 80089f51ed3ed5c4db17644f0fa8e23e, type: 2}
+    - {fileID: 11400000, guid: 51d8eed684d00ea40b4af3c6b4986893, type: 2}
+    - {fileID: 11400000, guid: 64e98d67309973642903d2c0b360b7bb, type: 2}
+    - {fileID: 11400000, guid: b8a79876963797c4883e69e4b05453af, type: 2}
+    - {fileID: 11400000, guid: a4c33bec2f6c25e4eb2e05ec6a90c9a8, type: 2}
+    - {fileID: 11400000, guid: cd488f80cefa16a4d991a75a5351c3c6, type: 2}
+    - {fileID: 11400000, guid: 956b9f465fdcd4e439ad723bc86bd3c8, type: 2}
+    - {fileID: 11400000, guid: 2fc3621093a9b1248b32ca68edac08bd, type: 2}
+    - {fileID: 11400000, guid: 0e2b8254236372948bc80d70090af27e, type: 2}
+    - {fileID: 11400000, guid: fd81c62e438e98a419e65401c0f78b8f, type: 2}
+    - {fileID: 11400000, guid: 56b69f25f915b5247b0a6b0774a252d9, type: 2}
+    - {fileID: 11400000, guid: 157074752d1b04649b5c9933d806adeb, type: 2}
+    - {fileID: 11400000, guid: 19edac355d402154397b1730a9625780, type: 2}
+  - name: Ancient
+    weight: 0.05
+    fishes:
+    - {fileID: 11400000, guid: 2e915299e8fbd054ea58ff875cfc1748, type: 2}
+    - {fileID: 11400000, guid: 730800a91f5d471439cc8de6e460e9cf, type: 2}
+    - {fileID: 11400000, guid: 63e880c173de8ea42be4c66098ed6b31, type: 2}
+    - {fileID: 11400000, guid: b2e5acb41a70c4d4da51ad0b9c7fbc56, type: 2}
+    - {fileID: 11400000, guid: 1938bfbaf1d9b04449bfbea29a5892d0, type: 2}
+    - {fileID: 11400000, guid: dee4d284adf002c468d0823c12e42618, type: 2}
+    - {fileID: 11400000, guid: cbc9575c73e895243bcda0fd0fe74a22, type: 2}
+    - {fileID: 11400000, guid: 281687f254e352c479a76139e7109bb3, type: 2}
+    - {fileID: 11400000, guid: 12164af3c88fd6e4e83a53405fc367cc, type: 2}
+    - {fileID: 11400000, guid: eae568ae229ebea4b8887add8d00eb1a, type: 2}
+    - {fileID: 11400000, guid: 995ef272a71fa7a45b56389ceeb301a5, type: 2}
+  - name: Legend
+    weight: 0.001
+    fishes:
+    - {fileID: 11400000, guid: 41d94cce802f5224b97daff95cb4a0c2, type: 2}
+    - {fileID: 11400000, guid: 187b92477dfdd2c49bbcfd76673048f9, type: 2}
+    - {fileID: 11400000, guid: 82a57944fa6c08e45a5cc9802a43bb8b, type: 2}
+    - {fileID: 11400000, guid: e519fd42e962d124785c453888b1c345, type: 2}
+    - {fileID: 11400000, guid: 177d0c9aa44f88440beffc0a147451a1, type: 2}
+    - {fileID: 11400000, guid: 371736b8cd9c6cd4c8675ed1cad4c281, type: 2}
+  - name: Myth
+    weight: 0.0001
+    fishes:
+    - {fileID: 11400000, guid: f5c9d9cc5d2202649946c3ccc57ca670, type: 2}
+    - {fileID: 11400000, guid: a6bdfa6cc5a82ca47ac93475646482e6, type: 2}
+    - {fileID: 11400000, guid: e1b6f39aecf10c148906e655585e1940, type: 2}
+    - {fileID: 11400000, guid: 778d66269e03aa848861ac518c9af1ee, type: 2}
+    - {fileID: 11400000, guid: 2f4ffb55de0c0474f8c5233d9dcb53a9, type: 2}
+    - {fileID: 11400000, guid: fc854deaa088668449426577d236240e, type: 2}
+  - name: Secret
+    weight: 0.000024
+    fishes:
+    - {fileID: 11400000, guid: 52a60f1efd44f5e42ba498915943b3f7, type: 2}

@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 
 public class FishDataLoader : MonoBehaviour
 {
-    public static string dataUrl = "https://script.google.com/macros/s/AKfycbwE27KNpz2454S9-WWxQlRZ8uicZi0PqdgW4KcdveI70HLZCGHEtRzCkRz826CyIFIW/exec";
+    public static string dataUrl = "https://script.google.com/macros/s/AKfycbz5u3jxyerqkbUFPqY8F7SMa9TR25Huay1iHBf_tcURUKsFcXAr6YnO0gq_OeOF-txI/exec";
 
     public static void LoadData(System.Action<string> onComplete)
     {

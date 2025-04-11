@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 10161
   fishSprite: {fileID: 0}
-  baseWeight: 6.2
+  baseWeight: 6
   spec: H E L O
-  basePrice: 1
+  basePrice: 12800
   MaxWeightMultiplier: 2
   MinWeightMultiplier: 1
   DancingStepMax: 0.7

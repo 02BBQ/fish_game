@@ -2,6 +2,7 @@ using TMPro.EditorUtilities;
 using UnityEditor;
 using UnityEngine;
 using Unity.EditorCoroutines.Editor;
+using System.Collections.Generic;
 
 public class FishDataEditor : EditorWindow
 {
@@ -20,95 +21,89 @@ public class FishDataEditor : EditorWindow
             FishDataLoader.LoadData(OnFishDataLoaded);
         }
 
-        if (GUILayout.Button("🎣 Rarity Table 불러오기"))
+        if (GUILayout.Button("🎣 Rarity 데이터 불러오기"))
         {
             FishDataLoader.LoadData(OnRarityDataLoaded);
+        }
+
+        if (GUILayout.Button("🥓 Trait 데이터 불러오기"))
+        {
+            FishDataLoader.LoadData(OnTraitDataLoaded);
         }
     }
 
     private void OnFishDataLoaded(string rawJson)
     {
-        var arrays = JsonHelper.SplitJsonArray(rawJson);
+        var arrays = JsonHelper.SplitJsonArray3(rawJson);
         string fishWrapped = "{\"items\":" + arrays[0] + "}";
 
         FishStructTable parsed = JsonUtility.FromJson<FishStructTable>(fishWrapped);
-        EditorCoroutineUtility.StartCoroutineOwnerless(FishSOGenerator.GenerateFish(parsed.items));
+        EditorCoroutineUtility.StartCoroutineOwnerless(FishSOGenerator.Generate(parsed.items));
     }
 
     private void OnRarityDataLoaded(string rawJson)
     {
-        var arrays = JsonHelper.SplitJsonArray(rawJson);
+        var arrays = JsonHelper.SplitJsonArray3(rawJson);
         string rarityWrapped = "{\"items\":" + arrays[1] + "}";
 
         RarityWeightTable parsed = JsonUtility.FromJson<RarityWeightTable>(rarityWrapped);
         FishSOGenerator.ProcessRarityTable(parsed.items); // 임시용 처리 함수
     }
+
+    private void OnTraitDataLoaded(string rawJson)
+    {
+        var arrays = JsonHelper.SplitJsonArray3(rawJson);
+        string traitWrapped = "{\"items\":" + arrays[2] + "}";
+
+        TraitStringWrapper parsed = JsonUtility.FromJson<TraitStringWrapper>(traitWrapped);
+
+        if (parsed.traits == null || parsed.traits.Length == 0)
+        {
+            Debug.LogWarning("⚠️ Trait 배열이 비어 있습니다.");
+            return;
+        }
+
+        TraitListSO so = ScriptableObject.CreateInstance<TraitListSO>();
+        so.traits = parsed.traits;
+
+        const string path = "Assets/10_SO/bbq/TraitTable.asset";
+        AssetDatabase.CreateAsset(so, path);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+    }
 }
 
 public static class JsonHelper
 {
-    public static string[] SplitJsonArray(string json)
+    public static string[] SplitJsonArray3(string json)
     {
+        List<string> result = new();
         int depth = 0;
-        int splitIndex = -1;
+        int startIdx = 1;
 
-        for (int i = 0; i < json.Length; i++)
+        for (int i = 1; i < json.Length - 1; i++)
         {
             if (json[i] == '[') depth++;
             else if (json[i] == ']') depth--;
 
-            if (depth == 1 && json[i] == ',' && splitIndex == -1)
+            if (depth == 0 && json[i] == ',')
             {
-                splitIndex = i;
-                break;
+                string part = json.Substring(startIdx, i - startIdx).Trim();
+                result.Add(part);
+                startIdx = i + 1;
             }
         }
 
-        if (splitIndex == -1)
-        {
-            Debug.LogError("⚠️ JSON 구조가 잘못되었습니다.");
-            return new[] { "[]", "[]" };
-        }
+        // 마지막 요소 추가
+        result.Add(json.Substring(startIdx, json.Length - 1 - startIdx).Trim());
 
-        string first = json.Substring(1, splitIndex - 1).Trim();
-        string second = json.Substring(splitIndex + 1, json.Length - splitIndex - 2).Trim();
-
-        return new[] { first, second };
+        return result.ToArray();
     }
 }
 
-// public static class SOGenerator
-// {
-//     private const string SAVE_PATH = "Assets/Data/Characters";
 
-//     public static void CreateCharacterSOs(CharacterData[] data)
-//     {
-//         if (!Directory.Exists(SAVE_PATH))
-//             Directory.CreateDirectory(SAVE_PATH);
-
-//         foreach (var entry in data)
-//         {
-//             CharacterSO asset = ScriptableObject.CreateInstance<CharacterSO>();
-//             asset.id = entry.id;
-//             asset.key = entry.key;
-//             asset.spec = entry.spec;
-//             asset.koreanName = entry.koreanName;
-//             asset.baseWeight = entry.baseWeight;
-//             asset.basePrice = entry.basePrice;
-//             asset.maxWeightMultiplier = entry.maxWeightMultiplier;
-//             asset.minWeightMultiplier = entry.minWeightMultiplier;
-//             asset.dancingStepMax = entry.dancingStepMax;
-//             asset.dancingStepMin = entry.dancingStepMin;
-//             asset.description = entry.description;
-
-//             string assetPath = Path.Combine(SAVE_PATH, $"Character_{entry.id}_{entry.koreanName}.asset");
-
-//             AssetDatabase.CreateAsset(asset, assetPath);
-//         }
-
-//         AssetDatabase.SaveAssets();
-//         AssetDatabase.Refresh();
-//         Debug.Log($"✅ {data.Length}개의 ScriptableObject가 생성되었습니다.");
-//     }
-// }
-
+[System.Serializable]
+public class TraitStringWrapper
+{
+    public string[] traits;
+}
