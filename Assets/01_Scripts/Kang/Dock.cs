@@ -1,5 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
-
+ 
 public class Dock : Interactor
 {
     protected override void OnTriggerEnter(Collider other)
@@ -22,5 +23,4 @@ public class Dock : Interactor
     {
         UIManager.Instance.dock.SetActive(true);
     }
-
 }

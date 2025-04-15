@@ -149,6 +149,7 @@ public class PlayerMovement : MonoBehaviour
             return;
 
         grounded = false;
+        if(!_player.boating)
         _player.playerAnim.SetBool("Ground", false);
     }
 

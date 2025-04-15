@@ -13,8 +13,6 @@ public class BoatController : MapEntity
 
     [HideInInspector] public Transform ridePoint;
     AudioSource aud;
-    Vector3 originPos;
-    Quaternion originRot;
     bool fast = false;
     private void Awake()
     {
@@ -23,7 +21,6 @@ public class BoatController : MapEntity
         ridePoint = transform.Find("RidePoint");
 
         boatEdges = GetComponentsInChildren<BoatEdge>();
-        transform.GetPositionAndRotation(out originPos, out originRot);
         isMove = true;
     }
     protected override void Start()
@@ -53,15 +50,6 @@ public class BoatController : MapEntity
         }
     }
 
-    private void OnEnable()
-    {
-        EventBus.Subscribe(EventBusType.Drowning, ResetPos);
-    }
-
-    private void OnDisable()
-    {
-        EventBus.Unsubscribe(EventBusType.Drowning, ResetPos);
-    }
     private void OnDestroy()
     {
         fast = false;
@@ -96,10 +84,10 @@ public class BoatController : MapEntity
     }
 
 
-    public void ResetPos()
+    public void ResetPos(Transform trm)
     {
         rigid.linearVelocity = Vector3.zero;
-        transform.SetPositionAndRotation(originPos, originRot);
+        transform.SetPositionAndRotation(trm.position, trm.rotation);
     }
 
     internal void EnterBoat()

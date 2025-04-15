@@ -11,6 +11,7 @@ public class BoatLabel : MonoBehaviour
     public Image icon;
     [HideInInspector] public Item item;
     [HideInInspector] public BoatController boat;
+    [HideInInspector] public bool boatActive = false;
     public void Init(Item item, BoatController boat)
     {
         this.item = item;
@@ -21,23 +22,30 @@ public class BoatLabel : MonoBehaviour
         destriptionText.text = item.description;
         icon.sprite = item.image;
         buttonText.text = "보관";
+        boatActive = true;
         this.boat = boat;
+    }
+    private void OnEnable()
+    {
+        BoatManager.Instance.labels.Add(this);
+    }
+    private void OnDisable()
+    {
+        BoatManager.Instance.labels.Remove(this);
     }
     public void OnClickToggle()
     {
         if (boat.gameObject.activeSelf)
         {
             boat.gameObject.SetActive(false);
+            boatActive = false;
             buttonText.text = "사용";
         }
         else
         {
             boat.gameObject.SetActive(true);
+            boatActive = true;
             buttonText.text = "보관";
         }
-    }
-    public void OnClickAlign()
-    {
-        boat.ResetPos();
     }
 }
