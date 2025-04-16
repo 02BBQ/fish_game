@@ -18,7 +18,6 @@ public class GameManager : MonoBehaviour
     }
 
     [SerializeField] private TextMeshProUGUI coinText;
-    public GameObject[] boats;
     public Transform spawnPoint;
     public bool startGame = false;
 
@@ -49,13 +48,6 @@ public class GameManager : MonoBehaviour
         coinText.text = _coin.ToString("0");
     }
 
-    public void UnlockBoat(string index)
-    {
-        if(int.TryParse(index, out int result))
-        {
-            boats[result].SetActive(true);
-        }
-    }
     public void PauseGame()
     {
         if (!startGame) return; 

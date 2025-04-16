@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -9,13 +10,10 @@ public class BoatController : MapEntity
     [SerializeField] ParticleSystem[] forms;
     private Rigidbody rigid;
     public Transform camPos;
-    //Vector2 currentVelocity;
     BoatEdge[] boatEdges;
 
     [HideInInspector] public Transform ridePoint;
     AudioSource aud;
-    Vector3 originPos;
-    Quaternion originRot;
     bool fast = false;
     private void Awake()
     {
@@ -24,8 +22,7 @@ public class BoatController : MapEntity
         ridePoint = transform.Find("RidePoint");
 
         boatEdges = GetComponentsInChildren<BoatEdge>();
-        transform.GetPositionAndRotation(out originPos, out originRot);
-        isDynamic = true;
+        isMove = true;
     }
     protected override void Start()
     {
@@ -54,18 +51,6 @@ public class BoatController : MapEntity
         }
     }
 
-    private void OnEnable()
-    {
-        EventBus.Subscribe(EventBusType.Drowning, OnDrowning);
-    }
-
-    private void OnDisable()
-
-
-    {
-        EventBus.Unsubscribe(EventBusType.Drowning, OnDrowning);
-
-    }
     private void OnDestroy()
     {
         fast = false;
@@ -100,30 +85,30 @@ public class BoatController : MapEntity
     }
 
 
-    private void OnDrowning()
+    public void ResetPos(Transform trm)
     {
         rigid.linearVelocity = Vector3.zero;
-        transform.SetPositionAndRotation(originPos, originRot);
+        rigid.angularVelocity = Vector3.zero;
+        transform.SetPositionAndRotation(trm.position, trm.rotation);
+        StartCoroutine(StopForce(trm));
+    }
+    IEnumerator StopForce(Transform trm)
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            rigid.linearVelocity = Vector3.zero;
+            rigid.angularVelocity = Vector3.zero;
+            transform.SetPositionAndRotation(trm.position, trm.rotation);
+            yield return null;
+            yield return null;
+            yield return null;
+            yield return null;
+            yield return null;
+        }
     }
 
     internal void EnterBoat()
     {
         IconDisable();
     }
-    /*    public void Move(Vector2 input)
-   {
-       currentVelocity += input * _boatData.boatWeight * Time.deltaTime;
-       currentVelocity.x = Mathf.Min(currentVelocity.x, _boatData.boatSpeed);
-       currentVelocity.y = Mathf.Min(currentVelocity.y, _boatData.boatSpeed);
-
-   }
-   private void LateUpdate()
-   {
-       rigid.angularVelocity = new Vector3(rigid.angularVelocity.x, currentVelocity.x * 10f, rigid.angularVelocity.z);
-       rigid.linearVelocity = transform.TransformDirection(new Vector3(rigid.linearVelocity.x, rigid.linearVelocity.y, currentVelocity.y * 80f));
-
-       currentVelocity -= Vector2.one * _boatData.boatWeight * Time.deltaTime;
-       currentVelocity.x = Mathf.Max(currentVelocity.x, 0f);
-       currentVelocity.y = Mathf.Max(currentVelocity.y, 0f);
-   }*/
 }

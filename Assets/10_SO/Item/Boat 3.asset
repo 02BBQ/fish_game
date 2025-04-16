@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 21300000, guid: eb30febb540271e4a883c6df828b799b, type: 3}
   type: 0
-  nameStr: 2
+  nameStr: ArmyBoat
   cost: 1000
   description: the greatest awesome boat
   stackable: 0
+  visualPath: 

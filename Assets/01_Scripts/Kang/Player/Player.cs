@@ -2,10 +2,11 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class Player : MonoBehaviour
+public class Player : MapEntity
 {
     [HideInInspector] private Rigidbody _rigid;
     public Rigidbody Rigidbody { get => _rigid; }
@@ -31,12 +32,17 @@ public class Player : MonoBehaviour
         _capsuleCollider = transform.Find("Collider").GetComponent<CapsuleCollider>();
     }
     public Item debugItem;
-    private void Start()
+    protected override void Start()
     {
+        isMove = true;
+        isRotate = true;
+        base.Start();
         InventoryManager.Instance.AddItem(debugItem);
+        playerBoat.enabled = true;
     }
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
 
         if (boating)
             playerBoat.Move(playerInput.Movement);
@@ -85,6 +91,7 @@ public class Player : MonoBehaviour
     private IEnumerator DieCoroutine()
     {
         Transform camParent = CameraManager.Instance.camVirtual.transform.parent;
+        Transform camTarget = CameraManager.Instance.camVirtual.LookAt;
         if (camParent == null)
             yield break;
 
@@ -92,6 +99,7 @@ public class Player : MonoBehaviour
         var localPos = CameraManager.Instance.camVirtual.transform.localPosition;
         var localRot = CameraManager.Instance.camVirtual.transform.localRotation;
         CameraManager.Instance.camVirtual.transform.parent = null;
+        CameraManager.Instance.camVirtual.Follow = null;
 
         UIManager.Instance.FadeIn(1.5f);
         yield return new WaitForSeconds(2.5f);
@@ -99,6 +107,7 @@ public class Player : MonoBehaviour
         playerMovement.movable = true;
         transform.position = Definder.GameManager.spawnPoint.position;
         CameraManager.Instance.camVirtual.transform.parent = camParent;
+        CameraManager.Instance.camVirtual.Follow = camTarget;
         CameraManager.Instance.camVirtual.transform.SetLocalPositionAndRotation(localPos, localRot);
         EventBus.Publish(EventBusType.Drowning);
         boating = false;

@@ -14,7 +14,7 @@ public static class Core
     }
     public static float Remap(float value, float inputMin, float inputMax, float outputMin, float outputMax)
     {
-        return outputMin + (value - inputMin) * (outputMax - outputMin) / (inputMax - inputMin);
+        return Mathf.Clamp(outputMin + (value - inputMin) * (outputMax - outputMin) / (inputMax - inputMin), outputMin, outputMax);
     }
     public static Vector3 RotateVector(Vector3 referenceVector, Vector3 targetVector)
     {

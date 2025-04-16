@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -9,7 +10,7 @@ public class PlayerBoat : MonoBehaviour
     private Player _player;
     BoatController _currentBoat;
     [SerializeField] Color _ridingColor;
-    Color _originColor;
+    [SerializeField] Color _originColor;
 
     bool _ridable = false;
 
@@ -17,12 +18,11 @@ public class PlayerBoat : MonoBehaviour
     private void Awake()
     {
         _player = GetComponent<Player>();
-        _originColor = UIManager.Instance.playerIcon.color;
     }
     private void OnEnable()
     {
-        _player.playerTrigger.TriggerEnter += TriggerEnter;
-        _player.playerTrigger.TriggerExit += TriggerExit;
+        _player.playerTrigger.TriggerEnter.AddListener(TriggerEnter);
+        _player.playerTrigger.TriggerExit.AddListener(TriggerExit);
         EventBus.Subscribe(EventBusType.Drowning, Reset);
         _player.AddInteract(TryInterect);
     }
@@ -30,8 +30,8 @@ public class PlayerBoat : MonoBehaviour
 
     private void OnDisable()
     {
-        _player.playerTrigger.TriggerEnter += TriggerEnter;
-        _player.playerTrigger.TriggerExit += TriggerExit;
+        _player.playerTrigger.TriggerEnter.RemoveListener(TriggerEnter);
+        _player.playerTrigger.TriggerExit.RemoveListener(TriggerExit);
         EventBus.Unsubscribe(EventBusType.Drowning, Reset);
         _player.RemoveInterect(TryInterect);
     }
@@ -62,7 +62,7 @@ public class PlayerBoat : MonoBehaviour
             _player.boating = false;
             _player.playerMovement.StopMoveTarget();
             _currentBoat.ExitBoat();
-            UIManager.Instance.playerIcon.color = _originColor;
+            _player.sr.color = _originColor;
             boatCam.Follow = null;
             boatCam.Priority = -1;
             _player.playerMovement.visual.localRotation = transform.rotation * Quaternion.Euler(0f, 180f, 0f);
@@ -83,7 +83,7 @@ public class PlayerBoat : MonoBehaviour
                     _player.boating = true;
                     boatCam.Priority = 10;
                     _currentBoat.EnterBoat();
-                    UIManager.Instance.playerIcon.color = _ridingColor;
+                    _player.sr.color = _ridingColor;
                 });
                 boatCam.transform.SetPositionAndRotation(_currentBoat.transform.position, _currentBoat.transform.rotation);
                 boatCam.Follow = _currentBoat.camPos;
@@ -120,7 +120,7 @@ public class PlayerBoat : MonoBehaviour
         if(_currentBoat)
             _currentBoat.ExitBoat();
         _player.playerMovement.StopMoveTarget();
-        UIManager.Instance.playerIcon.color = _originColor;
+        _player.sr.color = _originColor;
         boatCam.Follow = null;
         boatCam.Priority = -1;
         _currentBoat = null;

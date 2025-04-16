@@ -4,9 +4,9 @@ using UnityEngine.Events;
 
 public class Trigger : MonoBehaviour
 {
-    public Action<Collider> TriggerEnter;
-    public Action<Collider> TriggerStay;
-    public Action<Collider> TriggerExit;
+    public UnityEvent<Collider> TriggerEnter;
+    public UnityEvent<Collider> TriggerStay;
+    public UnityEvent<Collider> TriggerExit;
     private void OnTriggerEnter(Collider other)
     {
         TriggerEnter?.Invoke(other);

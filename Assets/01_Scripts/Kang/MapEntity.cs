@@ -5,16 +5,18 @@ public abstract class MapEntity : MonoBehaviour
     public Sprite icon; // 지도에 표시될 아이콘
     public GameObject iconPrefab; // 생성된 아이콘 오브젝트
     GameObject iconObj;
-    protected bool isDynamic = false;
+    [HideInInspector] public SpriteRenderer sr;
+    protected bool isMove = false;
+    protected bool isRotate = false;
 
     private void CreateMapIcon()
     {
         iconObj = Instantiate(iconPrefab);
-        if (!isDynamic)
+        if (!isMove)
             iconObj.transform.SetParent(transform);
         iconObj.transform.position = transform.position + Vector3.up * 400f; // 아이콘 위치 조정
 
-        SpriteRenderer sr = iconObj.GetComponent<SpriteRenderer>();
+        sr = iconObj.GetComponent<SpriteRenderer>();
         sr.sprite = icon;
     }
 
@@ -24,9 +26,12 @@ public abstract class MapEntity : MonoBehaviour
     }
     protected virtual void Update()
     {
-        if (isDynamic && iconObj.activeSelf == true)
+        if (iconObj.activeSelf == true)
         {
-            iconObj.transform.position = transform.position + Vector3.up * 400f; // 아이콘 위치 조정
+            if(isMove)
+                iconObj.transform.position = transform.position + Vector3.up * 400f; // 아이콘 위치 조정
+            if (isRotate)
+                iconObj.transform.rotation = Quaternion.Euler(90f, transform.GetChild(0).eulerAngles.y, 0f);
         }
     }
     public void IconEnable()

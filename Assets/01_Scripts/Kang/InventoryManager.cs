@@ -27,6 +27,7 @@ public class InventoryManager : SingleTon<InventoryManager>
     private void Awake()
     {
         category.ClearOptions();
+        Events.AddItemEvent.getItems = Items;
         List<string> types = new List<string>();
         types.Add("All");
         foreach (ItemType type in Enum.GetValues(typeof(ItemType)))
@@ -89,22 +90,23 @@ public class InventoryManager : SingleTon<InventoryManager>
 
                 itemInSlot.count++;
                 itemInSlot.RefreshCount();
+                EventManager.Broadcast(Events.AddItemEvent);
                 return true;
             }
         }
         if (inventoryItems.Count < inventorySlots.Length)//��ĭ ������
         {
             SpawnNewItem(item);
+            EventManager.Broadcast(Events.AddItemEvent);
             return true;
         }
         return false;
     }
     public bool RemoveItem(Item item)
     {
-        for (int i = 0; i < inventorySlots.Length; i++)
+        for (int i = 0; i < inventoryItems.Count; i++)
         {
-            InventorySlot slot = inventorySlots[i];
-            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+            InventoryItem itemInSlot = inventoryItems[i];
             if (itemInSlot != null &&
                 itemInSlot.item.nameStr == item.nameStr)
             {
@@ -138,7 +140,7 @@ public class InventoryManager : SingleTon<InventoryManager>
 
     void DeleteItem(InventoryItem slot)
     {
-        inventoryItems.Add(slot);
+        inventoryItems.Remove(slot);
         Items.Remove(slot.item);
         Destroy(slot.gameObject);
     }

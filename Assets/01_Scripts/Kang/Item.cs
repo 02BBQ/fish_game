@@ -13,12 +13,10 @@ public class Item : ScriptableObject
 
     [TextArea]
     public string description;
-
     public bool stackable = true;
     
     [Header("Visual")]
     public string visualPath;
-
     public virtual StringBuilder GetDescription()
     {
         return new StringBuilder(this.description);

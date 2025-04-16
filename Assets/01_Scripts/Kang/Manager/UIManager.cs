@@ -28,30 +28,41 @@ public class UIManager : SingleTon<UIManager>
     public UI[] playUI;
     public UI[] pauseUI;
     public GameObject block;
+    public GameObject boatLabelPref;
+    public Transform labelParent;
     public TextMeshProUGUI oceanText;
     public Image playerIcon;
     public List<string> oceanNames;
     public UIInput uiInput;
 
+    public GameObject dock;
     [SerializeField] private Image image;
+    [SerializeField] private GameObject map;
 
     private Tween currentTween;
     int currentOcean;
 
+    #region UNITY_EVENT
     private void Start()
     {
         currentOcean = Definder.Player.GetCurrentOcean();
     }
     private void OnEnable()
     {
-        uiInput.ClickESC += Definder.GameManager.PauseGame;
+        uiInput.OnClickESC += Definder.GameManager.PauseGame;
+        uiInput.OnClickMap += ToggleMap;
+        
     }
     private void OnDisable()
     {
-        uiInput.ClickESC -= Definder.GameManager.PauseGame;
+        uiInput.OnClickESC -= Definder.GameManager.PauseGame;
+        uiInput.OnClickMap -= ToggleMap;
     }
     private void Update()
     {
+        if(uiInput.leftClicked)
+            uiInput.OnLeft?.Invoke();
+
         int frameOcean = Definder.Player.GetCurrentOcean();
         if (currentOcean != frameOcean)
         {
@@ -59,7 +70,13 @@ public class UIManager : SingleTon<UIManager>
             {
                 currentOcean = frameOcean;
             }
-        } 
+        }
+    }
+    #endregion
+    private void ToggleMap()
+    {
+        if(Definder.GameManager.startGame)
+            map.SetActive(!map.activeSelf);
     }
 
     private bool PostText(int index)
@@ -201,7 +218,6 @@ public class UIManager : SingleTon<UIManager>
         block.SetActive(false);
     }
 
-
     public void FadeOut(float duration)
     {
         if (currentTween != null && currentTween.IsActive())
@@ -224,5 +240,11 @@ public class UIManager : SingleTon<UIManager>
 
         image.enabled = true;
         currentTween = image.DOFade(1f, duration);
+    }
+
+    internal void MakeBoatLabel(Item index, BoatController gameObject)
+    {
+        BoatLabel label = Instantiate(boatLabelPref, labelParent).GetComponent<BoatLabel>();
+        label.Init(index, gameObject);
     }
 }

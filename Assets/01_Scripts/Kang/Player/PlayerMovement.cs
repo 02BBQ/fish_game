@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
 
     float _pitch = 0f;
     float _yaw = 0f;
+    int triggerCnt = 0;
 
     public Vector3 direction = Vector3.zero;
 
@@ -54,17 +55,17 @@ public class PlayerMovement : MonoBehaviour
     {
         _player.playerInput.OnAim += Aim;
         _player.playerInput.DownJump += Jump;
-        _player.playerTrigger.TriggerEnter += TriggerEnter;
-        _player.playerTrigger.TriggerStay += TriggerStay;
-        _player.playerTrigger.TriggerExit += TriggerExit;
+        _player.playerTrigger.TriggerEnter.AddListener(TriggerEnter);
+        _player.playerTrigger.TriggerStay.AddListener(TriggerStay);
+        _player.playerTrigger.TriggerExit.AddListener(TriggerExit);
     }
     private void OnDisable()
     {
         _player.playerInput.OnAim -= Aim;
         _player.playerInput.DownJump -= Jump;
-        _player.playerTrigger.TriggerEnter += TriggerEnter;
-        _player.playerTrigger.TriggerStay += TriggerStay;
-        _player.playerTrigger.TriggerExit += TriggerExit;
+        _player.playerTrigger.TriggerEnter.RemoveListener(TriggerEnter);
+        _player.playerTrigger.TriggerStay.RemoveListener(TriggerStay);
+        _player.playerTrigger.TriggerExit.RemoveListener(TriggerExit);
     }
     private void Update()
     {
@@ -75,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
                 _player.playerAnim.SetDirection(Vector3.Lerp(_player.playerAnim.GetDirection(), Vector3.forward, Time.deltaTime * 10f));
                 Vector3 target = _targetPos.position - transform.position;
                 target.y = 0f;
-                Quaternion forward = Quaternion.LookRotation(target);
+                Quaternion forward = Quaternion.LookRotation(-target);
                 visual.localRotation = Quaternion.RotateTowards(visual.localRotation, forward, _rotateSpeed * Time.deltaTime * 2f);
 
                 if (Physics.Raycast(new Ray(transform.position + Vector3.up * 0.1f, target), 0.4f))
@@ -130,6 +131,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.isTrigger) return;
         grounded = true;
+        triggerCnt++;
         _player.playerAnim.SetBool("Ground", true);
     }
     private void TriggerStay(Collider other)
@@ -141,11 +143,13 @@ public class PlayerMovement : MonoBehaviour
     private void TriggerExit(Collider other)
     {
         if (other.isTrigger) return;
-        Vector3 startPos = transform.position + Vector3.up * 0.2f;
-        if (Physics.OverlapSphere(startPos, 0.3f, groundLayer).Length > 0)
+
+        triggerCnt--;
+        if (triggerCnt > 0)
             return;
 
         grounded = false;
+        if(!_player.boating)
         _player.playerAnim.SetBool("Ground", false);
     }
 

@@ -1266,7 +1266,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1757446366705318430
 Transform:
   m_ObjectHideFlags: 0
@@ -1359,6 +1359,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 51fdaa6702a25a74995c7892aa2a1feb, type: 3}
   iconPrefab: {fileID: 8063337397439021707, guid: 5be979e7e38d9a94381644eed63c0b15, type: 3}
+  sr: {fileID: 0}
   _boatData: {fileID: 11400000, guid: 83c6be7a707a99d47b015038a496e6d2, type: 2}
   forms:
   - {fileID: 58659340940269881}
@@ -20947,7 +20948,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 394
+  m_VersionIndex: 412
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
