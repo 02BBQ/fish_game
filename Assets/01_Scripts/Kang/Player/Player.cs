@@ -91,6 +91,7 @@ public class Player : MapEntity
     private IEnumerator DieCoroutine()
     {
         Transform camParent = CameraManager.Instance.camVirtual.transform.parent;
+        Transform camTarget = CameraManager.Instance.camVirtual.LookAt;
         if (camParent == null)
             yield break;
 
@@ -98,6 +99,7 @@ public class Player : MapEntity
         var localPos = CameraManager.Instance.camVirtual.transform.localPosition;
         var localRot = CameraManager.Instance.camVirtual.transform.localRotation;
         CameraManager.Instance.camVirtual.transform.parent = null;
+        CameraManager.Instance.camVirtual.Follow = null;
 
         UIManager.Instance.FadeIn(1.5f);
         yield return new WaitForSeconds(2.5f);
@@ -105,6 +107,7 @@ public class Player : MapEntity
         playerMovement.movable = true;
         transform.position = Definder.GameManager.spawnPoint.position;
         CameraManager.Instance.camVirtual.transform.parent = camParent;
+        CameraManager.Instance.camVirtual.Follow = camTarget;
         CameraManager.Instance.camVirtual.transform.SetLocalPositionAndRotation(localPos, localRot);
         EventBus.Publish(EventBusType.Drowning);
         boating = false;

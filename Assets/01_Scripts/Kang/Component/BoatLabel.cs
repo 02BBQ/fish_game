@@ -24,14 +24,12 @@ public class BoatLabel : MonoBehaviour
         buttonText.text = "º¸°ü";
         boatActive = true;
         this.boat = boat;
-    }
-    private void OnEnable()
-    {
         BoatManager.Instance.labels.Add(this);
     }
-    private void OnDisable()
+    private void OnDestroy()
     {
-        BoatManager.Instance.labels.Remove(this);
+        if(BoatManager.Instance != null)
+            BoatManager.Instance.labels.Remove(this);
     }
     public void OnClickToggle()
     {

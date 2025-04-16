@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
+using UnityEditor.Search;
 using UnityEngine;
 
 public class Market : Interactor
@@ -11,18 +14,30 @@ public class Market : Interactor
     public GameObject buyGoods;
     public GameObject sellGoods;
 
+    List<SellGoods> initItems;
+
+    private void Awake()
+    {
+
+        initItems = new List<SellGoods>();
+
+    }
     protected override void Start()
     {
         base.Start();
-
         foreach (Item item in buyItems)
         {
             AddGoodsInBuy(item);
         }
-        foreach (Item item in sellItems)
-        {
-            AddGoodsInSell(item);
-        }
+    }
+    private void OnEnable()
+    {
+        EventManager.AddListener<AddItemEvent>(AddGoodsInSell);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.RemoveListener<AddItemEvent>(AddGoodsInSell);
     }
 
     protected override void OnTriggerEnter(Collider other)
@@ -47,10 +62,32 @@ public class Market : Interactor
         BuyGoods copyGoods = Instantiate(buyGoods, buyUIParents[(int)item.type]).GetComponent<BuyGoods>();
         copyGoods.SetItem(item);
     }
-    private void AddGoodsInSell(Item item)
+    private void AddGoodsInSell(AddItemEvent addItemEvent)
     {
-        SellGoods copyGoods = Instantiate(sellGoods, sellUIParents[(int)item.type]).GetComponent<SellGoods>();
-        copyGoods.SetItem(item);
+        foreach (Item addItem in addItemEvent.getItems)
+        {
+            print(addItem.nameStr);
+            print(initItems.Count);
+            bool isItemInInit = initItems.Any(initItem => initItem.item.nameStr == addItem.nameStr);
+            if (!isItemInInit)
+            {
+                SellGoods copyGoods = Instantiate(sellGoods, sellUIParents[(int)addItem.type]).GetComponent<SellGoods>();
+                copyGoods.SetItem(addItem);
+                initItems.Add(copyGoods);
+            }
+            else
+            {
+                initItems.First(initItem => initItem.item.nameStr == addItem.nameStr).gameObject.SetActive(true);
+            }
+        }
+        foreach (SellGoods initItem in initItems)
+        {
+            bool isItemInAdd = addItemEvent.getItems.Any(addItem => addItem.nameStr == initItem.item.nameStr);
+            if (!isItemInAdd)
+            {
+                initItem.gameObject.SetActive(false);
+            }
+        }
     }
     protected override void OnInterect()
     {

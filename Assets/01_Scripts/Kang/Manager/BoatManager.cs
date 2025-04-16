@@ -6,8 +6,8 @@ public class BoatManager : SingleTon<BoatManager>
     public List<Item> boatItems;
     public List<BoatController> boats = new();
     public List<BoatLabel> labels;
-    public List<Transform> points;
-    
+    public Dock mainDock;
+    Dock currentDock;
     private void Start()
     {
         for(int i = 1; i < boats.Count; i++)
@@ -25,6 +25,10 @@ public class BoatManager : SingleTon<BoatManager>
     {
         EventBus.Unsubscribe(EventBusType.Drowning, Sort);
     }
+    public void SetDock(Dock dock)
+    {
+        currentDock = dock;
+    }
     public void UnlockBoat(Item item)
     {
         BoatController boat = boats[boatItems.IndexOf(item)];
@@ -33,18 +37,28 @@ public class BoatManager : SingleTon<BoatManager>
     }
     public void Sort()
     {
+        currentDock = mainDock;
+        DockSort();
+    }
+
+    public void DockSort()
+    {
         int index = 0;
+        print(labels.Count);
+        print(currentDock.points.Count);
+
         foreach (BoatLabel label in labels)
         {
+            print(label.boat.gameObject.name);
             if (label.boatActive)
             {
-                if (index >= points.Count)
+                if (index >= currentDock.points.Count)
                     label.OnClickToggle();
                 else
                 {
-                    label.boat.transform.position = points[index].position;
+                    label.boat.ResetPos(currentDock.points[index]);
                     index++;
-                } 
+                }
             }
         }
     }

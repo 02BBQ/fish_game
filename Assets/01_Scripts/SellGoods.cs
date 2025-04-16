@@ -12,6 +12,7 @@ public class SellGoods : MonoBehaviour
     public TextMeshProUGUI description;
     public TextMeshProUGUI costText;
     public TextMeshProUGUI nameText;
+    public Item thisItem;
 
     private void Awake()
     {
@@ -35,5 +36,6 @@ public class SellGoods : MonoBehaviour
         costText.text = item.cost.ToString() + "<sprite=0>";
         nameText.text = item.name;
         image.sprite = item.image;
+        thisItem = item;
     }
 }

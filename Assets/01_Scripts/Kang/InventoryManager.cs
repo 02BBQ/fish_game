@@ -27,6 +27,7 @@ public class InventoryManager : SingleTon<InventoryManager>
     private void Awake()
     {
         category.ClearOptions();
+        Events.AddItemEvent.getItems = Items;
         List<string> types = new List<string>();
         types.Add("All");
         foreach (ItemType type in Enum.GetValues(typeof(ItemType)))
@@ -89,12 +90,14 @@ public class InventoryManager : SingleTon<InventoryManager>
 
                 itemInSlot.count++;
                 itemInSlot.RefreshCount();
+                EventManager.Broadcast(Events.AddItemEvent);
                 return true;
             }
         }
         if (inventoryItems.Count < inventorySlots.Length)//��ĭ ������
         {
             SpawnNewItem(item);
+            EventManager.Broadcast(Events.AddItemEvent);
             return true;
         }
         return false;

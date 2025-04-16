@@ -55,17 +55,17 @@ public class PlayerMovement : MonoBehaviour
     {
         _player.playerInput.OnAim += Aim;
         _player.playerInput.DownJump += Jump;
-        _player.playerTrigger.TriggerEnter += TriggerEnter;
-        _player.playerTrigger.TriggerStay += TriggerStay;
-        _player.playerTrigger.TriggerExit += TriggerExit;
+        _player.playerTrigger.TriggerEnter.AddListener(TriggerEnter);
+        _player.playerTrigger.TriggerStay.AddListener(TriggerStay);
+        _player.playerTrigger.TriggerExit.AddListener(TriggerExit);
     }
     private void OnDisable()
     {
         _player.playerInput.OnAim -= Aim;
         _player.playerInput.DownJump -= Jump;
-        _player.playerTrigger.TriggerEnter += TriggerEnter;
-        _player.playerTrigger.TriggerStay += TriggerStay;
-        _player.playerTrigger.TriggerExit += TriggerExit;
+        _player.playerTrigger.TriggerEnter.RemoveListener(TriggerEnter);
+        _player.playerTrigger.TriggerStay.RemoveListener(TriggerStay);
+        _player.playerTrigger.TriggerExit.RemoveListener(TriggerExit);
     }
     private void Update()
     {

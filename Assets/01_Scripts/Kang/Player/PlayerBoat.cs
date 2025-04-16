@@ -21,8 +21,8 @@ public class PlayerBoat : MonoBehaviour
     }
     private void OnEnable()
     {
-        _player.playerTrigger.TriggerEnter += TriggerEnter;
-        _player.playerTrigger.TriggerExit += TriggerExit;
+        _player.playerTrigger.TriggerEnter.AddListener(TriggerEnter);
+        _player.playerTrigger.TriggerExit.AddListener(TriggerExit);
         EventBus.Subscribe(EventBusType.Drowning, Reset);
         _player.AddInteract(TryInterect);
     }
@@ -30,8 +30,8 @@ public class PlayerBoat : MonoBehaviour
 
     private void OnDisable()
     {
-        _player.playerTrigger.TriggerEnter += TriggerEnter;
-        _player.playerTrigger.TriggerExit += TriggerExit;
+        _player.playerTrigger.TriggerEnter.RemoveListener(TriggerEnter);
+        _player.playerTrigger.TriggerExit.RemoveListener(TriggerExit);
         EventBus.Unsubscribe(EventBusType.Drowning, Reset);
         _player.RemoveInterect(TryInterect);
     }

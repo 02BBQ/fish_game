@@ -3,11 +3,14 @@ using UnityEngine;
  
 public class Dock : Interactor
 {
+    public List<Transform> points;
     protected override void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             base.OnTriggerEnter(other);
+            BoatManager.Instance.SetDock(this);
+            
             GuideText.Instance.AddGuide("Dock");
         }
     }
@@ -16,6 +19,7 @@ public class Dock : Interactor
         if (other.CompareTag("Player"))
         {
             base.OnTriggerExit(other);
+            UIManager.Instance.dock.SetActive(false);
             GuideText.Instance.RemoveGuide("Dock");
         }
     }

@@ -1588,7 +1588,7 @@
     "m_Title": "Inspector Property",
     "m_Position": {
         "x": -843.9999389648438,
-        "y": -807.3331298828125
+        "y": -807.333251953125
     }
 }
 
@@ -2604,7 +2604,7 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     },
-    "m_Value": true
+    "m_Value": false
 }
 
 {

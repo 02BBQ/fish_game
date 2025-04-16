@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -87,7 +88,23 @@ public class BoatController : MapEntity
     public void ResetPos(Transform trm)
     {
         rigid.linearVelocity = Vector3.zero;
+        rigid.angularVelocity = Vector3.zero;
         transform.SetPositionAndRotation(trm.position, trm.rotation);
+        StartCoroutine(StopForce(trm));
+    }
+    IEnumerator StopForce(Transform trm)
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            rigid.linearVelocity = Vector3.zero;
+            rigid.angularVelocity = Vector3.zero;
+            transform.SetPositionAndRotation(trm.position, trm.rotation);
+            yield return null;
+            yield return null;
+            yield return null;
+            yield return null;
+            yield return null;
+        }
     }
 
     internal void EnterBoat()
