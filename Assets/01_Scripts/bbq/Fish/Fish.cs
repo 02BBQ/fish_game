@@ -3,6 +3,7 @@
 [CreateAssetMenu(fileName = "Item", menuName = "SO/Fishing/FishData")]
 public class FishData : ScriptableObject
 {
+    public int id;
     public Sprite fishSprite;
     [Header("Fish Stat")]
     public float baseWeight;
@@ -16,6 +17,10 @@ public class FishData : ScriptableObject
 
     public float DancingStepMax;
     public float DancingStepMin;
+
+    public string visualAddress;
+
+    public string rarity;
 
     [TextArea] public string description;
 

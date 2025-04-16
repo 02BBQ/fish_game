@@ -3,5 +3,5 @@ using UnityEngine;
 
 public interface ModelView
 {
-    public string addressPath { get; set; } 
+    // public string addressPath { get; set; } 
 }

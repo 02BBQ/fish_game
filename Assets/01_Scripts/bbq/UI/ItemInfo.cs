@@ -35,6 +35,8 @@ public class ItemInfo : MonoBehaviour //, IItemInfoView
 
         spriteModel.sortingLayerName = "UI";
         spriteModel.sortingOrder = 1;
+
+        spriteModel.gameObject.layer = viewLayer;
     }
 
     public void UpdateItemInfo(Item item)
@@ -43,9 +45,9 @@ public class ItemInfo : MonoBehaviour //, IItemInfoView
         nameText.text = item.GetName();
         descText.text = item.GetDescription().ToString();
         currentItem = item;
-        if (item is ModelView itemModel && itemModel.addressPath != null && itemModel.addressPath != string.Empty)
+        if (item is ModelView itemModel && item.visualPath != null && item.visualPath != string.Empty)
         {
-            modelAddress = itemModel.addressPath;
+            modelAddress = item.visualPath;
             LoadModel(modelAddress);
         }
         else
@@ -68,18 +70,7 @@ public class ItemInfo : MonoBehaviour //, IItemInfoView
         
         if (image != null)
         {
-            loadedModel = new GameObject("Sprite");
-            loadedModel.transform.SetParent(modelPosition.transform);
-            loadedModel.transform.localPosition = Vector3.zero;
-            loadedModel.transform.localRotation = Quaternion.identity;
-            loadedModel.layer = viewLayer;
-
-            loadedModel.transform.localScale *= .25f;
-
-            SpriteRenderer spriteRenderer = loadedModel.AddComponent<SpriteRenderer>();
-            spriteRenderer.sprite = image;
-            spriteRenderer.sortingLayerName = "UI";
-            spriteRenderer.sortingOrder = 1;
+            spriteModel.sprite = image;
 
             SetLayerRecursively(loadedModel, viewLayer);
         }
@@ -123,8 +114,8 @@ public class ItemInfo : MonoBehaviour //, IItemInfoView
             if (modelAddress != defaultModelAddress)
             {
                 Debug.LogWarning($"모델 '{modelAddress}'을(를) 찾을 수 없습니다. 기본 모델을 로드합니다.");
-                // LoadModel(defaultModelAddress);
-                LoadSprite(currentItem.image);
+                LoadModel(defaultModelAddress);
+                // LoadSprite(currentItem.image);
             }
             else
             {

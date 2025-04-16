@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6522fc69616c13c4891c6b3959f595aa, type: 3}
+  m_Name: tung tung tung tung tung tung tung sahur_10006
+  m_EditorClassIdentifier: 
+  id: 10006
+  fishSprite: {fileID: 0}
+  baseWeight: 550
+  spec: "\uD241 \uD241 \uD241 \uD241 \uD241 \uD241 \uD241 \uC0AC\uD6C4\uB974"
+  basePrice: 12800
+  MaxWeightMultiplier: 3
+  MinWeightMultiplier: 1
+  DancingStepMax: 0.7
+  DancingStepMin: 0.4
+  visualAddress: 
+  rarity: Myth
+  description: "Legend has it that if you call its name three times and it doesn\u2019t
+    respond, it will appear and haunt you"
