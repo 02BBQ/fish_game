@@ -10,12 +10,12 @@ public class FishSO : Item, ModelView
     public float weight;
     public string id;
     public string species;
-
     public string rarity;
+    public string guid;
 
     public void Initialize(FishData data)
     {
-        this.id = Guid.NewGuid().ToString();
+        // this.id = Guid.NewGuid().ToString();
         this.species = data.spec;
         this.name = data.name;
         this.nameStr = data.name;
