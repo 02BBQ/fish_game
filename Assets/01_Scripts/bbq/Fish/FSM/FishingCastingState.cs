@@ -35,7 +35,7 @@ public class FishingCastingState : FishingStateBase
         p0 = fishing.transform.position - fishing.transform.forward;
         p3 = fishing.Destination;
         
-        fishing.FishingFish = fishing.FishingRegion.fishWeights[fishing.GetCurrentRegionIndex() - 1].GetFish();
+        // fishing.FishingFish = fishing.FishingRegion.fishWeights[fishing.GetCurrentRegionIndex() - 1].GetFish();
     }
 
     public override void Exit()

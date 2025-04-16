@@ -1,14 +1,15 @@
+// FishingServerConnector.cs
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 
-public class FishingServerCommunicator : MonoBehaviour
+public class FishingServerConnector : MonoBehaviour
 {
     private const string SERVER_URL = "http://localhost:3000/api/fish/";
     
-    public static FishingServerCommunicator Instance { get; private set; }
+    public static FishingServerConnector Instance { get; private set; }
     
     private void Awake()
     {
@@ -23,12 +24,12 @@ public class FishingServerCommunicator : MonoBehaviour
         }
     }
     
-    public void StartFishing(Action<string, float> onSuccess, Action<string> onError)
+    public void StartFishing(Action<string, float, float> onSuccess, Action<string> onError)
     {
         StartCoroutine(StartFishingCoroutine(onSuccess, onError));
     }
     
-    private IEnumerator StartFishingCoroutine(Action<string, float> onSuccess, Action<string> onError)
+    private IEnumerator StartFishingCoroutine(Action<string, float, float> onSuccess, Action<string> onError)
     {
         using (UnityWebRequest request = UnityWebRequest.PostWwwForm($"{SERVER_URL}start", ""))
         {
@@ -37,7 +38,7 @@ public class FishingServerCommunicator : MonoBehaviour
             if (request.result == UnityWebRequest.Result.Success)
             {
                 var response = JsonConvert.DeserializeObject<StartFishingResponse>(request.downloadHandler.text);
-                onSuccess?.Invoke(response.guid, response.time / 1000f); // 밀리초 -> 초 변환
+                onSuccess?.Invoke(response.guid, response.time / 1000f, response.dancingStep);
             }
             else
             {
@@ -53,12 +54,7 @@ public class FishingServerCommunicator : MonoBehaviour
     
     private IEnumerator EndFishingCoroutine(string guid, bool success, Action<FishJson> onSuccess, Action<string> onError)
     {
-        var requestData = new EndFishingRequest
-        {
-            guid = guid,
-            suc = success
-        };
-        
+        var requestData = new EndFishingRequest { guid = guid, suc = success };
         string json = JsonConvert.SerializeObject(requestData);
         byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
         
@@ -72,16 +68,8 @@ public class FishingServerCommunicator : MonoBehaviour
             
             if (request.result == UnityWebRequest.Result.Success)
             {
-                var response = JsonConvert.DeserializeObject(request.downloadHandler.text);
-                
-                if (response.suc)
-                {
-                    onSuccess?.Invoke(response.fish);
-                }
-                else
-                {
-                    onSuccess?.Invoke(null); // 실패한 경우
-                }
+                var response = JsonConvert.DeserializeObject<EndFishingResponse>(request.downloadHandler.text);
+                onSuccess?.Invoke(response.suc ? response.fish : null);
             }
             else
             {
@@ -90,41 +78,24 @@ public class FishingServerCommunicator : MonoBehaviour
         }
     }
     
-    // 데이터 클래스들
-    [Serializable]
-    private class StartFishingResponse
-    {
-        public string guid;
-        public float time;
-    }
+    [Serializable] private class StartFishingResponse { public string guid; public float time; public float dancingStep; }
+    [Serializable] private class EndFishingRequest { public string guid; public bool suc; }
+    [Serializable] public class EndFishingResponse { public bool suc; public FishJson fish; }
     
-    [Serializable]
-    private class EndFishingRequest
-    {
-        public string guid;
-        public bool suc;
-    }
-    
-    [Serializable]
-    public class EndFishingResponse
-    {
-        public bool suc;
-        public FishJson fish;
-    }
-    
-    [Serializable]
-    public class FishJson
-    {
-        public string name;
-        public string spec;
-        public string rarity;
-        public string trait;
-        public string visualAddress;
-        public string spriteAddress;
-        public string id;
-        public string description;
-        public float weight;
-        public float price;
-        public float dancingStep;
-    }
+}
+
+[Serializable]
+public class FishJson
+{
+    public string name;
+    public string spec;
+    public string rarity;
+    public string trait;
+    public float purity;
+    public string visualAddress;
+    public string id;
+    public string description;
+    public float weight;
+    public float price;
+    public float dancingStep;
 }

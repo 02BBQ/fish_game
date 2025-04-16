@@ -6,7 +6,6 @@ public class FishingState : FishingStateBase
 
     public FishingState(Fishing fishing) : base(fishing) 
     {
-        timeout = Random.Range(5f, 21f);
     }
 
     public override void Enter()
@@ -15,17 +14,21 @@ public class FishingState : FishingStateBase
         if (fishing.Hit.collider != null && fishing.Hit.collider.gameObject.layer != LayerMask.NameToLayer("Suimono_Water"))
         {
             fishing.ChangeState(Fishing.FishingStateType.Reeling);
+            return;
         }
+
+         StartServerFishing(OnFishingReady);
+    }
+
+    private void OnFishingReady()
+    {
+        if (fishing.CurrentStateType != Fishing.FishingStateType.Fishing) return;
+        
+        fishing.ChangeState(Fishing.FishingStateType.Fighting);
     }
 
     public override void Update()
     {
-        timeout -= Time.deltaTime;
-        
-        if (timeout <= 0)
-        {
-            fishing.ChangeState(Fishing.FishingStateType.Fighting);
-        }
     }
 
     public override void OnHoldStart()

@@ -6,6 +6,7 @@ public class FishingReelingState : FishingStateBase
     private float progress;
     private Vector3 goal;
     private Vector3 p0, p1, p2;
+    private FishSO fish;
 
     public FishingReelingState(Fishing fishing) : base(fishing) 
     {
@@ -20,6 +21,37 @@ public class FishingReelingState : FishingStateBase
         p2 = fishing.FishingVisual.fishingRodTip.position;
         p1 = (p0 + p2) / 2; 
         p1.y = p2.y + 2f + Vector3.Distance(p0, p2) / 8;
+        
+        // 서버에 결과 전송
+        EndServerFishing(fishing.Success, fishData => 
+        {
+            if (fishing.Success && fishData != null)
+            {
+                var fish = GameObject.Instantiate(fishing.FishSOBase);
+                fish.Initialize(fishData);
+                HandleSuccess(fish);
+            }
+            else
+            {
+                HandleFailure();
+            }
+        });
+    }
+
+    private void HandleSuccess(FishSO fish)
+    {
+        this.fish = fish;
+        // StringBuilder sb = new StringBuilder($"{fish.weight}kg <color=yellow>{fish.species}</color>를 낚았다!");
+        // Events.NotificationEvent.text = sb.ToString();
+        // EventManager.Broadcast(Events.NotificationEvent);
+        InventoryManager.Instance.AddItem(fish);
+        
+        // fishing.ChangeState(Fishing.FishingStateType.Idle);
+    }
+    
+    private void HandleFailure()
+    {
+        // fishing.ChangeState(Fishing.FishingStateType.Idle);
     }
 
     public override void Update()
@@ -52,11 +84,20 @@ public class FishingReelingState : FishingStateBase
     {
         if (fishing.Success)
         {
-            StringBuilder sb = new StringBuilder(
-                $"{fishing.Fish.weight}kg <color=yellow>{fishing.Fish.species}</color>를 낚았다!");
-            Events.NotificationEvent.text = sb.ToString();
+            if (fish.trait == null || fish.trait == string.Empty)
+            {
+                StringBuilder sb = new StringBuilder(
+                    $"{fish.weight}kg <color=yellow>{fish.species}</color>를 낚았다!");
+                Events.NotificationEvent.text = sb.ToString();
+            }
+            else
+            {
+                StringBuilder sb = new StringBuilder(
+                    $"{fish.weight}kg {fish.purity} {fish.trait} <color=yellow>{fish.species}</color>를 낚았다!");
+                Events.NotificationEvent.text = sb.ToString();
+            }
+            // InventoryManager.Instance.AddItem(fishing.Fish);
             EventManager.Broadcast(Events.NotificationEvent);
-            InventoryManager.Instance.AddItem(fishing.Fish);
         }
         else
         {

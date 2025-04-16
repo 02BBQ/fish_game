@@ -19,7 +19,6 @@ public class Fishing : MonoBehaviour
     [SerializeField] public FishingVisual fishingVisual;
     [SerializeField] private FishingRegion _fishingRegion;
     [SerializeField] private FishSO _fishSOBase;
-    [SerializeField] private string currentFishGuid;
     
     [Header("Fishing UI")]
     public FishCanvas fishCanvas;
@@ -49,6 +48,10 @@ public class Fishing : MonoBehaviour
     // Layer masks
     [SerializeField] private LayerMask _toAimLayer;
     public LayerMask ToAimLayer => _toAimLayer;
+
+    // Fishing properties
+    public string currentFishGuid;
+    public float dancingStep = 1;
 
     private void Awake()
     {

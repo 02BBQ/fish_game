@@ -16,19 +16,28 @@ public class FishingFightingState : FishingStateBase
     private float halfBarWidth;
     private float halfTargetWidth;
 
+    private Vector2 originalTargetSize; // 원본 크기 저장
+
+    private CinemachineImpulseSource impulseSource;
+
     public FishingFightingState(Fishing fishing) : base(fishing) 
     {
-        fishing.GetComponent<CinemachineImpulseSource>().GenerateImpulse();
+        impulseSource = fishing.GetComponent<CinemachineImpulseSource>();
+        impulseSource.GenerateImpulse();
         fishing.FishingVisual.SetAnchor(true, fishing.Destination);
         fishing.FishCanvas.StartEvent();
-        
+
+        Debug.Log("asd");
+
+        originalTargetSize = fishing.FishCanvas.target.sizeDelta;
+
         // Initialize fishing minigame values
         time = Time.time;
         initTime = time;
         health = Random.Range(1.5f, 2.5f);
         goal = Random.Range(1.5f, 2.5f);
         current = 0f;
-        power = fishing.FishingFish.GetDancingStep();
+        power = fishing.dancingStep;
         
         // Cache UI values
         barWidth = (fishing.FishCanvas.bar.transform as RectTransform).rect.height;
@@ -46,7 +55,7 @@ public class FishingFightingState : FishingStateBase
         time += Time.deltaTime * power * .75f;
         float noise = Mathf.PerlinNoise(Time.time * 3f * power, initTime) - .5f; 
         noise *= 3200 * power;
-        xMove = Mathf.Lerp(xMove, noise, Time.deltaTime * 2);
+        xMove = Mathf.Lerp(xMove, noise, Time.deltaTime * 1.5f);
         xMove = Mathf.Clamp(xMove, -halfBarWidth + halfTargetWidth, halfBarWidth - halfTargetWidth);
         
         Vector2 pos = fishing.FishCanvas.target.anchoredPosition;
@@ -98,11 +107,5 @@ public class FishingFightingState : FishingStateBase
     {
         fishing.FishCanvas.SetColor(false);
         fishing.FishingVisual.SetAnchor(false);
-        
-        if (fishing.Success && fishing.FishingFish != null)
-        {
-            fishing.Fish = GameObject.Instantiate(fishing.FishSOBase);
-            fishing.Fish.Initialize(fishing.FishingFish);
-        }
     }
 }
