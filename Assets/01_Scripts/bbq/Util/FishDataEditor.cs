@@ -53,7 +53,9 @@ public class FishDataEditor : EditorWindow
     private void OnTraitDataLoaded(string rawJson)
     {
         var arrays = JsonHelper.SplitJsonArray3(rawJson);
-        string traitWrapped = "{\"items\":" + arrays[2] + "}";
+        string traitWrapped = "{\"traits\":" + arrays[2] + "}";
+
+        Debug.Log(traitWrapped);
 
         TraitStringWrapper parsed = JsonUtility.FromJson<TraitStringWrapper>(traitWrapped);
 
