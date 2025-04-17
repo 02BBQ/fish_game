@@ -19,11 +19,14 @@ public class FishingAimingState : FishingStateBase
         
         direction = rig.transform.forward;
         origin = fishing.Player.transform.position;
+        fishing.FishTray.throwPower = 3f;
         fishing.FishTray.trajectoryLine.enabled = true;
     }
 
     public override void Update()
     {
+        fishing.FishTray.throwPower = Mathf.Min(fishing.FishTray.throwPower + Time.deltaTime, 7f);
+
         if (aiming)
             fishing.FishTray.UpdateTray(rig.transform);
     }
@@ -36,10 +39,10 @@ public class FishingAimingState : FishingStateBase
         fishing.PlayerMovement.movable = false;
         fishing.Player.playerSlot.CanChange = false;
         fishing.Success = false;
+        fishing.FishTray.trajectoryLine.enabled = false;
     }
 
     public override void Exit()
     {
-        fishing.FishTray.trajectoryLine.enabled = false;
     }
 }

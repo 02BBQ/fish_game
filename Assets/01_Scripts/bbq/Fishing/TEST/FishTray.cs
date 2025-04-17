@@ -4,7 +4,7 @@ using UnityEngine.Rendering.RenderGraphModule;
 public class FishTray : MonoBehaviour
 {
     [Header("던지기 설정")]
-    public float throwPower = 15f;
+    [HideInInspector] public float throwPower = 3f;
     public float maxAngle = 70f;
     public float minAngle = 30f;
     public float gravity = 9.8f;
@@ -24,6 +24,7 @@ public class FishTray : MonoBehaviour
 
     public Vector3 Goal => landingPoint;
     public Vector3[] TrajectoryPoints => trajectoryPoints;
+    public RaycastHit hit;
 
     void Awake()
     {
@@ -40,7 +41,7 @@ public class FishTray : MonoBehaviour
         throwDirection = Quaternion.AngleAxis(currentAngle, -transform.right) * throwDirection;
         
         // Raycast로 목표 지점 찾기
-        CalculateLandingPoint(transform.position, throwDirection * throwPower);
+        CalculateLandingPoint(transform.position + new Vector3(0,.5f,0), throwDirection * throwPower);
         
         // 예시선 업데이트
         UpdateTrajectoryLine();
@@ -69,7 +70,7 @@ public class FishTray : MonoBehaviour
                 initialVelocity.z * currentTime);
             
             // Raycast로 충돌 체크
-            if (Physics.Linecast(lastPos, currentPos, out RaycastHit hit, groundWaterMask))
+            if (Physics.Linecast(lastPos, currentPos, out hit, groundWaterMask))
             {
                 landingPoint = hit.point;
                 totalFlightTime = currentTime - timeStep + (timeStep * (hit.distance / Vector3.Distance(lastPos, currentPos)));

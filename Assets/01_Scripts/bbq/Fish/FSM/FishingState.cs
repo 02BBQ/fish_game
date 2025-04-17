@@ -11,7 +11,7 @@ public class FishingState : FishingStateBase
     public override void Enter()
     {
         base.Enter();
-        if (fishing.Hit.collider != null && fishing.Hit.collider.gameObject.layer != LayerMask.NameToLayer("Suimono_Water"))
+        if (fishing.FishTray.hit.collider != null && fishing.FishTray.hit.collider.gameObject.layer != LayerMask.NameToLayer("Suimono_Water"))
         {
             fishing.ChangeState(Fishing.FishingStateType.Reeling);
             return;
