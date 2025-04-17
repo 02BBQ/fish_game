@@ -101,6 +101,8 @@ public class FishingFightingState : FishingStateBase
             fishing.ChangeState(Fishing.FishingStateType.Reeling);
             return;
         }
+
+        fishing.fishingVisual.bobber.position = fishing.Destination;
     }
 
     public override void Exit()

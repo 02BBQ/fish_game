@@ -15,10 +15,10 @@ public class Fishing : MonoBehaviour
     }
 
     [Header("References")]
-    [SerializeField] private GameObject _aim;
     [SerializeField] public FishingVisual fishingVisual;
     [SerializeField] private FishingRegion _fishingRegion;
     [SerializeField] private FishSO _fishSOBase;
+    [SerializeField] private FishTray _fishTray;
     
     [Header("Fishing UI")]
     public FishCanvas fishCanvas;
@@ -42,7 +42,7 @@ public class Fishing : MonoBehaviour
     public FishCanvas FishCanvas => fishCanvas;
     public FishingRegion FishingRegion => _fishingRegion;
     public FishSO FishSOBase => _fishSOBase;
-    public GameObject Aim => _aim;
+    public FishTray FishTray => _fishTray;
     public string CurrentFishGUID => currentFishGuid;
 
     // Layer masks
@@ -60,7 +60,6 @@ public class Fishing : MonoBehaviour
 
     private void OnEnable() 
     {
-        _aim.SetActive(false);
         Player = Definder.Player;
         if (Player == null)
         {
