@@ -27,6 +27,11 @@ public class GameManager : MonoBehaviour
         Coin = 100000;
         SetCoinText();
     }
+    [ContextMenu("dsfa")]
+    public void Delete()
+    {
+        PlayerPrefs.DeleteAll();
+    }
     public void OnClickStart()
     {
         EventBus.Publish(EventBusType.Start);
