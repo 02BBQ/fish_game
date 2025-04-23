@@ -27,10 +27,11 @@ public class FishingFightingState : FishingStateBase
         fishing.FishingVisual.SetAnchor(true, fishing.Destination);
         fishing.FishCanvas.StartEvent();
 
-        Debug.Log("asd");
-
         originalTargetSize = fishing.FishCanvas.target.sizeDelta;
+    }
 
+    public override void Enter()
+    {
         // Initialize fishing minigame values
         time = Time.time;
         initTime = time;
@@ -38,6 +39,8 @@ public class FishingFightingState : FishingStateBase
         goal = Random.Range(1.5f, 2.5f);
         current = 0f;
         power = fishing.dancingStep;
+
+        fishing.FishCanvas.target.sizeDelta = originalTargetSize;
         
         // Cache UI values
         barWidth = (fishing.FishCanvas.bar.transform as RectTransform).rect.height;

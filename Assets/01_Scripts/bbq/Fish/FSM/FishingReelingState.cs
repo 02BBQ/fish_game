@@ -82,7 +82,7 @@ public class FishingReelingState : FishingStateBase
 
     private void EndReeling()
     {
-        if (fishing.Success)
+        if (fishing.Success && fish != null)
         {
             if (fish.trait == null || fish.trait == string.Empty)
             {

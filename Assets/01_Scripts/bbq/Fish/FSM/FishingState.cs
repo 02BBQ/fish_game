@@ -30,6 +30,7 @@ public class FishingState : FishingStateBase
     public override void Update()
     {
         fishing.fishingVisual.bobber.position = fishing.Destination;
+        // fishing.fishingVisual.UpdateTray();
     }
 
     public override void OnHoldStart()

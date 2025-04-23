@@ -28,7 +28,7 @@ public class FishingVisual : MonoBehaviour
         linerenderer.useWorldSpace = true;
     }
 
-    private void Update()
+    public void Update()
     {
         var pointList = new List<Vector3>();
 

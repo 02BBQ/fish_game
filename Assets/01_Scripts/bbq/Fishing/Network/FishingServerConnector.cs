@@ -81,7 +81,16 @@ public class FishingServerConnector : MonoBehaviour
     [Serializable] private class StartFishingResponse { public string guid; public float time; public float dancingStep; }
     [Serializable] private class EndFishingRequest { public string guid; public bool suc; }
     [Serializable] public class EndFishingResponse { public bool suc; public FishJson fish; }
-    
+
+    public void GetData(int userid, Action<FishJson[]> onSuccess, Action<string> onError)
+    {
+        StartCoroutine(GetDataCoroutine(userid, onSuccess, onError));
+    }
+
+    private string GetDataCoroutine(int userid, Action<FishJson[]> onSuccess, Action<string> onError)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 [Serializable]
@@ -97,5 +106,5 @@ public class FishJson
     public string description;
     public float weight;
     public float price;
-    public float dancingStep;
+    public ItemType type;
 }
