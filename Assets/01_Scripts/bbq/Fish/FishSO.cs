@@ -42,6 +42,7 @@ public class FishSO : Item, ModelView
         this.rarity = data.rarity;
         this.trait = data.trait;
         this.purity = data.purity;
+        this.type = data.type;
     }
 
     public override StringBuilder GetDescription()
