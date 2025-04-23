@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 public class FishingServerConnector : MonoBehaviour
 {
-    private const string SERVER_URL = "http://localhost:3000/api/fish/";
+    private const string SERVER_URL = "http://localhost:3000/api/";
     
     public static FishingServerConnector Instance { get; private set; }
     
@@ -31,7 +31,7 @@ public class FishingServerConnector : MonoBehaviour
     
     private IEnumerator StartFishingCoroutine(Action<string, float, float> onSuccess, Action<string> onError)
     {
-        using (UnityWebRequest request = UnityWebRequest.PostWwwForm($"{SERVER_URL}start", ""))
+        using (UnityWebRequest request = UnityWebRequest.PostWwwForm($"{SERVER_URL}fish/start", ""))
         {
             yield return request.SendWebRequest();
             
@@ -58,7 +58,7 @@ public class FishingServerConnector : MonoBehaviour
         string json = JsonConvert.SerializeObject(requestData);
         byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
         
-        using (UnityWebRequest request = new UnityWebRequest($"{SERVER_URL}end", "POST"))
+        using (UnityWebRequest request = new UnityWebRequest($"{SERVER_URL}fish/end", "POST"))
         {
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
@@ -81,16 +81,42 @@ public class FishingServerConnector : MonoBehaviour
     [Serializable] private class StartFishingResponse { public string guid; public float time; public float dancingStep; }
     [Serializable] private class EndFishingRequest { public string guid; public bool suc; }
     [Serializable] public class EndFishingResponse { public bool suc; public FishJson fish; }
+    [Serializable] public class getDataInventory { public fishesJson fishes; }
+    [Serializable] public class dataReq { public string userId; }
 
-    public void GetData(int userid, Action<FishJson[]> onSuccess, Action<string> onError)
+    public void GetData(string userid, Action<FishJson[]> onSuccess)
     {
-        StartCoroutine(GetDataCoroutine(userid, onSuccess, onError));
+        StartCoroutine(GetDataCoroutine(userid, onSuccess));
     }
 
-    private string GetDataCoroutine(int userid, Action<FishJson[]> onSuccess, Action<string> onError)
+    private IEnumerator GetDataCoroutine(string userid, Action<FishJson[]> onSuccess)
     {
-        throw new NotImplementedException();
+        var requestData = new dataReq { userId = userid };
+        string json = JsonConvert.SerializeObject(requestData);
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+
+        using (UnityWebRequest request = new UnityWebRequest($"{SERVER_URL}datastore/fishtank", "POST"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            
+
+            yield return request.SendWebRequest();
+            Debug.Log(request.result);
+            
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                FishJson[] response = JsonConvert.DeserializeObject<FishJson[]>(request.downloadHandler.text);
+                onSuccess?.Invoke(response);
+            }
+        }
     }
+}
+
+[Serializable] public class fishesJson
+{
+    public FishJson[] fishes;
 }
 
 [Serializable]

@@ -21,8 +21,18 @@ public class GameManager : MonoBehaviour
     public Transform spawnPoint;
     public bool startGame = false;
 
+    private void handleFishJson(FishJson[] fishes)
+    {
+        foreach (var fish in fishes)
+        {
+            FishSO data = ScriptableObject.CreateInstance<FishSO>(); data.Initialize(fish);
+            InventoryManager.Instance.AddItem(data);
+        }
+    }
+
     private void Start()
     {
+        FishingServerConnector.Instance.GetData("test", handleFishJson);
         Time.timeScale = 1f;
         Coin = 100000;
         SetCoinText();
@@ -43,9 +53,9 @@ public class GameManager : MonoBehaviour
     public void OnClickQuit()
     {
 #if UNITY_EDITOR
-        EditorApplication.ExitPlaymode();  // ¿¡µðÅÍ¿¡¼­ ½ÇÇà ÁßÀÌ¸é Play ¸ðµå Á¾·á
+        EditorApplication.ExitPlaymode();  // ï¿½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ Play ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 #else
-        Application.Quit();  // ºôµåµÈ °ÔÀÓ¿¡¼­´Â Á¤»ó Á¾·á
+        Application.Quit();  // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 #endif
     }
     private void SetCoinText()
