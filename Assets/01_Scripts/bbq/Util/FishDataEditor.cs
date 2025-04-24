@@ -3,6 +3,8 @@ using UnityEditor;
 using UnityEngine;
 using Unity.EditorCoroutines.Editor;
 using System.Collections.Generic;
+using System.IO;
+using UnityEditor.AddressableAssets;
 
 public class FishDataEditor : EditorWindow
 {
@@ -35,7 +37,60 @@ public class FishDataEditor : EditorWindow
         {
             FishDataLoader.LoadData(OnTraitDataLoaded);
         }
+        if (GUILayout.Button("🍳 Fishrod Adressable 업로드"))
+        {
+            AddScriptableObjectsToAddressables("Assets/10_SO/bbq/FishingRods", "Fishrod");
+        }
     }
+
+    public static void AddScriptableObjectsToAddressables(string targetFolderPath, string groupName = "Default Local Group")
+    {
+        // AddressableAssetSettings 가져오기
+        var settings = AddressableAssetSettingsDefaultObject.Settings;
+        if (settings == null)
+        {
+            Debug.LogError("Addressable Settings not found. Please initialize Addressables first.");
+            return;
+        }
+
+        // 그룹 찾기 또는 생성
+        var group = settings.FindGroup(groupName);
+        if (group == null)
+        {
+            group = settings.CreateGroup(groupName, false, false, true, null);
+            Debug.Log($"Created new Addressables group: {groupName}");
+        }
+
+        // 대상 폴더에서 모든 SO 파일 찾기
+        string fullPath = Path.Combine(Application.dataPath, targetFolderPath);
+        if (!Directory.Exists(fullPath))
+        {
+            Debug.LogError($"Directory not found: {fullPath}");
+            return;
+        }
+
+        string[] soFiles = Directory.GetFiles(fullPath, "*.asset", SearchOption.AllDirectories);
+        int addedCount = 0;
+
+        foreach (string file in soFiles)
+        {
+            string assetPath = "Assets" + file.Replace(Application.dataPath, "").Replace('\\', '/');
+            ScriptableObject so = AssetDatabase.LoadAssetAtPath<ScriptableObject>(assetPath);
+
+            if (so != null)
+            {
+                // Addressables에 추가
+                var entry = settings.CreateOrMoveEntry(AssetDatabase.AssetPathToGUID(assetPath), group);
+                entry.address = assetPath; // 주소를 에셋 경로로 설정 (원하는 방식으로 수정 가능)
+                addedCount++;
+            }
+        }
+
+        // 변경사항 저장
+        AssetDatabase.SaveAssets();
+        Debug.Log($"Added {addedCount} ScriptableObjects to Addressables group '{groupName}'");
+    }
+
 
     private void OnFishDataLoaded(string rawJson)
     {
