@@ -9,6 +9,7 @@ public class FishingServerConnector : MonoBehaviour
 {
     private const string SERVER_URL = "http://localhost:3000/api/";
     
+    public FishingRod baseFishingRodPrefab;
     public static FishingServerConnector Instance { get; private set; }
     
     private void Awake()
@@ -81,15 +82,16 @@ public class FishingServerConnector : MonoBehaviour
     [Serializable] private class StartFishingResponse { public string guid; public float time; public float dancingStep; }
     [Serializable] private class EndFishingRequest { public string guid; public bool suc; }
     [Serializable] public class EndFishingResponse { public bool suc; public FishJson fish; }
-    [Serializable] public class getDataInventory { public fishesJson fishes; }
+    [Serializable] public class getDataInventory { public InventoryData fishes; }
     [Serializable] public class dataReq { public string userId; }
 
-    public void GetData(string userid, Action<FishJson[]> onSuccess)
+    public void GetData(string userid, Action<InventoryData> onSuccess)
     {
         StartCoroutine(GetDataCoroutine(userid, onSuccess));
     }
 
-    private IEnumerator GetDataCoroutine(string userid, Action<FishJson[]> onSuccess)
+
+    private IEnumerator GetDataCoroutine(string userid, Action<InventoryData> onSuccess)
     {
         var requestData = new dataReq { userId = userid };
         string json = JsonConvert.SerializeObject(requestData);
@@ -100,37 +102,19 @@ public class FishingServerConnector : MonoBehaviour
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
-            
 
             yield return request.SendWebRequest();
-            Debug.Log(request.result);
             
             if (request.result == UnityWebRequest.Result.Success)
             {
-                FishJson[] response = JsonConvert.DeserializeObject<FishJson[]>(request.downloadHandler.text);
+                // fishesJson 클래스를 사용하여 파싱
+                var response = JsonConvert.DeserializeObject<InventoryData>(request.downloadHandler.text);
                 onSuccess?.Invoke(response);
+            }
+            else
+            {
+                Debug.LogError($"Error: {request.error}");
             }
         }
     }
-}
-
-[Serializable] public class fishesJson
-{
-    public FishJson[] fishes;
-}
-
-[Serializable]
-public class FishJson
-{
-    public string name;
-    public string spec;
-    public string rarity;
-    public string trait;
-    public float purity;
-    public string visualAddress;
-    public string id;
-    public string description;
-    public float weight;
-    public float price;
-    public ItemType type;
 }

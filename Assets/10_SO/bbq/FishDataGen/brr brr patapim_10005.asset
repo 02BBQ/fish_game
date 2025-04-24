@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6522fc69616c13c4891c6b3959f595aa, type: 3}
-  m_Name: brr brr patapim_10005
+  m_Name: Brr Brr Patapim_10005
   m_EditorClassIdentifier: 
   id: 10005
   fishSprite: {fileID: 0}
@@ -23,4 +23,4 @@ MonoBehaviour:
   DancingStepMin: 0.4
   visualAddress: 
   rarity: Epic
-  description: 
+  description: Brr brrr Patapim, my hat is full of Slim!

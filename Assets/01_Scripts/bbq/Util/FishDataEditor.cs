@@ -30,6 +30,11 @@ public class FishDataEditor : EditorWindow
         {
             FishDataLoader.LoadData(OnTraitDataLoaded);
         }
+        
+        if (GUILayout.Button("🍳 Fishrod 데이터 불러오기"))
+        {
+            FishDataLoader.LoadData(OnTraitDataLoaded);
+        }
     }
 
     private void OnFishDataLoaded(string rawJson)

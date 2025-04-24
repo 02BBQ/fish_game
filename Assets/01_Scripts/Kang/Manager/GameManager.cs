@@ -21,12 +21,19 @@ public class GameManager : MonoBehaviour
     public Transform spawnPoint;
     public bool startGame = false;
 
-    private void handleFishJson(FishJson[] fishes)
+    private void handleFishJson(InventoryData data)
     {
-        foreach (var fish in fishes)
+        foreach (FishJson fish in data.fishes)
         {
-            FishSO data = ScriptableObject.CreateInstance<FishSO>(); data.Initialize(fish);
-            InventoryManager.Instance.AddItem(data);
+            FishSO so = ScriptableObject.CreateInstance<FishSO>();
+            so.Initialize(fish);
+            InventoryManager.Instance.AddItem(so);
+        }
+        foreach (FishJson fish in data.fishes)
+        {
+            FishSO so = ScriptableObject.CreateInstance<FishSO>();
+            so.Initialize(fish);
+            InventoryManager.Instance.AddItem(so);
         }
     }
 

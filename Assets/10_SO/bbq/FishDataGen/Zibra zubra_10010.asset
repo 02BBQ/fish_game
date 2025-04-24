@@ -23,4 +23,5 @@ MonoBehaviour:
   DancingStepMin: 0.4
   visualAddress: 
   rarity: UltraSuperRare
-  description: 
+  description: A creature with the head of a zebra, the body of a watermelon, and
+    human legs.
