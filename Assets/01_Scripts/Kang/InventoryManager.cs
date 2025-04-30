@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.UI.Dropdown;
+using System.Linq;
 
 public class InventoryManager : SingleTon<InventoryManager>
 {
@@ -20,6 +17,20 @@ public class InventoryManager : SingleTon<InventoryManager>
 
     [field: SerializeField] public List<Item> Items {get; private set;} = new List<Item>();
     private List<InventoryItem> inventoryItems = new List<InventoryItem>();
+
+    [Header("Fish")]
+    [HideInInspector] public List<FishSlot> fishSlots = new List<FishSlot>();
+    [SerializeField] Transform fishSlotParent;
+    [SerializeField] FishSlot fishSlotPrefab;
+    [SerializeField] GameObject sellBtn;
+    [SerializeField] GameObject getBtn;
+    [SerializeField] GameObject keepBtn;
+    [SerializeField] FishSlot personalFishSlot;
+
+    public Action<FishSO> OnRemoveFish;
+    public Action<FishSO> OnAddFish;
+
+    public FishSlot clickedFish;
 
     int selectedSlot = -1;
 
@@ -36,11 +47,15 @@ public class InventoryManager : SingleTon<InventoryManager>
                 types.Add(type.ToString());
         }
         category.AddOptions(types);
+
     }
 
     private void Start()
     {
         category.onValueChanged.AddListener(OnChangeCategory);
+        getBtn.GetComponent<Button>().onClick.AddListener(OnClickGet);
+        keepBtn.GetComponent<Button>().onClick.AddListener(OnClickKeep);
+        sellBtn.GetComponent<Button>().onClick.AddListener(OnClickSell);
         EventBus.Subscribe(EventBusType.Start, Init);
     }
 
@@ -78,10 +93,12 @@ public class InventoryManager : SingleTon<InventoryManager>
 
     public bool AddItem(Item item)
     {
+        if (item is FishSO)
+            Definder.Player.HandleFish(item as FishSO);
         for (int i = 0; i < inventoryItems.Count; i++)
         {
             InventoryItem itemInSlot = inventoryItems[i];
-
+            
             if (itemInSlot != null && 
                 itemInSlot.item.nameStr == item.nameStr && 
                 itemInSlot.count < maxStackedItems &&
@@ -124,6 +141,35 @@ public class InventoryManager : SingleTon<InventoryManager>
         }
         return false;
     }
+    public void SetFish(int maxCount, List<FishSO> fishs)
+    {
+        print(maxCount + "  " + fishSlots.Count);
+        if (fishSlots.Count < maxCount)
+        {
+            for (int i = 0; i < maxCount - fishSlots.Count; i++)
+            {
+                fishSlots.Add(Instantiate(fishSlotPrefab, fishSlotParent));
+                fishSlots[i].child = fishSlots[i].transform.GetChild(0).gameObject;
+                fishSlots[i].childImage = fishSlots[i].child.GetComponent<Image>();
+            }
+        }
+
+        for (int i = 0; i < maxCount; i++)
+        {
+            fishSlots[i].child.SetActive(false);
+            fishSlots[i].gameObject.SetActive(true);
+        }
+        for(int i = maxCount; i < fishSlots.Count; i++)
+        {
+            fishSlots[i].gameObject.SetActive(false);
+        }
+        for (int i = 0; i < fishs.Count; i++)
+        {
+            fishSlots[i].child.SetActive(true);
+            fishSlots[i].childImage.sprite = fishs[i].image;
+            fishSlots[i].SetItem(fishs[i]);
+        }
+    }
     void SpawnNewItem(Item item)
     {
         item = Instantiate(item);
@@ -135,8 +181,6 @@ public class InventoryManager : SingleTon<InventoryManager>
         newItemGo.SetActive(false);
         RefreshFillter();
     }
-
-    
 
     void DeleteItem(InventoryItem slot)
     {
@@ -166,14 +210,71 @@ public class InventoryManager : SingleTon<InventoryManager>
         }
         return null;
     }
-
+    #region FishThreeButton
     public void UpdateInfo(Item item)
     {
-        if (item == null) return;
-
         itemInfo.UpdateItemInfo(item);
     }
 
+    public void OnClickFish()
+    {
+        getBtn.SetActive(true);
+        sellBtn.SetActive(true);
+        keepBtn.SetActive(false);
+    }
+    public void OnClickPersonalFish()
+    {
+        getBtn.SetActive(false);
+        sellBtn.SetActive(false);
+        keepBtn.SetActive(true);
+    }
+    public void ResetFishButtons()
+    {
+        getBtn.SetActive(false);
+        sellBtn.SetActive(false);
+        keepBtn.SetActive(false);
+    }
+    
+    public void OnClickGet()
+    {
+        //  Definder.Player.HandleFish(clickedFish.slotItem);
+
+        FishSO origin = personalFishSlot.slotItem;
+
+        personalFishSlot.SetItem(clickedFish.slotItem);
+        OnRemoveFish(clickedFish.slotItem);
+
+        if (origin == null)
+            clickedFish.ResetItem();
+        else
+        {
+            clickedFish.SetItem(origin);
+            OnAddFish(origin);
+        }
+        clickedFish = personalFishSlot;
+
+        personalFishSlot.OnPointerDown(null);
+        OnClickPersonalFish();
+    }
+    public void OnClickKeep()
+    {
+        FishSlot firstSlot = fishSlots.FirstOrDefault(x => x.slotItem == null);
+
+        if (firstSlot)
+        {
+            OnAddFish(personalFishSlot.slotItem);
+            firstSlot.SetItem(personalFishSlot.slotItem);
+            firstSlot.OnPointerDown(null);
+            personalFishSlot.ResetItem();
+        }
+        else
+            Debug.LogWarning("아이템창 꽉참;;");
+    }
+    public void OnClickSell()
+    {
+        //@ Sell fish
+    }
+    #endregion
     #region Fillter
     public ItemType GetCurrentCategory()
     {
@@ -250,5 +351,7 @@ public class InventoryManager : SingleTon<InventoryManager>
         }
         RefreshItembyCategory((ItemType)index);
     }
+
     #endregion
+
 }

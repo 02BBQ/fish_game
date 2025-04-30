@@ -36,6 +36,7 @@ public class UIManager : SingleTon<UIManager>
     public UIInput uiInput;
 
     public GameObject dock;
+    public GameObject fishTank;
     [SerializeField] private Image image;
     [SerializeField] private GameObject map;
 

@@ -1,10 +1,6 @@
-using DG.Tweening;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class Player : MapEntity
 {
@@ -25,11 +21,18 @@ public class Player : MapEntity
 
     public Action<Collision> CollisionEnter;
 
+    public GameObject fishObj;
+    MeshRenderer fishRenderer;
+    MeshFilter fishMesh;
+    [HideInInspector] public FishSO currentFish = null;
+
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody>();
         // playerAnim = GetComponentInChildren<PlayerAnimation>();
         _capsuleCollider = transform.Find("Collider").GetComponent<CapsuleCollider>();
+        fishRenderer = fishObj.GetComponent<MeshRenderer>();
+        fishMesh = fishObj.GetComponent<MeshFilter>();
     }
     public Item debugItem;
     protected override void Start()
@@ -113,5 +116,34 @@ public class Player : MapEntity
         boating = false;
         
         UIManager.Instance.FadeOut(1f);
+    }
+
+    internal void HandleFish(FishSO fishSO)
+    {
+        currentFish = fishSO;
+        if (fishSO.visualPath != "")
+        {
+            Definder.GameManager.LoadAddressableAsset(fishSO.visualPath, (obj) =>
+            {
+                fishRenderer.material = obj.GetComponent<Renderer>().material;
+                fishMesh.mesh = obj.GetComponent<MeshFilter>().mesh;
+            });
+        }
+        else if(fishSO.image != null)
+        {
+            Sprite sprite = fishSO.image;
+            Texture2D newTexture = new Texture2D((int)sprite.rect.width, (int)sprite.rect.height);
+            Color[] newColors = sprite.texture.GetPixels(
+            (int)sprite.textureRect.x,
+            (int)sprite.textureRect.y,
+                (int)sprite.textureRect.width,
+                (int)sprite.textureRect.height
+            );
+            newTexture.SetPixels(newColors);
+            newTexture.Apply();
+
+            fishRenderer.material.SetTexture("_MainTex", newTexture);
+        }
+        fishObj.SetActive(true);
     }
 }
