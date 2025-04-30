@@ -82,22 +82,21 @@ public class FishingServerConnector : MonoBehaviour
     [Serializable] private class StartFishingResponse { public string guid; public float time; public float dancingStep; }
     [Serializable] private class EndFishingRequest { public string guid; public bool suc; }
     [Serializable] public class EndFishingResponse { public bool suc; public FishJson fish; }
-    [Serializable] public class getDataInventory { public InventoryData fishes; }
     [Serializable] public class dataReq { public string userId; }
 
-    public void GetData(string userid, Action<InventoryData> onSuccess)
+    public void GetData(string userid, Action<InitData> onSuccess)
     {
         StartCoroutine(GetDataCoroutine(userid, onSuccess));
     }
 
 
-    private IEnumerator GetDataCoroutine(string userid, Action<InventoryData> onSuccess)
+    private IEnumerator GetDataCoroutine(string userid, Action<InitData> onSuccess)
     {
         var requestData = new dataReq { userId = userid };
         string json = JsonConvert.SerializeObject(requestData);
         byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
 
-        using (UnityWebRequest request = new UnityWebRequest($"{SERVER_URL}datastore/fishtank", "POST"))
+        using (UnityWebRequest request = new UnityWebRequest($"{SERVER_URL}datastore/initload", "POST"))
         {
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
@@ -108,7 +107,7 @@ public class FishingServerConnector : MonoBehaviour
             if (request.result == UnityWebRequest.Result.Success)
             {
                 // fishesJson 클래스를 사용하여 파싱
-                var response = JsonConvert.DeserializeObject<InventoryData>(request.downloadHandler.text);
+                var response = JsonConvert.DeserializeObject<InitData>(request.downloadHandler.text);
                 onSuccess?.Invoke(response);
             }
             else

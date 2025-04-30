@@ -21,15 +21,10 @@ public class GameManager : MonoBehaviour
     public Transform spawnPoint;
     public bool startGame = false;
 
-    private void handleFishJson(InventoryData data)
+    private void handleFishJson(InitData data)
     {
-        foreach (FishJson fish in data.fishes)
-        {
-            FishSO so = ScriptableObject.CreateInstance<FishSO>();
-            so.Initialize(fish);
-            InventoryManager.Instance.AddItem(so);
-        }
-        foreach (FishJson fish in data.fishes)
+        Coin = data.money;
+        foreach (FishJson fish in data.inventoryData.Fish)
         {
             FishSO so = ScriptableObject.CreateInstance<FishSO>();
             so.Initialize(fish);
@@ -41,9 +36,9 @@ public class GameManager : MonoBehaviour
     {
         FishingServerConnector.Instance.GetData("test", handleFishJson);
         Time.timeScale = 1f;
-        Coin = 100000;
         SetCoinText();
     }
+
     [ContextMenu("dsfa")]
     public void Delete()
     {

@@ -5,6 +5,7 @@ using Unity.EditorCoroutines.Editor;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
 
 public class FishDataEditor : EditorWindow
 {
@@ -39,7 +40,7 @@ public class FishDataEditor : EditorWindow
         }
         if (GUILayout.Button("🍳 Fishrod Adressable 업로드"))
         {
-            AddScriptableObjectsToAddressables("Assets/10_SO/bbq/FishingRods", "Fishrod");
+            AddScriptableObjectsToAddressables("Assets/10_SO/bbq/FishingRods", "Fishrods");
         }
     }
 
@@ -61,8 +62,8 @@ public class FishDataEditor : EditorWindow
             Debug.Log($"Created new Addressables group: {groupName}");
         }
 
-        // 대상 폴더에서 모든 SO 파일 찾기
-        string fullPath = Path.Combine(Application.dataPath, targetFolderPath);
+        // 경로 정규화 및 존재 확인
+        string fullPath = targetFolderPath.Replace("\\", "/");
         if (!Directory.Exists(fullPath))
         {
             Debug.LogError($"Directory not found: {fullPath}");
@@ -71,24 +72,53 @@ public class FishDataEditor : EditorWindow
 
         string[] soFiles = Directory.GetFiles(fullPath, "*.asset", SearchOption.AllDirectories);
         int addedCount = 0;
+        int updatedCount = 0;
+        int skippedCount = 0;
+
+        // 기존 항목 정보 수집
+        var existingEntries = new Dictionary<string, AddressableAssetEntry>();
+        foreach (var entry in group.entries)
+        {
+            existingEntries[entry.guid] = entry;
+        }
 
         foreach (string file in soFiles)
         {
-            string assetPath = "Assets" + file.Replace(Application.dataPath, "").Replace('\\', '/');
-            ScriptableObject so = AssetDatabase.LoadAssetAtPath<ScriptableObject>(assetPath);
+            string path = file.Replace("\\", "/");
+            string guid = AssetDatabase.AssetPathToGUID(path);
+            string expectedAddress = $"{typeof(FishingRod).Name}/{Path.GetFileNameWithoutExtension(path)}";
 
-            if (so != null)
+            // FishingRod SO 로드
+            FishingRod so = AssetDatabase.LoadAssetAtPath<FishingRod>(path);
+            if (so == null) continue;
+
+            // 이미 등록된 경우
+            if (existingEntries.TryGetValue(guid, out var existingEntry))
             {
-                // Addressables에 추가
-                var entry = settings.CreateOrMoveEntry(AssetDatabase.AssetPathToGUID(assetPath), group);
-                entry.address = assetPath; // 주소를 에셋 경로로 설정 (원하는 방식으로 수정 가능)
-                addedCount++;
+                // 주소가 다른 경우 업데이트
+                if (existingEntry.address != expectedAddress)
+                {
+                    existingEntry.address = expectedAddress;
+                    updatedCount++;
+                    Debug.Log($"Updated address for: {path} -> {expectedAddress}");
+                }
+                else
+                {
+                    skippedCount++;
+                }
+                continue;
             }
+
+            // 새 항목 추가
+            var newEntry = settings.CreateOrMoveEntry(guid, group);
+            newEntry.address = expectedAddress;
+            addedCount++;
+            Debug.Log($"Added new entry: {path}");
         }
 
         // 변경사항 저장
         AssetDatabase.SaveAssets();
-        Debug.Log($"Added {addedCount} ScriptableObjects to Addressables group '{groupName}'");
+        Debug.Log($"Addressables update complete - Added: {addedCount}, Updated: {updatedCount}, Skipped: {skippedCount}");
     }
 
 

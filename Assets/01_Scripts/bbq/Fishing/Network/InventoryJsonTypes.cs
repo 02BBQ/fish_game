@@ -12,8 +12,14 @@ public class ItemJson
 
 [Serializable] public class InventoryData
 {
-    public FishJson[] fishes;
+    public FishJson[] Fish;
     // public FishingRod[] rods;
+}
+
+[Serializable] public class InitData
+{
+    public int money;
+    public InventoryData inventoryData;
 }
 
 // [Serializable]
