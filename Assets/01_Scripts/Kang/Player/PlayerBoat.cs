@@ -55,12 +55,14 @@ public class PlayerBoat : MonoBehaviour
 
     private void OpenFish()
     {
-        UIManager.Instance.fishTank.SetActive(true);
-        InventoryManager.Instance.SetFish(_currentBoat.boatData.maxFish, _currentBoat.fishs);
+        if (_currentBoat)
+        {
+            UIManager.Instance.fishTank.SetActive(true);
+            InventoryManager.Instance.SetFish(_currentBoat.boatData.maxFish, _currentBoat.fishs);
+        }
     }
     private void TryInterect()
     {
-
         if (_player.boating)
         {
             GuideText.Instance.RemoveGuide("ExitBoat");

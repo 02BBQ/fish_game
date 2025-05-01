@@ -27,11 +27,12 @@ public class InventoryManager : SingleTon<InventoryManager>
     [SerializeField] GameObject keepBtn;
     [SerializeField] FishSlot personalFishSlot;
 
-    public Action<FishSO> OnRemoveFish;
-    public Action<FishSO> OnAddFish;
+    public Action<List<FishSO>, FishSO> OnRemoveFish;
+    public Action<List<FishSO>, FishSO> OnAddFish;
 
     public FishSlot clickedFish;
 
+    List<FishSO> currentFishs;
     int selectedSlot = -1;
 
 #region UNITY_EVENTS
@@ -143,21 +144,24 @@ public class InventoryManager : SingleTon<InventoryManager>
     }
     public void SetFish(int maxCount, List<FishSO> fishs)
     {
-        print(maxCount + "  " + fishSlots.Count);
+        clickedFish = null;
+        currentFishs = fishs;
+        UpdateInfo(null);
         if (fishSlots.Count < maxCount)
         {
-            for (int i = 0; i < maxCount - fishSlots.Count; i++)
+            int fishCnt = fishSlots.Count;
+            for (int i = fishCnt; i < maxCount; i++)
             {
                 fishSlots.Add(Instantiate(fishSlotPrefab, fishSlotParent));
                 fishSlots[i].child = fishSlots[i].transform.GetChild(0).gameObject;
                 fishSlots[i].childImage = fishSlots[i].child.GetComponent<Image>();
             }
         }
-
         for (int i = 0; i < maxCount; i++)
         {
             fishSlots[i].child.SetActive(false);
             fishSlots[i].gameObject.SetActive(true);
+            fishSlots[i].ResetItem();
         }
         for(int i = maxCount; i < fishSlots.Count; i++)
         {
@@ -237,23 +241,22 @@ public class InventoryManager : SingleTon<InventoryManager>
     
     public void OnClickGet()
     {
-        //  Definder.Player.HandleFish(clickedFish.slotItem);
-
         FishSO origin = personalFishSlot.slotItem;
 
         personalFishSlot.SetItem(clickedFish.slotItem);
-        OnRemoveFish(clickedFish.slotItem);
+        OnRemoveFish(currentFishs, clickedFish.slotItem);
 
         if (origin == null)
             clickedFish.ResetItem();
         else
         {
             clickedFish.SetItem(origin);
-            OnAddFish(origin);
+            OnAddFish(currentFishs, origin);
         }
         clickedFish = personalFishSlot;
 
         personalFishSlot.OnPointerDown(null);
+        Definder.Player.HandleFish(clickedFish.slotItem);
         OnClickPersonalFish();
     }
     public void OnClickKeep()
@@ -262,10 +265,11 @@ public class InventoryManager : SingleTon<InventoryManager>
 
         if (firstSlot)
         {
-            OnAddFish(personalFishSlot.slotItem);
+            OnAddFish(currentFishs, personalFishSlot.slotItem);
             firstSlot.SetItem(personalFishSlot.slotItem);
             firstSlot.OnPointerDown(null);
             personalFishSlot.ResetItem();
+            Definder.Player.DisableFish();
         }
         else
             Debug.LogWarning("아이템창 꽉참;;");

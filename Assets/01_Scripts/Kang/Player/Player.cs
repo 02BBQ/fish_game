@@ -22,7 +22,7 @@ public class Player : MapEntity
     public Action<Collision> CollisionEnter;
 
     public GameObject fishObj;
-    MeshRenderer fishRenderer;
+    SpriteRenderer fishRenderer;
     MeshFilter fishMesh;
     [HideInInspector] public FishSO currentFish = null;
 
@@ -31,7 +31,7 @@ public class Player : MapEntity
         _rigid = GetComponent<Rigidbody>();
         // playerAnim = GetComponentInChildren<PlayerAnimation>();
         _capsuleCollider = transform.Find("Collider").GetComponent<CapsuleCollider>();
-        fishRenderer = fishObj.GetComponent<MeshRenderer>();
+        fishRenderer = fishObj.GetComponent<SpriteRenderer>();
         fishMesh = fishObj.GetComponent<MeshFilter>();
     }
     public Item debugItem;
@@ -118,7 +118,7 @@ public class Player : MapEntity
         UIManager.Instance.FadeOut(1f);
     }
 
-    internal void HandleFish(FishSO fishSO)
+    public void HandleFish(FishSO fishSO)
     {
         currentFish = fishSO;
         if (fishSO.visualPath != "")
@@ -131,19 +131,12 @@ public class Player : MapEntity
         }
         else if(fishSO.image != null)
         {
-            Sprite sprite = fishSO.image;
-            Texture2D newTexture = new Texture2D((int)sprite.rect.width, (int)sprite.rect.height);
-            Color[] newColors = sprite.texture.GetPixels(
-            (int)sprite.textureRect.x,
-            (int)sprite.textureRect.y,
-                (int)sprite.textureRect.width,
-                (int)sprite.textureRect.height
-            );
-            newTexture.SetPixels(newColors);
-            newTexture.Apply();
-
-            fishRenderer.material.SetTexture("_MainTex", newTexture);
+            fishRenderer.sprite = fishSO.image;
         }
         fishObj.SetActive(true);
+    }
+    public void DisableFish()
+    {
+        fishObj.SetActive(false);
     }
 }

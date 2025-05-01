@@ -7,6 +7,7 @@ public class FishModel : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public MeshFilter meshFilter;
     public MeshRenderer meshRend;
+    public FishSO fishSO;
     
     private Vector3 direction; // Fish의 이동 방향
     private BoxCollider boxCollider; // Fish가 있는 Box Collider
@@ -16,16 +17,18 @@ public class FishModel : MonoBehaviour
     private bool triggerEntered = false; // Trigger Enter 여부
 
 
-    public void Init(Mesh mesh, Material mat)
+    public void Init(Mesh mesh, Material mat, FishSO so)
     {
         meshFilter.mesh = mesh;
         meshRend.material = mat;
+        fishSO = so;
         spriteRenderer.gameObject.SetActive(false);
         meshRend.gameObject.SetActive(true);
     }
-    public void Init(Sprite sprite)
+    public void Init(Sprite sprite, FishSO so)
     {
         spriteRenderer.sprite = sprite;
+        fishSO = so;
 
         spriteRenderer.gameObject.SetActive(true);
         meshRend.gameObject.SetActive(false);

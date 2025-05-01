@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class WaterTank : Interactor
@@ -29,7 +31,7 @@ public class WaterTank : Interactor
         // 초기 물고기들 처리
         foreach (FishSO fish in fishs)
         {
-            FishModel fishObj = pool.Find(obj => !obj.gameObject.activeSelf);
+            FishModel fishObj = pool.FirstOrDefault(obj => !obj.gameObject.activeSelf);
 
             if (fishObj == null)
             {
@@ -37,17 +39,19 @@ public class WaterTank : Interactor
                 fishObj = Instantiate(fishPref, transform);
                 pool.Add(fishObj);
             }
-            fishObj.Init(fish.image);
+            fishObj.Init(fish.image, fish);
             fishObj.gameObject.SetActive(true);
         }
     }
 
-    public void AddFish(FishSO fish)
+    public void AddFish(List<FishSO> lst, FishSO fish)
     {
+        if (lst != fishs) return;
+
         fishs.Add(fish);
         
         // pool에서 비활성화된 오브젝트 찾기
-        FishModel fishObj = pool.Find(obj => !obj.gameObject.activeSelf);
+        FishModel fishObj = pool.FirstOrDefault(obj => !obj.gameObject.activeSelf);
         
         if (fishObj == null)
         {
@@ -55,17 +59,19 @@ public class WaterTank : Interactor
             fishObj = Instantiate(fishPref, transform);
             pool.Add(fishObj);
         }
-        fishObj.Init(fish.image);
+        fishObj.Init(fish.image, fish);
         fishObj.gameObject.SetActive(true);
     }
 
-    public void RemoveFish(FishSO fish)
+    public void RemoveFish(List<FishSO> lst, FishSO fish)
     {
+        if (lst != fishs) return;
+
         if (fishs.Contains(fish))
         {
             fishs.Remove(fish);
             // 해당 물고기 오브젝트 찾아서 비활성화
-            FishModel fishObj = pool.Find(obj => obj.gameObject.activeSelf);
+            FishModel fishObj = pool.FirstOrDefault(obj => obj.gameObject.activeSelf && obj.fishSO.nameStr == fish.nameStr);
             if (fishObj != null)
             {
                 fishObj.gameObject.SetActive(false);
