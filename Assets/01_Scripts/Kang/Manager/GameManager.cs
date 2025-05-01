@@ -24,11 +24,18 @@ public class GameManager : MonoBehaviour
     private void handleFishJson(InitData data)
     {
         Coin = data.money;
-        foreach (FishJson fish in data.inventoryData.Fish)
+        if (data.inventoryData.fishes != null)
         {
-            FishSO so = ScriptableObject.CreateInstance<FishSO>();
-            so.Initialize(fish);
-            InventoryManager.Instance.AddItem(so);
+            foreach (FishJson fish in data.inventoryData.fishes)
+            {
+                FishSO so = ScriptableObject.CreateInstance<FishSO>();
+                so.Initialize(fish);
+                InventoryManager.Instance.AddItem(so);
+            }
+        }
+        else
+        {
+            Debug.Log("No fish data available.");
         }
     }
 
