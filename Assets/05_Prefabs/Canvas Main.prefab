@@ -68,7 +68,8 @@ MonoBehaviour:
   m_text: King of Fish
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a6f57bb02604f164099aff89d5bd6a67, type: 2}
-  m_sharedMaterial: {fileID: -8190808505015226683, guid: a6f57bb02604f164099aff89d5bd6a67, type: 2}
+  m_sharedMaterial: {fileID: -8190808505015226683, guid: a6f57bb02604f164099aff89d5bd6a67,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -928,7 +929,8 @@ MonoBehaviour:
 '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5113a6c6463ea334e8fd3f4a038ec41a, type: 2}
-  m_sharedMaterial: {fileID: -8190808505015226683, guid: 5113a6c6463ea334e8fd3f4a038ec41a, type: 2}
+  m_sharedMaterial: {fileID: -8190808505015226683, guid: 5113a6c6463ea334e8fd3f4a038ec41a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1064,7 +1066,8 @@ MonoBehaviour:
   m_text: Start
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5113a6c6463ea334e8fd3f4a038ec41a, type: 2}
-  m_sharedMaterial: {fileID: -8190808505015226683, guid: 5113a6c6463ea334e8fd3f4a038ec41a, type: 2}
+  m_sharedMaterial: {fileID: -8190808505015226683, guid: 5113a6c6463ea334e8fd3f4a038ec41a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1200,7 +1203,8 @@ MonoBehaviour:
   m_text: Setting
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5113a6c6463ea334e8fd3f4a038ec41a, type: 2}
-  m_sharedMaterial: {fileID: -8190808505015226683, guid: 5113a6c6463ea334e8fd3f4a038ec41a, type: 2}
+  m_sharedMaterial: {fileID: -8190808505015226683, guid: 5113a6c6463ea334e8fd3f4a038ec41a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

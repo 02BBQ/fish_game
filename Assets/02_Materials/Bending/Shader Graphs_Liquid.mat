@@ -8,7 +8,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Shader Graphs_Liquid
-  m_Shader: {fileID: -6465566751694194690, guid: 35e5ce357f6bae24c922b7dda6d4d64e, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 35e5ce357f6bae24c922b7dda6d4d64e,
+    type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
