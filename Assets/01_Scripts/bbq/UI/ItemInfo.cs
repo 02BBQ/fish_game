@@ -41,18 +41,29 @@ public class ItemInfo : MonoBehaviour //, IItemInfoView
 
     public void UpdateItemInfo(Item item)
     {
-        
-        nameText.text = item.GetName();
-        descText.text = item.GetDescription().ToString();
-        currentItem = item;
-        if (item is ModelView itemModel && item.visualPath != null && item.visualPath != string.Empty)
+        if (item == null)
         {
-            modelAddress = item.visualPath;
-            LoadModel(modelAddress);
+            nameText.text = "";
+            descText.text = "";
+            currentItem = null;
+            if (spriteModel == null)
+                Start();
+            spriteModel.gameObject.SetActive(false);
         }
         else
         {
-            LoadSprite(item.image);
+            nameText.text = item.GetName();
+            descText.text = item.GetDescription().ToString();
+            currentItem = item;
+            if (item is ModelView itemModel && item.visualPath != null && item.visualPath != string.Empty)
+            {
+                modelAddress = item.visualPath;
+                LoadModel(modelAddress);
+            }
+            else
+            {
+                LoadSprite(item.image);
+            }
         }
     }
 
