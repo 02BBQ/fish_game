@@ -11,19 +11,19 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - No Player Collision
+  - Player
   - Water
   - UI
+  - Boat
   - 
-  - 
-  - Player
-  - 
-  - 
-  - Post-Procssing
+  - Suimono_Water
+  - Suimono_Depth
+  - Suimono_Scene
+  - Map
   - ViewModel
-  - Enviroment
+  - Ground
   - 
-  - Iteractable
+  - 
   - 
   - 
   - 
