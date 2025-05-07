@@ -22,8 +22,11 @@ public class WaterTank : Interactor
     }
     private void OnDisable()
     {
-        InventoryManager.Instance.OnAddFish -= AddFish;
-        InventoryManager.Instance.OnRemoveFish -= RemoveFish;
+        if (InventoryManager.Instance)
+        {
+            InventoryManager.Instance.OnAddFish -= AddFish;
+            InventoryManager.Instance.OnRemoveFish -= RemoveFish;
+        }
     }
     protected override void Start()
     {

@@ -9,6 +9,8 @@ public class SettingData
 {
     public float _SFX;
     public float _BGM;
+    public int _resolution;
+    public int _fullScreen;
     public float _sensitivity;
     public bool _oceanRef;
 }
@@ -22,6 +24,8 @@ public class JsonManager : SingleTon<JsonManager>
     //프로퍼티로 외부에서 변경하면 바로 저장
     public float SFX { get { return _settingData._SFX; } set { _settingData._SFX = value; SaveData(_settingData, _settingFile); } }
     public float BGM { get { return _settingData._BGM; } set { _settingData._BGM = value; SaveData(_settingData, _settingFile); } }
+    public int Resolution { get { return _settingData._resolution; } set { _settingData._resolution = value; SaveData(_settingData, _settingFile); } }
+    public int FullScreen { get { return _settingData._fullScreen; } set { _settingData._fullScreen = value; SaveData(_settingData, _settingFile); } }
     public float Sensitivity { get { return _settingData._sensitivity; } set { _settingData._sensitivity = value; SaveData(_settingData, _settingFile); } }
     public bool OceanRef { get { return _settingData._oceanRef; } set { _settingData._oceanRef = value; SaveData(_settingData, _settingFile); } }
 

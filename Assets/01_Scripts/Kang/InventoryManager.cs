@@ -9,7 +9,7 @@ public class InventoryManager : SingleTon<InventoryManager>
 {
     public int maxStackedItems = 16;
     public GameObject inventoryUI;
-    public InventorySlot[] inventorySlots;
+    public List<InventorySlot> inventorySlots = new List<InventorySlot>();
     public ItemInfo itemInfo;
     [SerializeField] private GameObject inventoryItemPrefab;
     [SerializeField] private TMP_Dropdown category;
@@ -112,7 +112,8 @@ public class InventoryManager : SingleTon<InventoryManager>
                 return true;
             }
         }
-        if (inventoryItems.Count < inventorySlots.Length)//��ĭ ������
+
+        if (inventoryItems.Count < inventorySlots.Count)//��ĭ ������ 
         {
             SpawnNewItem(item);
             EventManager.Broadcast(Events.AddItemEvent);
@@ -335,7 +336,7 @@ public class InventoryManager : SingleTon<InventoryManager>
     }
     private void CleanSlot()
     {
-        for (int i = quickSlotCount; i < inventorySlots.Length; i++)
+        for (int i = quickSlotCount; i < inventorySlots.Count; i++)
         {
             InventorySlot slot = inventorySlots[i];
 
