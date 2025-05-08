@@ -75,6 +75,8 @@ public class PlayerBoat : MonoBehaviour
             boatCam.Priority = -1;
             _player.playerMovement.visual.localRotation = transform.rotation * Quaternion.Euler(0f, 180f, 0f);
             transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            _player.Rigidbody.mass = 10f;
+            _player.cForce.enabled = true;
         }
         else
         {
@@ -91,6 +93,8 @@ public class PlayerBoat : MonoBehaviour
                     _player.boating = true;
                     boatCam.Priority = 10;
                     _currentBoat.EnterBoat();
+                    _player.Rigidbody.mass = 0.1f;
+                    _player.cForce.enabled = false;
                     _player.sr.color = _ridingColor;
                 });
                 boatCam.transform.SetPositionAndRotation(_currentBoat.transform.position, _currentBoat.transform.rotation);

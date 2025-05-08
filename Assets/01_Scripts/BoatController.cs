@@ -141,6 +141,7 @@ public class BoatController : MapEntity
             pool.Add(fishObj);
         }
         fishObj.Init(fish.image, fish);
+        fishObj.transform.localPosition = Vector3.zero;
         fishObj.gameObject.SetActive(true);
     }
 

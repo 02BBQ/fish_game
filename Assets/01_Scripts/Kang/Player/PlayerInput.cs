@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.PlayerLoop;
 
 [CreateAssetMenu(menuName = "SO/InputTest")]
 public class PlayerInput : ScriptableObject
@@ -58,7 +61,6 @@ public class PlayerInput : ScriptableObject
 
         _inputAction.Player.CameraLock.performed += (obj) => CamereLock?.Invoke();
     }
-
     private void KeyPad_performed(InputAction.CallbackContext obj)
     {
         downKeyPad?.Invoke(int.Parse(obj.control.name));
@@ -95,7 +97,7 @@ public class PlayerInput : ScriptableObject
         Jumping = true;
         DownJump?.Invoke();
     }
-    private void OnDisable()
+    private void OnDestroy()
     {
         _inputAction.Player.Disable();
     }
