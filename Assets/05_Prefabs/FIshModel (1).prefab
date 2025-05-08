@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 850177157618353797}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: -0.1706}
+  m_LocalPosition: {x: 0, y: 0, z: -0.211}
   m_LocalScale: {x: 0.013502594, y: 0.017042827, z: 0.015167942}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -192,6 +192,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 7561950780662655945}
   meshFilter: {fileID: 3463380190894127944}
   meshRend: {fileID: 3166236855744624497}
+  fishSO: {fileID: 0}
 --- !u!54 &6882867455211108604
 Rigidbody:
   m_ObjectHideFlags: 0

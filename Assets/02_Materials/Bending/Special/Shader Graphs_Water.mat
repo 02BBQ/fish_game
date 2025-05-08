@@ -89,7 +89,8 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _Bend: 0.0297
+    - _Bend: 1
+    - _BendAmount: 0
     - _Blend: 0
     - _Blur: 0.005
     - _CastShadows: 1

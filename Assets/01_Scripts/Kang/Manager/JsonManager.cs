@@ -13,6 +13,7 @@ public class SettingData
     public int _fullScreen;
     public float _sensitivity;
     public bool _oceanRef;
+    public bool _worldBend;
 }
 
 public class JsonManager : SingleTon<JsonManager>
@@ -28,6 +29,7 @@ public class JsonManager : SingleTon<JsonManager>
     public int FullScreen { get { return _settingData._fullScreen; } set { _settingData._fullScreen = value; SaveData(_settingData, _settingFile); } }
     public float Sensitivity { get { return _settingData._sensitivity; } set { _settingData._sensitivity = value; SaveData(_settingData, _settingFile); } }
     public bool OceanRef { get { return _settingData._oceanRef; } set { _settingData._oceanRef = value; SaveData(_settingData, _settingFile); } }
+    public bool WorldBend { get { return _settingData._worldBend; } set { _settingData._worldBend = value; SaveData(_settingData, _settingFile); } }
 
     [HideInInspector] public bool dataIsNull = false;
 

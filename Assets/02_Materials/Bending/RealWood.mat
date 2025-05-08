@@ -8,7 +8,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: RealWood
-  m_Shader: {fileID: -6465566751694194690, guid: 8eecd573450be8944b4af8cb71d6e243, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 8eecd573450be8944b4af8cb71d6e243,
+    type: 3}
   m_Parent: {fileID: 2100000, guid: 4a269a5f79625d54ca63a0ae63fe5458, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -34,6 +35,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Bend: 1
     - _Metalic: 0.276
     - _Smoothness: 0.29
     m_Colors:

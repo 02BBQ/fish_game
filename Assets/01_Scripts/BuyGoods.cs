@@ -21,6 +21,7 @@ public class BuyGoods : MonoBehaviour
 
     private void ClickBuy()
     {
+        //@ on buy item func
         if (Definder.GameManager.Coin >= item.cost)
         {
             if(item.type == ItemType.Boat)
