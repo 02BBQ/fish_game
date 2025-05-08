@@ -39,8 +39,11 @@ public class BoatController : MapEntity
     }
     private void OnDisable()
     {
-        InventoryManager.Instance.OnAddFish -= AddFish;
-        InventoryManager.Instance.OnRemoveFish -= RemoveFish;
+        if (InventoryManager.Instance)
+        {
+            InventoryManager.Instance.OnAddFish -= AddFish;
+            InventoryManager.Instance.OnRemoveFish -= RemoveFish;
+        }
     }
     protected override void Start()
     {
@@ -138,6 +141,7 @@ public class BoatController : MapEntity
             pool.Add(fishObj);
         }
         fishObj.Init(fish.image, fish);
+        fishObj.transform.localPosition = Vector3.zero;
         fishObj.gameObject.SetActive(true);
     }
 

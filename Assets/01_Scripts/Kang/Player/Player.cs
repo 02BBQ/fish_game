@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Player : MapEntity
 {
@@ -13,6 +14,7 @@ public class Player : MapEntity
     public PlayerSlot playerSlot;
 
     [HideInInspector] public bool boating = false;
+    [HideInInspector] public ConstantForce cForce;
 
     public PlayerInput playerInput;
     public LayerMask mapLayer;
@@ -30,6 +32,7 @@ public class Player : MapEntity
     {
         _rigid = GetComponent<Rigidbody>();
         // playerAnim = GetComponentInChildren<PlayerAnimation>();
+        cForce = GetComponent<ConstantForce>();
         _capsuleCollider = transform.Find("Collider").GetComponent<CapsuleCollider>();
         fishRenderer = fishObj.GetComponent<SpriteRenderer>();
         fishMesh = fishObj.GetComponent<MeshFilter>();
@@ -39,14 +42,16 @@ public class Player : MapEntity
     {
         isMove = true;
         isRotate = true;
+        playerInput.InputAction.Enable();
         base.Start();
         InventoryManager.Instance.AddItem(debugItem);
         playerBoat.enabled = true;
+        Rigidbody.mass = 10f;
+        cForce.enabled = true;
     }
     protected override void Update()
     {
         base.Update();
-
         if (boating)
             playerBoat.Move(playerInput.Movement);
         else
