@@ -36,7 +36,7 @@ public class FishDataEditor : EditorWindow
         
         if (GUILayout.Button("🍳 Fishrod 데이터 불러오기"))
         {
-            FishDataLoader.LoadData(OnTraitDataLoaded);
+            FishDataLoader.LoadData(OnRodDataLoaded);
         }
         if (GUILayout.Button("🍳 Fishrod Adressable 업로드"))
         {
@@ -86,12 +86,12 @@ public class FishDataEditor : EditorWindow
         {
             string path = file.Replace("\\", "/");
             string guid = AssetDatabase.AssetPathToGUID(path);
-            string expectedAddress = $"{typeof(FishingRod).Name}/{Path.GetFileNameWithoutExtension(path)}";
 
             // FishingRod SO 로드
             FishingRod so = AssetDatabase.LoadAssetAtPath<FishingRod>(path);
             if (so == null) continue;
 
+            string expectedAddress = $"{typeof(FishingRod).Name}/{Path.GetFileNameWithoutExtension(path)}";
             // 이미 등록된 경우
             if (existingEntries.TryGetValue(guid, out var existingEntry))
             {
@@ -111,6 +111,7 @@ public class FishDataEditor : EditorWindow
 
             // 새 항목 추가
             var newEntry = settings.CreateOrMoveEntry(guid, group);
+            newEntry.labels.Add("Items");
             newEntry.address = expectedAddress;
             addedCount++;
             Debug.Log($"Added new entry: {path}");

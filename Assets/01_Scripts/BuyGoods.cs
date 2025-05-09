@@ -21,7 +21,7 @@ public class BuyGoods : MonoBehaviour
 
     private void ClickBuy()
     {
-        if (Definder.GameManager.Coin >= item.cost)
+        if (Definder.GameManager.Coin >= item.price)
         {
             if(item.type == ItemType.Boat)
             {
@@ -31,7 +31,7 @@ public class BuyGoods : MonoBehaviour
             }
             else
                 InventoryManager.Instance.AddItem(item);
-            Definder.GameManager.Coin -= item.cost;
+            Definder.GameManager.Coin -= item.price;
         }
     }
 
@@ -39,7 +39,7 @@ public class BuyGoods : MonoBehaviour
     {
         this.item = item;
         description.text = item.description;
-        costText.text = item.cost.ToString() + "<sprite=0>";
+        costText.text = item.price.ToString() + "<sprite=0>";
         nameText.text = item.name;
         image.sprite = item.image;
     }

@@ -15,10 +15,35 @@ MonoBehaviour:
   m_GroupName: Fishrods
   m_GUID: 640eabf6ee88c264eb20fbe20107b70c
   m_SerializeEntries:
+  - m_GUID: 1233ca5ea841d964cbfffd59507a26db
+    m_Address: FishingRod/BurningWoodenRod
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Items
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 137ef4985f6afdc43bd273621a969a9b
+    m_Address: FishingRod/GoldenRod
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Items
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 797725000bee69d4fab26e2468ca99e1
+    m_Address: FishingRod/MetalRod
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Items
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a01fbbd47b5d7f44090d9950b8c1e802
     m_Address: FishingRod/OldFishingRod
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Items
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f1bd1891796df1b47b1b9d828fafe941
+    m_Address: FishingRod/BurningMetalRod
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Items
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: db2422c37c4129946a896d3f9d2182fa, type: 2}

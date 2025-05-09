@@ -25,7 +25,7 @@ public class SellGoods : MonoBehaviour
         if (item.type != ItemType.Boat)
         {
             if(InventoryManager.Instance.RemoveItem(item))
-                Definder.GameManager.Coin += item.cost;
+                Definder.GameManager.Coin += item.price;
         }
     }
 
@@ -33,7 +33,7 @@ public class SellGoods : MonoBehaviour
     {
         this.item = item;
         description.text = item.description;
-        costText.text = item.cost.ToString() + "<sprite=0>";
+        costText.text = item.price.ToString() + "<sprite=0>";
         nameText.text = item.name;
         image.sprite = item.image;
         thisItem = item;
