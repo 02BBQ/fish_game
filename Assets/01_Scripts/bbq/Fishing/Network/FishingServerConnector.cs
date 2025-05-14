@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 public class FishingServerConnector : MonoBehaviour
 {
-    private const string SERVER_URL = "http://localhost:3000/api/";
+    private const string SERVER_URL = "http://172.31.2.88:5926/api/";
     
     public FishingRod baseFishingRodPrefab;
     public static FishingServerConnector Instance { get; private set; }

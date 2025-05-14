@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
+using System;
 
 public class FishDataEditor : EditorWindow
 {
@@ -42,6 +43,11 @@ public class FishDataEditor : EditorWindow
         {
             AddScriptableObjectsToAddressables("Assets/10_SO/bbq/FishingRods", "Fishrods");
         }
+    }
+
+    private void OnRodDataLoaded(string obj)
+    {
+        // throw new NotImplementedException();
     }
 
     public static void AddScriptableObjectsToAddressables(string targetFolderPath, string groupName = "Default Local Group")
