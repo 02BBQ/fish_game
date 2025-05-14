@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System;
+using Steamworks;
 
 public enum AutoMoveState
 {
@@ -49,6 +50,12 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _yaw = transform.localEulerAngles.y;
+        if (SteamManager.instance.connectedToSteam)
+        {
+            bool bSuccess = SteamUserStats.RequestCurrentStats();
+            print(bSuccess);
+            print(Steamworks.SteamClient.Name);
+        }
     }
 
     private void OnEnable()
@@ -205,8 +212,24 @@ public class PlayerMovement : MonoBehaviour
         {
             grounded = false;
             _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, _jumpPower, _rb.linearVelocity.z);
+
+            if (SteamManager.instance.connectedToSteam)
+            {
+                int loaded = SteamUserStats.GetStatInt("Test");
+                loaded++;
+                SteamUserStats.SetStat("Test", loaded);
+                SteamUserStats.StoreStats();
+                print(loaded);
+                Steamworks.Data.Achievement ach = new Steamworks.Data.Achievement ("TestAchivement");
+                
+                if (!ach.State && loaded >= 10)
+                {
+                    ach.Trigger();
+                }
+            }
         }
     }
+
     public void StopMoveTarget()
     {
         _chaseState = AutoMoveState.None;

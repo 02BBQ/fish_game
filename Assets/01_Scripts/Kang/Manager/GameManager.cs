@@ -8,7 +8,6 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.SceneManagement;
-using static UnityEngine.Rendering.VirtualTexturing.Debugging;
 
 public class GameManager : MonoBehaviour
 {
