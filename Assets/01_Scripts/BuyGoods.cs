@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityEngine.AddressableAssets;
 
 public class BuyGoods : MonoBehaviour
 {
@@ -79,7 +80,8 @@ public class BuyGoods : MonoBehaviour
             if (response.success)
             {
                 Debug.Log("구매 성공! " + response.message);
-                // TODO: 인벤토리 갱신, UI 업데이트 등
+                // Load item from Addressables and add to inventory
+                StartCoroutine(LoadAndAddItemToInventory(response.item));
             }
             else
             {
@@ -92,6 +94,35 @@ public class BuyGoods : MonoBehaviour
             Debug.LogError("서버 통신 오류: " + request.error);
             // TODO: 네트워크 에러 UI 처리
         }
+    }
+
+    private IEnumerator LoadAndAddItemToInventory(StoreItem storeItem)
+    {
+        // Load the item from Addressables
+        var handle = Addressables.LoadAssetAsync<Item>(storeItem.Address);
+        yield return handle;
+
+        if (handle.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+        {
+            Item loadedItem = handle.Result;
+            if (loadedItem != null)
+            {
+                // Add the item to inventory
+                InventoryManager.Instance.AddItem(loadedItem);
+                Debug.Log($"아이템 '{loadedItem.nameStr}' 인벤토리에 추가됨!");
+            }
+            else
+            {
+                Debug.LogError($"아이템 로드 실패: {storeItem.Address}");
+            }
+        }
+        else
+        {
+            Debug.LogError($"어드레서블 로드 실패: {storeItem.Address}");
+        }
+
+        // Release the handle
+        Addressables.Release(handle);
     }
 
     // 요청용 클래스
@@ -113,15 +144,18 @@ public class BuyGoods : MonoBehaviour
     {
         public bool success;
         public string message;
-        public ItemData item; // 필요하면 상세 구조 추가
+        public StoreItem item; // 필요하면 상세 구조 추가
     }
 
     [System.Serializable]
-    public class ItemData
+    public struct StoreItem
     {
-        public string id;
-        public string type;
-        public int price;
-        // 기타 필요한 필드
+        public string Address;
+        public string Id;
+        public string Name;
+        public string Category;
+        public int CurrencyCount;
+        public string Guid;
+        public long purchaseDate;  // JavaScript의 Date.now()는 밀리초 단위의 타임스탬프를 반환하므로 long 사용
     }
 }
