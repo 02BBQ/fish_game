@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using ServerData;
 
 [Serializable]
 public class ItemJson
@@ -10,12 +12,11 @@ public class ItemJson
     public string description;
 }
 
+
 [Serializable] public class InventoryData
 {
-    public FishJson[] fishes;
-    public FishingRodJson[] rods;
-    public BoatJson[] boats;
-    // public FishingRod[] rods;
+    public List<FishJson> Fish;
+    public List<InventoryItemData> FishingRod;
 }
 
 [Serializable]

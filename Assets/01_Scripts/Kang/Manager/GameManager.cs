@@ -1,10 +1,37 @@
 using System;
 using System.Net.Sockets;
+using ServerData;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.AddressableAssets;
 
+namespace ServerData
+{
+    [System.Serializable]
+    public class InventoryItemData
+    {
+        public string guid;
+        public string Address;
+        public string Category;
+        public int? CurrencyCount;
+        public string Desc;
+        public int Id;
+        public int Limit;
+        public int MaxPerPurchase;
+        public string Name;
+        public bool Stackable;
+        // public ServerItem item;
+    }
+
+    [System.Serializable]
+    public class ServerResponse
+    {
+        public int money;
+        public InventoryData inventoryData;
+    }
+}
 public class GameManager : MonoBehaviour
 {
     int _coin;
@@ -24,13 +51,38 @@ public class GameManager : MonoBehaviour
     private void handleFishJson(InitData data)
     {
         Coin = data.money;
-        if (data.inventoryData.fishes != null)
+        if (data.inventoryData.Fish != null)
         {
-            foreach (FishJson fish in data.inventoryData.fishes)
+            foreach (FishJson fish in data.inventoryData.Fish)
             {
                 FishSO so = ScriptableObject.CreateInstance<FishSO>();
                 so.Initialize(fish);
                 InventoryManager.Instance.AddItem(so);
+            }
+            foreach (InventoryItemData fish in data.inventoryData.FishingRod)
+            {
+                // Load fishing rod prefab from addressables
+                var handle = Addressables.LoadAssetAsync<FishingRod>(fish.Address);
+                handle.Completed += (op) =>
+                {
+                    if (op.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+                    {
+                        var fishingRod = op.Result;
+                        if (fishingRod != null)
+                        {
+                            // fishingRod.Initialize(fish);
+                            InventoryManager.Instance.AddItem(fishingRod);
+                        }
+                        else
+                        {
+                            Debug.LogError($"FishingRod component not found on prefab: {fish.Address}");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError($"Failed to load fishing rod from address: {fish.Address}");
+                    }
+                };
             }
         }
         else
