@@ -102,7 +102,7 @@ public class FishingServerConnector : MonoBehaviour
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
 
-            yield return request.SendWebRequest();
+            yield return request.SendWebRequest(); // brr brr
             
             if (request.result == UnityWebRequest.Result.Success)
             {
