@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 public enum Dir : short
 {
@@ -47,6 +48,7 @@ public class UIManager : SingleTon<UIManager>
     private void Start()
     {
         currentOcean = Definder.Player.GetCurrentOcean();
+        uiInput.InputAction.UI.Enable();
     }
     private void OnEnable()
     {

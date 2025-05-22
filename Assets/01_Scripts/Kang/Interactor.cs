@@ -10,17 +10,17 @@ public abstract class Interactor : MapEntity
     {
         base.Start();
 
-        outlineMaterial = outlineMesh.materials[1];
-        materials = outlineMesh.materials;
+        outlineMaterial = outlineMesh.sharedMaterials[1];
+        materials = outlineMesh.sharedMaterials;
         materials[1] = nullMat;
-        outlineMesh.materials = materials;
+        outlineMesh.sharedMaterials = materials;
     }
     protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             materials[1] = outlineMaterial;
-            outlineMesh.materials = materials;
+            outlineMesh.sharedMaterials = materials;
             Definder.Player.AddInteract(OnInterect);
         }
     }
@@ -29,7 +29,7 @@ public abstract class Interactor : MapEntity
         if (other.CompareTag("Player"))
         {
             materials[1] = nullMat;
-            outlineMesh.materials = materials;
+            outlineMesh.sharedMaterials = materials;
             Definder.Player.RemoveInterect(OnInterect);
         }
     }

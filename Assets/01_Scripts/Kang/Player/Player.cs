@@ -1,3 +1,4 @@
+using Steamworks;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -48,6 +49,8 @@ public class Player : MapEntity
         playerBoat.enabled = true;
         Rigidbody.mass = 10f;
         cForce.enabled = true;
+        if(SteamManager.instance.connectedToSteam)
+            SteamUserStats.ResetAll(true);
     }
     protected override void Update()
     {

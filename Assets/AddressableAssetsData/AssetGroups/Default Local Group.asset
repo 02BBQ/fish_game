@@ -14,7 +14,301 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Default Local Group
   m_GUID: 36f86287879b6814c918e679a27c5641
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 064d6f18cd2ca394ca5950a5a257356c
+    m_Address: Assets/02_Materials/Bending/Shader Graphs_Liquid.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 06d9973db47bc574490a6a1cb9f8459e
+    m_Address: Assets/02_Materials/Bending/Weapon market_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 085123195ac1e594e9501ef1bf5674ae
+    m_Address: Assets/02_Materials/Bending/Kawai/Wood_02_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0a694a90407f4d246a3fcd7cbccba673
+    m_Address: Assets/02_Materials/Bending/Fish.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1270bcb2187e86a4196dd7c14783e730
+    m_Address: Assets/02_Materials/Bending/Character/Hair_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 14d6735d7b72acb48969bd43f2adf1da
+    m_Address: Assets/02_Materials/Bending/Special/Shader Graphs_Outline.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1634862e0d204454e98245cabf551543
+    m_Address: Assets/02_Materials/Bending/Kawai/Folliage_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1f7234b00454ce64db0a1876b4fcd3ba
+    m_Address: Assets/02_Materials/Bending/Character/free_zombie_body_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 232a6a6082889aa4cb4e38b287c55f90
+    m_Address: Assets/02_Materials/Bending/fish_market_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 25c7c2c1847156542a1b9677e43eef2f
+    m_Address: Assets/02_Materials/Bending/Line.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2cc04c45833001e4f8b29fb17c0e98c2
+    m_Address: Assets/02_Materials/Bending/Kawai/Fruits_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 348c8980f9c90e1498e4dafe6289763e
+    m_Address: Assets/02_Materials/Bending/Character/Wood.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 34e3d66c4a033014a98e5e0c26d02bf3
+    m_Address: Assets/02_Materials/Bending/Ground 2.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3a2f0ee7257a3c04980478da4a2d78ac
+    m_Address: Assets/02_Materials/Bending/Armor_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4696ca491044df44faf539ecd65d727a
+    m_Address: Assets/02_Materials/Bending/Kawai/Toon_trunk_01_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 47309219530281940ad3b56be0a5bf85
+    m_Address: Assets/02_Materials/Bending/Kawai/Bush_01_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 48cd353b9de0bab4f868554a57e86275
+    m_Address: Assets/02_Materials/Bending/mat2_splash_medium_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 48e514318561c3e4d85fe6473be118a8
+    m_Address: Assets/02_Materials/Bending/Kawai/Cliff_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4b99b535e50007e47bcf51806576f43f
+    m_Address: Assets/02_Materials/Bending/Kawai/Wood_01_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 500fcf75020db8c4bbc42e072b148cf5
+    m_Address: Assets/02_Materials/Bending/Kawai/PlantsAndVegetables_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 519a360260dcf6744957bc2184e1f2b6
+    m_Address: Assets/02_Materials/Bending/Special/Shader Graphs_Water.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52592cef272d598408420eaf77585de3
+    m_Address: Assets/02_Materials/Bending/Character/Body_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52a639d4c5f6c7044b259d675e936864
+    m_Address: Assets/02_Materials/Bending/Kawai/Bush_02_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5871275aa08be8a488042589abfc9254
+    m_Address: Assets/02_Materials/Bending/Laterns_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5e25a7527574ca841952c4774c695b35
+    m_Address: Assets/02_Materials/Bending/WaterBottom_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 61636dcfa5b9df7418a93e96115aaf01
+    m_Address: Assets/02_Materials/Bending/mat_fx_wakeNormal_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6ccc2df3f08f67a4ab840527b4f69ac1
+    m_Address: Assets/02_Materials/Bending/Ground 1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6e9586cb32be4e44f9e25394e076e39e
+    m_Address: Assets/02_Materials/Bending/RealWood.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 725d68fa512d2ab4db4b330ccb6dc759
+    m_Address: Assets/02_Materials/Bending/Shader Graphs_BendParticle.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76746d866538b5e429fa6f2f058d9242
+    m_Address: Assets/02_Materials/Bending/Kawai/Cliff_Variant 1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 796923271f877b34b9ad011a692397e8
+    m_Address: Assets/02_Materials/Bending/Red.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 855b7a80722699648b227b9de0be1901
+    m_Address: Assets/02_Materials/Bending/Bakery matket_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 86e8929065f6d3347821612a04aa1e4d
+    m_Address: Assets/02_Materials/Bending/Character/Underwear_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87f4e3912bd83594f9b6f0ad78f037cf
+    m_Address: Assets/02_Materials/Bending/Plane_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8aad405510a615444ba0c0916798af63
+    m_Address: Assets/02_Materials/Bending/ToonWater_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a53003db752aec489a3ed7595a19fc2
+    m_Address: Assets/02_Materials/Bending/bozow_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a422f411d438fa44eaaf6bd8f7594c50
+    m_Address: Assets/02_Materials/Bending/Glass.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b168b9edc66db6a4e954a9ca561f8a5e
+    m_Address: Assets/02_Materials/Bending/Vegetables market_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b49ade8ae71c9364fb2041d31480f4c3
+    m_Address: Assets/02_Materials/Bending/White.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b4fd486b20d04004a90ba33df1bda417
+    m_Address: Assets/02_Materials/Bending/Character/free_zombie_head_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c05edf422d8b0724280a970a029057ef
+    m_Address: Assets/02_Materials/Bending/Meat market_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c0f7469878caa3c40adef8850228f606
+    m_Address: Assets/02_Materials/Bending/Character/Eyes_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c48183074496c99428609bed47065198
+    m_Address: Assets/02_Materials/Bending/Kawai/Tiles_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e20fec9723533574dbbed1dbbaa39aa7
+    m_Address: Assets/02_Materials/Bending/Kawai/FruitTrunk_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e29ab211035b4044dbffb98d4fcedfbb
+    m_Address: Assets/02_Materials/Bending/Kawai/Pine_tree_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e6875a9421c92684187512816c7e7ea2
+    m_Address: Assets/02_Materials/Bending/Boat/Main_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ee32277818f7bcd4da4b53006d20a499
+    m_Address: Assets/02_Materials/Bending/Kawai/Rock_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f48f48f59c29bda409925182a48dd64c
+    m_Address: Assets/02_Materials/Bending/Environment_Variant Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f9d91e30229440f428ee6e871ed9f4cb
+    m_Address: Assets/02_Materials/Bending/Dog_Variant.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Bend
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: db2422c37c4129946a896d3f9d2182fa, type: 2}
   m_SchemaSet:

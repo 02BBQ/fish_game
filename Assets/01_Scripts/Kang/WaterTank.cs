@@ -32,6 +32,7 @@ public class WaterTank : Interactor
     {
         base.Start();
         // 초기 물고기들 처리
+        //@ Fishtank init code
         foreach (FishSO fish in fishs)
         {
             FishModel fishObj = pool.FirstOrDefault(obj => !obj.gameObject.activeSelf);
