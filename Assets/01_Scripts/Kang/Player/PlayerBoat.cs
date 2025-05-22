@@ -25,8 +25,8 @@ public class PlayerBoat : MonoBehaviour
         _player.playerTrigger.TriggerExit.AddListener(TriggerExit);
         EventBus.Subscribe(EventBusType.Drowning, Reset);
         _player.AddInteract(TryInterect);
+        _player.playerInput.OnClickC += OpenFish;
     }
-
 
     private void OnDisable()
     {
@@ -34,6 +34,7 @@ public class PlayerBoat : MonoBehaviour
         _player.playerTrigger.TriggerExit.RemoveListener(TriggerExit);
         EventBus.Unsubscribe(EventBusType.Drowning, Reset);
         _player.RemoveInterect(TryInterect);
+        _player.playerInput.OnClickC -= OpenFish;
     }
 
     private void Update()
@@ -52,9 +53,16 @@ public class PlayerBoat : MonoBehaviour
     }
     #endregion
 
+    private void OpenFish()
+    {
+        if (_currentBoat)
+        {
+            UIManager.Instance.fishTank.SetActive(true);
+            InventoryManager.Instance.SetFish(_currentBoat.boatData.maxFish, _currentBoat.fishs);
+        }
+    }
     private void TryInterect()
     {
-
         if (_player.boating)
         {
             GuideText.Instance.RemoveGuide("ExitBoat");
@@ -67,6 +75,8 @@ public class PlayerBoat : MonoBehaviour
             boatCam.Priority = -1;
             _player.playerMovement.visual.localRotation = transform.rotation * Quaternion.Euler(0f, 180f, 0f);
             transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            _player.Rigidbody.mass = 10f;
+            _player.cForce.enabled = true;
         }
         else
         {
@@ -83,6 +93,8 @@ public class PlayerBoat : MonoBehaviour
                     _player.boating = true;
                     boatCam.Priority = 10;
                     _currentBoat.EnterBoat();
+                    _player.Rigidbody.mass = 0.1f;
+                    _player.cForce.enabled = false;
                     _player.sr.color = _ridingColor;
                 });
                 boatCam.transform.SetPositionAndRotation(_currentBoat.transform.position, _currentBoat.transform.rotation);
@@ -98,6 +110,7 @@ public class PlayerBoat : MonoBehaviour
         {
             _currentBoat = boat;
             GuideText.Instance.AddGuide("EnterBoat");
+            GuideText.Instance.AddGuide("SmallWaterTank");
             _ridable = true;
         }
     }
@@ -106,6 +119,8 @@ public class PlayerBoat : MonoBehaviour
         if (_currentBoat && other.transform.root == _currentBoat.transform)
         {
             GuideText.Instance.RemoveGuide("EnterBoat");
+            GuideText.Instance.RemoveGuide("SmallWaterTank");
+            UIManager.Instance.fishTank.SetActive(false);
             _ridable = false;
         }
     }

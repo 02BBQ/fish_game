@@ -4,6 +4,11 @@ public class FishModel : MonoBehaviour
 {
     public float speed = 2.0f; // Fish의 이동 속도
     public float turnSpeed = 2.0f; // 방향 전환 속도
+    public SpriteRenderer spriteRenderer;
+    public MeshFilter meshFilter;
+    public MeshRenderer meshRend;
+    public FishSO fishSO;
+    
     private Vector3 direction; // Fish의 이동 방향
     private BoxCollider boxCollider; // Fish가 있는 Box Collider
     private Quaternion targetRotation; // 목표 회전
@@ -11,11 +16,22 @@ public class FishModel : MonoBehaviour
     private bool isMoving = true; // 이동 여부
     private bool triggerEntered = false; // Trigger Enter 여부
 
-    ItemInfo fishinfo;
 
-    public void SetFishInfo(ItemInfo info)
+    public void Init(Mesh mesh, Material mat, FishSO so)
     {
-        fishinfo = info;
+        meshFilter.mesh = mesh;
+        meshRend.material = mat;
+        fishSO = so;
+        spriteRenderer.gameObject.SetActive(false);
+        meshRend.gameObject.SetActive(true);
+    }
+    public void Init(Sprite sprite, FishSO so)
+    {
+        spriteRenderer.sprite = sprite;
+        fishSO = so;
+
+        spriteRenderer.gameObject.SetActive(true);
+        meshRend.gameObject.SetActive(false);
     }
 
     void Start()
@@ -66,8 +82,8 @@ public class FishModel : MonoBehaviour
     void SetNewDirection()
     {
         // Z축 회전 설정
-        float heightPercentage = (transform.position.y - boxCollider.bounds.min.y) / (boxCollider.bounds.size.y * 0.65f);
-        float xRotation = heightPercentage < 0.5f ? Random.Range(-30f, 0f) : Random.Range(0f, 30f);
+        float heightPercentage = boxCollider.bounds.min.y + boxCollider.bounds.size.y * 0.35f;
+        float xRotation = heightPercentage < transform.position.y ? Random.Range(-30f, 0f) : Random.Range(0f, 30f);
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, xRotation);
 
         // 새로운 방향을 랜덤하게 설정하되, y축은 0으로 고정

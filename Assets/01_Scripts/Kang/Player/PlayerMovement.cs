@@ -167,7 +167,6 @@ public class PlayerMovement : MonoBehaviour
         localMovement.y = 0f;
         localMovement.Normalize();
         localMovement *= weight;
-
         direction = Vector3.Lerp(direction, localMovement, 8f * Time.deltaTime);
 
         Vector3 worldMovement = transform.TransformDirection(direction);

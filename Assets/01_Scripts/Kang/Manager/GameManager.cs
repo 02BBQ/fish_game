@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
 using ServerData;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceLocations;
+using UnityEngine.SceneManagement;
 
 namespace ServerData
 {
@@ -47,6 +50,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI coinText;
     public Transform spawnPoint;
     public bool startGame = false;
+    private AsyncOperationHandle<GameObject> handle;
+    private string currentPath;
+    private Action<GameObject> currentCallback;
 
     private void handleFishJson(InitData data)
     {
@@ -142,4 +148,44 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadSceneAsync(gameObject.scene.name);
     }
+
+    public void LoadAddressableAsset(string path, Action<GameObject> callback)
+    {
+        currentPath = path;
+        currentCallback = callback;
+
+        Addressables.LoadResourceLocationsAsync(path).Completed += OnResourceLocationLoaded;
+    }
+    private void OnResourceLocationLoaded(AsyncOperationHandle<IList<IResourceLocation>> locationHandle)
+    {
+        if (locationHandle.Status == AsyncOperationStatus.Succeeded && locationHandle.Result.Count > 0)
+        {
+            if (handle.IsValid())
+            {
+                Addressables.Release(handle);
+            }
+
+            handle = Addressables.LoadAssetAsync<GameObject>(currentPath);
+            handle.Completed += OnModelLoaded;
+
+        }
+        else
+        {
+            print("����;;");
+        }
+        
+        Addressables.Release(locationHandle);
+    }
+    private void OnModelLoaded(AsyncOperationHandle<GameObject> obj)
+    {
+        if (obj.Status == AsyncOperationStatus.Succeeded)
+        {
+            currentCallback?.Invoke(obj.Result);
+        }
+        else
+        {
+            Debug.LogError($"�ε忡 �����߽��ϴ�.");
+        }
+    }
+
 }

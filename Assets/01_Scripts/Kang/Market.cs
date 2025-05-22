@@ -91,8 +91,6 @@ public class Market : Interactor
     {
         foreach (Item addItem in addItemEvent.getItems)
         {
-            print(addItem.nameStr);
-            print(initItems.Count);
             bool isItemInInit = initItems.Any(initItem => initItem.item.nameStr == addItem.nameStr);
             if (!isItemInInit)
             {

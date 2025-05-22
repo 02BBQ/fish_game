@@ -7,4 +7,5 @@ public class BoatDataSO : ScriptableObject
     public float boatSpeed;
     public float boatTurn;
     public float boatDamp;
+    public int maxFish;
 }

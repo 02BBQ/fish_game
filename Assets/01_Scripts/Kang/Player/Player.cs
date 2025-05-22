@@ -1,10 +1,7 @@
-using DG.Tweening;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Player : MapEntity
 {
@@ -17,6 +14,7 @@ public class Player : MapEntity
     public PlayerSlot playerSlot;
 
     [HideInInspector] public bool boating = false;
+    [HideInInspector] public ConstantForce cForce;
 
     public PlayerInput playerInput;
     public LayerMask mapLayer;
@@ -25,25 +23,35 @@ public class Player : MapEntity
 
     public Action<Collision> CollisionEnter;
 
+    public GameObject fishObj;
+    SpriteRenderer fishRenderer;
+    MeshFilter fishMesh;
+    [HideInInspector] public FishSO currentFish = null;
+
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody>();
         // playerAnim = GetComponentInChildren<PlayerAnimation>();
+        cForce = GetComponent<ConstantForce>();
         _capsuleCollider = transform.Find("Collider").GetComponent<CapsuleCollider>();
+        fishRenderer = fishObj.GetComponent<SpriteRenderer>();
+        fishMesh = fishObj.GetComponent<MeshFilter>();
     }
     public Item debugItem;
     protected override void Start()
     {
         isMove = true;
         isRotate = true;
+        playerInput.InputAction.Enable();
         base.Start();
         InventoryManager.Instance.AddItem(debugItem);
         playerBoat.enabled = true;
+        Rigidbody.mass = 10f;
+        cForce.enabled = true;
     }
     protected override void Update()
     {
         base.Update();
-
         if (boating)
             playerBoat.Move(playerInput.Movement);
         else
@@ -113,5 +121,27 @@ public class Player : MapEntity
         boating = false;
         
         UIManager.Instance.FadeOut(1f);
+    }
+
+    public void HandleFish(FishSO fishSO)
+    {
+        currentFish = fishSO;
+        if (fishSO.visualPath != "")
+        {
+            Definder.GameManager.LoadAddressableAsset(fishSO.visualPath, (obj) =>
+            {
+                fishRenderer.material = obj.GetComponent<Renderer>().material;
+                fishMesh.mesh = obj.GetComponent<MeshFilter>().mesh;
+            });
+        }
+        else if(fishSO.image != null)
+        {
+            fishRenderer.sprite = fishSO.image;
+        }
+        fishObj.SetActive(true);
+    }
+    public void DisableFish()
+    {
+        fishObj.SetActive(false);
     }
 }

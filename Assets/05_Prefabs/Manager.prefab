@@ -131,7 +131,8 @@ MonoBehaviour:
     setActive: 1
     fadeFloat: 255
   block: {fileID: 0}
-  boatLabelPref: {fileID: 3376595548950144439, guid: a140b5682f3d6a3409be91682872f803, type: 3}
+  boatLabelPref: {fileID: 3376595548950144439, guid: a140b5682f3d6a3409be91682872f803,
+    type: 3}
   labelParent: {fileID: 0}
   oceanText: {fileID: 0}
   playerIcon: {fileID: 0}
@@ -143,6 +144,7 @@ MonoBehaviour:
   - Five Ocean
   uiInput: {fileID: 11400000, guid: 3998da514df83fe44a7efbdf0d16fd78, type: 2}
   dock: {fileID: 0}
+  fishTank: {fileID: 0}
   image: {fileID: 0}
   map: {fileID: 0}
 --- !u!1 &2088134029978883558
@@ -316,7 +318,8 @@ AudioSource:
   m_GameObject: {fileID: 2957564086970504653}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 4821196177989466553, guid: 8ca01a8a83cec85478d52b30b908c060, type: 2}
+  OutputAudioMixerGroup: {fileID: 4821196177989466553, guid: 8ca01a8a83cec85478d52b30b908c060,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -445,7 +448,8 @@ AudioSource:
   m_GameObject: {fileID: 3341154667683186930}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 4821196177989466553, guid: 8ca01a8a83cec85478d52b30b908c060, type: 2}
+  OutputAudioMixerGroup: {fileID: 4821196177989466553, guid: 8ca01a8a83cec85478d52b30b908c060,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -533,6 +537,52 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &3758983716803932361
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7477603367455853464}
+  - component: {fileID: 7497571946813884678}
+  m_Layer: 0
+  m_Name: ResolutionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7477603367455853464
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3758983716803932361}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6603402877769204434}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7497571946813884678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3758983716803932361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd37e7b16835ef44cb9fbf3dd978b0c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resolutionBtn: {fileID: 0}
+  fullscreenBtn: {fileID: 0}
 --- !u!1 &4230422846274967595
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,6 +666,7 @@ Transform:
   - {fileID: 5145300824983870234}
   - {fileID: 6334312939835920310}
   - {fileID: 9101853170343431673}
+  - {fileID: 7477603367455853464}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4337025960233386223
@@ -642,7 +693,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4337025960233386223}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0000000281143, y: -0.0000013783638, z: -0.000000006039045, w: 1}
+  m_LocalRotation: {x: 0.0000000281143, y: -0.0000013783638, z: -0.000000006039045,
+    w: 1}
   m_LocalPosition: {x: -259.3393, y: -14.553614, z: 8.863907}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -734,7 +786,8 @@ AudioSource:
   m_GameObject: {fileID: 7410366411769424119}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -7579103500190387241, guid: 8ca01a8a83cec85478d52b30b908c060, type: 2}
+  OutputAudioMixerGroup: {fileID: -7579103500190387241, guid: 8ca01a8a83cec85478d52b30b908c060,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 627e0791d8d3f9248820dc5a725885b2, type: 3}
   m_Resource: {fileID: 8300000, guid: 627e0791d8d3f9248820dc5a725885b2, type: 3}
   m_PlayOnAwake: 1
@@ -870,3 +923,5 @@ MonoBehaviour:
   _BGMSlider: {fileID: 0}
   _SFXSlider: {fileID: 0}
   _sensSlider: {fileID: 0}
+  _ocean: {fileID: 2100000, guid: 519a360260dcf6744957bc2184e1f2b6, type: 2}
+  _toggle: {fileID: 0}

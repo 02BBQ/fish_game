@@ -1,13 +1,15 @@
 using DG.Tweening;
 using System;
 using System.Collections;
-using Unity.Cinemachine;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BoatController : MapEntity
 {
-    [SerializeField] BoatDataSO _boatData;
+    public BoatDataSO boatData;
     [SerializeField] ParticleSystem[] forms;
+    [SerializeField] Transform fishContainer;
     private Rigidbody rigid;
     public Transform camPos;
     BoatEdge[] boatEdges;
@@ -15,6 +17,11 @@ public class BoatController : MapEntity
     [HideInInspector] public Transform ridePoint;
     AudioSource aud;
     bool fast = false;
+
+    [HideInInspector] public List<FishSO> fishs = new List<FishSO>();
+    public FishModel fishPref;
+    public Transform fishTank;
+    List<FishModel> pool;
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -22,14 +29,28 @@ public class BoatController : MapEntity
         ridePoint = transform.Find("RidePoint");
 
         boatEdges = GetComponentsInChildren<BoatEdge>();
+        pool = new List<FishModel>();
         isMove = true;
+    }
+    private void OnEnable()
+    {
+        InventoryManager.Instance.OnAddFish += AddFish;
+        InventoryManager.Instance.OnRemoveFish += RemoveFish;
+    }
+    private void OnDisable()
+    {
+        if (InventoryManager.Instance)
+        {
+            InventoryManager.Instance.OnAddFish -= AddFish;
+            InventoryManager.Instance.OnRemoveFish -= RemoveFish;
+        }
     }
     protected override void Start()
     {
         base.Start();
 
-        rigid.angularDamping = _boatData.boatDamp;
-        rigid.linearDamping = _boatData.boatDamp;
+        rigid.angularDamping = boatData.boatDamp;
+        rigid.linearDamping = boatData.boatDamp;
         rigid.mass = 10000;
     }
     protected override void Update()
@@ -61,9 +82,9 @@ public class BoatController : MapEntity
 
     public void Move(Vector2 input)
     {
-        rigid.mass = _boatData.boatMass;
-        rigid.AddTorque(transform.up * (input.x * Time.deltaTime * _boatData.boatSpeed), ForceMode.Force);
-        rigid.AddForce(ridePoint.forward * (input.y * Time.deltaTime * _boatData.boatSpeed), ForceMode.Force);
+        rigid.mass = boatData.boatMass;
+        rigid.AddTorque(transform.up * (input.x * Time.deltaTime * boatData.boatSpeed), ForceMode.Force);
+        rigid.AddForce(ridePoint.forward * (input.y * Time.deltaTime * boatData.boatSpeed), ForceMode.Force);
     }
 
     public bool CanExitBoat()
@@ -94,7 +115,7 @@ public class BoatController : MapEntity
     }
     IEnumerator StopForce(Transform trm)
     {
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < 20; i++)
         {
             rigid.linearVelocity = Vector3.zero;
             rigid.angularVelocity = Vector3.zero;
@@ -102,11 +123,43 @@ public class BoatController : MapEntity
             yield return null;
             yield return null;
             yield return null;
-            yield return null;
-            yield return null;
         }
     }
+    public void AddFish(List<FishSO> lst, FishSO fish)
+    {
+        if (lst != fishs) return;
 
+        fishs.Add(fish);
+
+        // pool에서 비활성화된 오브젝트 찾기
+        FishModel fishObj = pool.FirstOrDefault(obj => !obj.gameObject.activeSelf);
+
+        if (fishObj == null)
+        {
+            // 새 오브젝트 생성
+            fishObj = Instantiate(fishPref, fishTank);
+            pool.Add(fishObj);
+        }
+        fishObj.Init(fish.image, fish);
+        fishObj.transform.localPosition = Vector3.zero;
+        fishObj.gameObject.SetActive(true);
+    }
+
+    public void RemoveFish(List<FishSO> lst, FishSO fish)
+    {
+        if (lst != fishs) return;
+
+        if (fishs.Contains(fish))
+        {
+            fishs.Remove(fish);
+            // 해당 물고기 오브젝트 찾아서 비활성화
+            FishModel fishObj = pool.FirstOrDefault(obj => obj.gameObject.activeSelf && obj.fishSO.nameStr == fish.nameStr);
+            if (fishObj != null)
+            {
+                fishObj.gameObject.SetActive(false);
+            }
+        }
+    }
     internal void EnterBoat()
     {
         IconDisable();
