@@ -3,6 +3,8 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Search;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class Market : Interactor
 {
@@ -19,16 +21,39 @@ public class Market : Interactor
     private void Awake()
     {
 
+        LoadAndSortItems();    
+
         initItems = new List<SellGoods>();
 
     }
+
+    public void LoadAndSortItems()
+    {
+        Addressables.LoadAssetsAsync<Item>("Items", item =>
+        {
+            buyItems.Add(item);
+        }).Completed += handle =>
+        {
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                // 가격순 정렬 (오름차순)
+                buyItems = buyItems.OrderBy(x => x.price).ToList(); 
+
+                foreach (Item item in buyItems)
+                {
+                    AddGoodsInBuy(item);
+                }
+            }
+        };
+    }
+
     protected override void Start()
     {
         base.Start();
-        foreach (Item item in buyItems)
-        {
-            AddGoodsInBuy(item);
-        }
+        // foreach (Item item in buyItems)
+        // {
+        //     AddGoodsInBuy(item);
+        // }
     }
     private void OnEnable()
     {

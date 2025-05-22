@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6522fc69616c13c4891c6b3959f595aa, type: 3}
-  m_Name: bombombini gusini_10008
+  m_Name: Bombombini Gusini_10008
   m_EditorClassIdentifier: 
   id: 10008
   fishSprite: {fileID: 0}
@@ -23,4 +23,5 @@ MonoBehaviour:
   DancingStepMin: 0.4
   visualAddress: 
   rarity: Epic
-  description: 
+  description: Bombombini Gusini! The brother of Bombardiro Crocodilo, who performs
+    all the same duties as his brother and gives bombs to people.

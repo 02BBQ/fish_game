@@ -9,7 +9,7 @@ public class Item : ScriptableObject
     public ItemType type;
 
     public string nameStr;
-    public int cost;
+    public int price;
 
     [TextArea]
     public string description;

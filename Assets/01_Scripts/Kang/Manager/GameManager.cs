@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using ServerData;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -9,6 +10,31 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.SceneManagement;
 
+namespace ServerData
+{
+    [System.Serializable]
+    public class InventoryItemData
+    {
+        public string guid;
+        public string Address;
+        public string Category;
+        public int? CurrencyCount;
+        public string Desc;
+        public int Id;
+        public int Limit;
+        public int MaxPerPurchase;
+        public string Name;
+        public bool Stackable;
+        // public ServerItem item;
+    }
+
+    [System.Serializable]
+    public class ServerResponse
+    {
+        public int money;
+        public InventoryData inventoryData;
+    }
+}
 public class GameManager : MonoBehaviour
 {
     int _coin;
@@ -28,12 +54,56 @@ public class GameManager : MonoBehaviour
     private string currentPath;
     private Action<GameObject> currentCallback;
 
+    private void handleFishJson(InitData data)
+    {
+        Coin = data.money;
+        if (data.inventoryData.Fish != null)
+        {
+            foreach (FishJson fish in data.inventoryData.Fish)
+            {
+                FishSO so = ScriptableObject.CreateInstance<FishSO>();
+                so.Initialize(fish);
+                InventoryManager.Instance.AddItem(so);
+            }
+            foreach (InventoryItemData fish in data.inventoryData.FishingRod)
+            {
+                // Load fishing rod prefab from addressables
+                var handle = Addressables.LoadAssetAsync<FishingRod>(fish.Address);
+                handle.Completed += (op) =>
+                {
+                    if (op.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+                    {
+                        var fishingRod = op.Result;
+                        if (fishingRod != null)
+                        {
+                            // fishingRod.Initialize(fish);
+                            InventoryManager.Instance.AddItem(fishingRod);
+                        }
+                        else
+                        {
+                            Debug.LogError($"FishingRod component not found on prefab: {fish.Address}");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError($"Failed to load fishing rod from address: {fish.Address}");
+                    }
+                };
+            }
+        }
+        else
+        {
+            Debug.Log("No fish data available.");
+        }
+    }
+
     private void Start()
     {
+        FishingServerConnector.Instance.GetData("test", handleFishJson);
         Time.timeScale = 1f;
-        Coin = 100000;
         SetCoinText();
     }
+
     [ContextMenu("dsfa")]
     public void Delete()
     {
@@ -50,9 +120,9 @@ public class GameManager : MonoBehaviour
     public void OnClickQuit()
     {
 #if UNITY_EDITOR
-        EditorApplication.ExitPlaymode();  // ¿¡µðÅÍ¿¡¼­ ½ÇÇà ÁßÀÌ¸é Play ¸ðµå Á¾·á
+        EditorApplication.ExitPlaymode();  // ï¿½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ Play ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 #else
-        Application.Quit();  // ºôµåµÈ °ÔÀÓ¿¡¼­´Â Á¤»ó Á¾·á
+        Application.Quit();  // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 #endif
     }
     private void SetCoinText()
@@ -101,7 +171,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            print("¾øÀ½;;");
+            print("ï¿½ï¿½ï¿½ï¿½;;");
         }
         
         Addressables.Release(locationHandle);
@@ -114,7 +184,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"·Îµå¿¡ ½ÇÆÐÇß½À´Ï´Ù.");
+            Debug.LogError($"ï¿½Îµå¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.");
         }
     }
 

@@ -23,4 +23,5 @@ MonoBehaviour:
   DancingStepMin: 0.4
   visualAddress: 
   rarity: UltraSuperRare
-  description: 
+  description: A cold breeze escapes from its mouth, sometimes freezing even itself
+    in the process.

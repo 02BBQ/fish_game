@@ -3,6 +3,10 @@ using UnityEditor;
 using UnityEngine;
 using Unity.EditorCoroutines.Editor;
 using System.Collections.Generic;
+using System.IO;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
+using System;
 
 public class FishDataEditor : EditorWindow
 {
@@ -30,7 +34,100 @@ public class FishDataEditor : EditorWindow
         {
             FishDataLoader.LoadData(OnTraitDataLoaded);
         }
+        
+        if (GUILayout.Button("🍳 Fishrod 데이터 불러오기"))
+        {
+            FishDataLoader.LoadData(OnRodDataLoaded);
+        }
+        if (GUILayout.Button("🍳 Fishrod Adressable 업로드"))
+        {
+            AddScriptableObjectsToAddressables("Assets/10_SO/bbq/FishingRods", "Fishrods");
+        }
     }
+
+    private void OnRodDataLoaded(string obj)
+    {
+        // throw new NotImplementedException();
+    }
+
+    public static void AddScriptableObjectsToAddressables(string targetFolderPath, string groupName = "Default Local Group")
+    {
+        // AddressableAssetSettings 가져오기
+        var settings = AddressableAssetSettingsDefaultObject.Settings;
+        if (settings == null)
+        {
+            Debug.LogError("Addressable Settings not found. Please initialize Addressables first.");
+            return;
+        }
+
+        // 그룹 찾기 또는 생성
+        var group = settings.FindGroup(groupName);
+        if (group == null)
+        {
+            group = settings.CreateGroup(groupName, false, false, true, null);
+            Debug.Log($"Created new Addressables group: {groupName}");
+        }
+
+        // 경로 정규화 및 존재 확인
+        string fullPath = targetFolderPath.Replace("\\", "/");
+        if (!Directory.Exists(fullPath))
+        {
+            Debug.LogError($"Directory not found: {fullPath}");
+            return;
+        }
+
+        string[] soFiles = Directory.GetFiles(fullPath, "*.asset", SearchOption.AllDirectories);
+        int addedCount = 0;
+        int updatedCount = 0;
+        int skippedCount = 0;
+
+        // 기존 항목 정보 수집
+        var existingEntries = new Dictionary<string, AddressableAssetEntry>();
+        foreach (var entry in group.entries)
+        {
+            existingEntries[entry.guid] = entry;
+        }
+
+        foreach (string file in soFiles)
+        {
+            string path = file.Replace("\\", "/");
+            string guid = AssetDatabase.AssetPathToGUID(path);
+
+            // FishingRod SO 로드
+            FishingRod so = AssetDatabase.LoadAssetAtPath<FishingRod>(path);
+            if (so == null) continue;
+
+            string expectedAddress = $"{typeof(FishingRod).Name}/{Path.GetFileNameWithoutExtension(path)}";
+            // 이미 등록된 경우
+            if (existingEntries.TryGetValue(guid, out var existingEntry))
+            {
+                // 주소가 다른 경우 업데이트
+                if (existingEntry.address != expectedAddress)
+                {
+                    existingEntry.address = expectedAddress;
+                    updatedCount++;
+                    Debug.Log($"Updated address for: {path} -> {expectedAddress}");
+                }
+                else
+                {
+                    skippedCount++;
+                }
+                continue;
+            }
+
+            // 새 항목 추가
+            var newEntry = settings.CreateOrMoveEntry(guid, group);
+            newEntry.labels.Add("Items");
+            newEntry.address = expectedAddress;
+            addedCount++;
+            Debug.Log($"Added new entry: {path}");
+        }
+
+        // 변경사항 저장
+        AssetDatabase.SaveAssets();
+        Debug.Log($"Addressables update complete - Added: {addedCount}, Updated: {updatedCount}, Skipped: {skippedCount}");
+    }
+
 
     private void OnFishDataLoaded(string rawJson)
     {
