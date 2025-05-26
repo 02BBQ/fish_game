@@ -81,6 +81,7 @@ public class BuyGoods : MonoBehaviour
             {
                 Debug.Log("구매 성공! " + response.message);
                 // Load item from Addressables and add to inventory
+                Definder.GameManager.moneyController.SetMoney((int)response.money);
                 StartCoroutine(LoadAndAddItemToInventory(response.item));
             }
             else
@@ -145,6 +146,7 @@ public class BuyGoods : MonoBehaviour
         public bool success;
         public string message;
         public StoreItem item; // 필요하면 상세 구조 추가
+        public uint money;
     }
 
     [System.Serializable]

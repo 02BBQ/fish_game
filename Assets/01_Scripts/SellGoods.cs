@@ -25,7 +25,7 @@ public class SellGoods : MonoBehaviour
         if (item.type != ItemType.Boat)
         {
             if(InventoryManager.Instance.RemoveItem(item))
-                Definder.GameManager.Coin += item.price;
+                Definder.GameManager.moneyController.EarnMoney(item.price);
         }
     }
 

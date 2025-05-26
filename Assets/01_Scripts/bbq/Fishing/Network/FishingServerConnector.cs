@@ -103,7 +103,6 @@ public class FishingServerConnector : MonoBehaviour
             request.SetRequestHeader("Content-Type", "application/json");
 
             yield return request.SendWebRequest(); // brr brr
-            
             if (request.result == UnityWebRequest.Result.Success)
             {
                 // fishesJson 클래스를 사용하여 파싱

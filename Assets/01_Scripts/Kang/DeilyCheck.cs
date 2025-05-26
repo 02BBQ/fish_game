@@ -38,7 +38,7 @@ public class DeilyCheck : MonoBehaviour
             now = lastRewardDate;
         else
             now = DateTime.Now;
-        DateTime nextReset = now.Date.AddDays(1); // ³»ÀÏ 00:00
+        DateTime nextReset = now.Date.AddDays(1); // ï¿½ï¿½ï¿½ï¿½ 00:00
 
         TimeSpan timeLeft = nextReset - now;
 
@@ -60,19 +60,19 @@ public class DeilyCheck : MonoBehaviour
         if (!arg0.CompareTag("Player")) return;
         DateTime now = DateTime.Now;
 
-        // ³¯Â¥°¡ ´Ù¸£¸é º¸»ó Áö±Þ
+        // ï¿½ï¿½Â¥ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (lastRewardDate.Date != now.Date)
         {
             
             lastRewardDate = now;
             particle.SetActive(true);
-            Definder.GameManager.Coin += 100;
+            Definder.GameManager.moneyController.EarnMoney(100);
             PlayerPrefs.SetString("LastRewardDate", lastRewardDate.ToString());
             PlayerPrefs.Save();
         }
         else
         {
-            Debug.Log("ÀÌ¹Ì ¿À´Ã º¸»óÀ» ¹Þ¾Ò½À´Ï´Ù.");
+            Debug.Log("ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Ò½ï¿½ï¿½Ï´ï¿½.");
         }
     }
 }

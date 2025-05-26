@@ -27,7 +27,10 @@ public class FishingFightingState : FishingStateBase
         fishing.FishingVisual.SetAnchor(true, fishing.Destination);
         fishing.FishCanvas.StartEvent();
 
-        originalTargetSize = fishing.FishCanvas.target.sizeDelta;
+        // if (originalTargetSize == null)
+        // {
+            originalTargetSize = fishing.FishCanvas.target.sizeDelta;
+        // }
     }
 
     public override void Enter()
@@ -110,6 +113,7 @@ public class FishingFightingState : FishingStateBase
 
     public override void Exit()
     {
+        fishing.FishCanvas.target.sizeDelta = originalTargetSize;
         fishing.FishCanvas.SetColor(false);
         fishing.FishingVisual.SetAnchor(false);
     }

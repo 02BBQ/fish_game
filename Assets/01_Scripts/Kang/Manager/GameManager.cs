@@ -37,26 +37,18 @@ namespace ServerData
 }
 public class GameManager : MonoBehaviour
 {
-    int _coin;
-    public int Coin { 
-        get => _coin;
-        set
-        {
-            _coin = value;
-            SetCoinText();
-        }
-    }
-
-    [SerializeField] private TextMeshProUGUI coinText;
     public Transform spawnPoint;
     public bool startGame = false;
     private AsyncOperationHandle<GameObject> handle;
     private string currentPath;
     private Action<GameObject> currentCallback;
 
+
+    public MoneyController moneyController;
+
     private void handleFishJson(InitData data)
     {
-        Coin = data.money;
+        moneyController?.SetMoney(data.money);
         if (data.inventoryData.Fish != null)
         {
             foreach (FishJson fish in data.inventoryData.Fish)
@@ -101,7 +93,6 @@ public class GameManager : MonoBehaviour
     {
         FishingServerConnector.Instance.GetData("test", handleFishJson);
         Time.timeScale = 1f;
-        SetCoinText();
     }
 
     [ContextMenu("dsfa")]
@@ -124,10 +115,6 @@ public class GameManager : MonoBehaviour
 #else
         Application.Quit();  // ����� ���ӿ����� ���� ����
 #endif
-    }
-    private void SetCoinText()
-    {
-        coinText.text = _coin.ToString("0");
     }
 
     public void PauseGame()
