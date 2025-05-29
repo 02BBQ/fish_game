@@ -16,9 +16,9 @@ MonoBehaviour:
   baseWeight: 999
   spec: "\uBD81\uBD81\uC5B4\uC5B4"
   basePrice: 12000
-  fishPrefab: {fileID: 919132149155446097, guid: 3763a610870991740befe42354bfeb4a, type: 3}
   MaxWeightMultiplier: 1.5
   MinWeightMultiplier: 1
   DancingStepMax: 0.5
   DancingStepMin: 1
+  visualAddress: asdasd
   description: "\uBD81\uB760\uAE30\uB760\uAE30\uB760\uAE30\uB760\uAE30\uB760\uB760\uAE30\uB760\uAE30\uB760\uAE30\uB760\uAE30\uB760\uB760\uAE30\uB760\uAE30\uB760\uAE30\uB760\uAE30\uB760\uB760\uAE30\uB760\uAE30\uB760\uAE30\uB760\uAE30\uB760"

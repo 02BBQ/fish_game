@@ -9,16 +9,14 @@ public class Item : ScriptableObject
     public ItemType type;
 
     public string nameStr;
-    public int cost;
+    public int price;
 
     [TextArea]
     public string description;
-
     public bool stackable = true;
     
     [Header("Visual")]
     public string visualPath;
-
     public virtual StringBuilder GetDescription()
     {
         return new StringBuilder(this.description);
@@ -33,8 +31,9 @@ public class Item : ScriptableObject
 
 public enum ItemType
 {
+    None = -1,
     Boat = 0,
     Fish = 1,
-    Fishing = 2,
+    FishingRod = 2,
     Bait = 3
 }

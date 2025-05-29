@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// this class is in gray background image, this is slot
+/// </summary>
 public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
 {
     Image image;
@@ -48,15 +51,11 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        // if(transform.childCount == 0)
-        // {
-        //     InventoryItem inventoryItem = eventData.pointerDrag.GetComponent<InventoryItem>();
-        //     inventoryItem.parentAfterDrag = transform;
-        //     slotItem = inventoryItem;
-        // }
         if (slotItem != null)
         {
             InventoryItem inventoryItem = eventData.pointerDrag.GetComponent<InventoryItem>();
+            if (inventoryItem == null) return;
+
             slotItem.parentAfterDrag = inventoryItem.parentBeforeDrag;
             slotItem.transform.SetParent(inventoryItem.parentBeforeDrag, false);
             inventoryItem.parentAfterDrag = transform;
@@ -66,6 +65,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
         else
         {
             InventoryItem inventoryItem = eventData.pointerDrag.GetComponent<InventoryItem>();
+            if (inventoryItem == null) return;
             inventoryItem.parentAfterDrag = transform;
             slotItem = inventoryItem;
         }
@@ -75,7 +75,11 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
     {
         slotItem = null;
     }
-
+    public void SetItem(InventoryItem item)
+    {
+        slotItem = item;
+        item.SetParent(transform);
+    }
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (slotItem != null && slotItem.item != null)

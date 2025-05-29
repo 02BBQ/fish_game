@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55d8ce7085e30ee49b7dff4216b3a828, type: 3}
   m_Name: Item 4
   m_EditorClassIdentifier: 
-  image: {fileID: 21300000, guid: 507375fb90b47f34b8e25880be985705, type: 3}
+  image: {fileID: 21300000, guid: 71b5cb09d848ea841b680ad1cb5e7486, type: 3}
   type: 3
-  nameStr: fake item
+  nameStr: ASDFASF
   cost: 100
   description: This is BEST fishing rod buy now!!!!
   stackable: 1
+  visualPath: 

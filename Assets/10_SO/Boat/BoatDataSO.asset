@@ -16,3 +16,4 @@ MonoBehaviour:
   boatSpeed: 18700
   boatTurn: 46.03
   boatDamp: 0.5
+  maxFish: 10

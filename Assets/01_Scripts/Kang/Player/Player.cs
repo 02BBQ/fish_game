@@ -1,11 +1,10 @@
-using DG.Tweening;
+using Steamworks;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
-public class Player : MonoBehaviour
+public class Player : MapEntity
 {
     [HideInInspector] private Rigidbody _rigid;
     public Rigidbody Rigidbody { get => _rigid; }
@@ -16,6 +15,7 @@ public class Player : MonoBehaviour
     public PlayerSlot playerSlot;
 
     [HideInInspector] public bool boating = false;
+    [HideInInspector] public ConstantForce cForce;
 
     public PlayerInput playerInput;
     public LayerMask mapLayer;
@@ -24,20 +24,37 @@ public class Player : MonoBehaviour
 
     public Action<Collision> CollisionEnter;
 
+    public GameObject fishObj;
+    SpriteRenderer fishRenderer;
+    MeshFilter fishMesh;
+    [HideInInspector] public FishSO currentFish = null;
+
     private void Awake()
     {
         _rigid = GetComponent<Rigidbody>();
         // playerAnim = GetComponentInChildren<PlayerAnimation>();
+        cForce = GetComponent<ConstantForce>();
         _capsuleCollider = transform.Find("Collider").GetComponent<CapsuleCollider>();
+        fishRenderer = fishObj.GetComponent<SpriteRenderer>();
+        fishMesh = fishObj.GetComponent<MeshFilter>();
     }
     public Item debugItem;
-    private void Start()
+    protected override void Start()
     {
+        isMove = true;
+        isRotate = true;
+        playerInput.InputAction.Enable();
+        base.Start();
         InventoryManager.Instance.AddItem(debugItem);
+        playerBoat.enabled = true;
+        Rigidbody.mass = 10f;
+        cForce.enabled = true;
+        if(SteamManager.instance.connectedToSteam)
+            SteamUserStats.ResetAll(true);
     }
-    private void Update()
+    protected override void Update()
     {
-
+        base.Update();
         if (boating)
             playerBoat.Move(playerInput.Movement);
         else
@@ -85,6 +102,7 @@ public class Player : MonoBehaviour
     private IEnumerator DieCoroutine()
     {
         Transform camParent = CameraManager.Instance.camVirtual.transform.parent;
+        Transform camTarget = CameraManager.Instance.camVirtual.LookAt;
         if (camParent == null)
             yield break;
 
@@ -92,6 +110,7 @@ public class Player : MonoBehaviour
         var localPos = CameraManager.Instance.camVirtual.transform.localPosition;
         var localRot = CameraManager.Instance.camVirtual.transform.localRotation;
         CameraManager.Instance.camVirtual.transform.parent = null;
+        CameraManager.Instance.camVirtual.Follow = null;
 
         UIManager.Instance.FadeIn(1.5f);
         yield return new WaitForSeconds(2.5f);
@@ -99,10 +118,33 @@ public class Player : MonoBehaviour
         playerMovement.movable = true;
         transform.position = Definder.GameManager.spawnPoint.position;
         CameraManager.Instance.camVirtual.transform.parent = camParent;
+        CameraManager.Instance.camVirtual.Follow = camTarget;
         CameraManager.Instance.camVirtual.transform.SetLocalPositionAndRotation(localPos, localRot);
         EventBus.Publish(EventBusType.Drowning);
         boating = false;
         
         UIManager.Instance.FadeOut(1f);
+    }
+
+    public void HandleFish(FishSO fishSO)
+    {
+        currentFish = fishSO;
+        if (fishSO.visualPath != "")
+        {
+            Definder.GameManager.LoadAddressableAsset(fishSO.visualPath, (obj) =>
+            {
+                fishRenderer.material = obj.GetComponent<Renderer>().material;
+                fishMesh.mesh = obj.GetComponent<MeshFilter>().mesh;
+            });
+        }
+        else if(fishSO.image != null)
+        {
+            fishRenderer.sprite = fishSO.image;
+        }
+        fishObj.SetActive(true);
+    }
+    public void DisableFish()
+    {
+        fishObj.SetActive(false);
     }
 }

@@ -6,6 +6,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// this class is in inventory item image, this is Instantiate item image
+/// </summary>
 public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
 
@@ -39,17 +42,14 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnBeginDrag(PointerEventData eventData)
     {
         image.raycastTarget = false;
-        if (parentAfterDrag != null)
-        {
-            var slot = parentAfterDrag.GetComponent<InventorySlot>();
-            if (slot)
-            {
-                slot.ResetItem();
-            }   
-        }
         parentBeforeDrag = transform.parent;
+        var slot = parentBeforeDrag.GetComponent<InventorySlot>();
+        if (slot)
+        {
+            slot.ResetItem();
+        }
         parentAfterDrag = transform.parent;
-        transform.SetParent(transform.root);
+
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -60,8 +60,23 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnEndDrag(PointerEventData eventData)
     {
         image.raycastTarget = true;
-        transform.SetParent(parentAfterDrag);
-        rectTrm.anchoredPosition = Vector2.zero;        
+
+        ItemType currentType = InventoryManager.Instance.GetCurrentCategory();
+        if (item.type == currentType || currentType == ItemType.None)
+        {
+            parentAfterDrag.GetComponent<InventorySlot>().SetItem(this);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+            InventoryManager.Instance.RefreshFillter();
+        }
+    }
+
+    public void SetParent(Transform slot)
+    {
+        transform.SetParent(slot);
+        rectTrm.anchoredPosition = Vector2.zero;
     }
 
     public void SetSlotItem()

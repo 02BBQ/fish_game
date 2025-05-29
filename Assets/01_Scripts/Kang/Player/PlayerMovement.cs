@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System;
+using Steamworks;
 
 public enum AutoMoveState
 {
@@ -29,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
 
     float _pitch = 0f;
     float _yaw = 0f;
+    int triggerCnt = 0;
 
     public Vector3 direction = Vector3.zero;
 
@@ -48,23 +50,29 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _yaw = transform.localEulerAngles.y;
+        if (SteamManager.instance.connectedToSteam)
+        {
+            bool bSuccess = SteamUserStats.RequestCurrentStats();
+            print(bSuccess);
+            print(Steamworks.SteamClient.Name);
+        }
     }
 
     private void OnEnable()
     {
         _player.playerInput.OnAim += Aim;
         _player.playerInput.DownJump += Jump;
-        _player.playerTrigger.TriggerEnter += TriggerEnter;
-        _player.playerTrigger.TriggerStay += TriggerStay;
-        _player.playerTrigger.TriggerExit += TriggerExit;
+        _player.playerTrigger.TriggerEnter.AddListener(TriggerEnter);
+        _player.playerTrigger.TriggerStay.AddListener(TriggerStay);
+        _player.playerTrigger.TriggerExit.AddListener(TriggerExit);
     }
     private void OnDisable()
     {
         _player.playerInput.OnAim -= Aim;
         _player.playerInput.DownJump -= Jump;
-        _player.playerTrigger.TriggerEnter += TriggerEnter;
-        _player.playerTrigger.TriggerStay += TriggerStay;
-        _player.playerTrigger.TriggerExit += TriggerExit;
+        _player.playerTrigger.TriggerEnter.RemoveListener(TriggerEnter);
+        _player.playerTrigger.TriggerStay.RemoveListener(TriggerStay);
+        _player.playerTrigger.TriggerExit.RemoveListener(TriggerExit);
     }
     private void Update()
     {
@@ -75,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
                 _player.playerAnim.SetDirection(Vector3.Lerp(_player.playerAnim.GetDirection(), Vector3.forward, Time.deltaTime * 10f));
                 Vector3 target = _targetPos.position - transform.position;
                 target.y = 0f;
-                Quaternion forward = Quaternion.LookRotation(target);
+                Quaternion forward = Quaternion.LookRotation(-target);
                 visual.localRotation = Quaternion.RotateTowards(visual.localRotation, forward, _rotateSpeed * Time.deltaTime * 2f);
 
                 if (Physics.Raycast(new Ray(transform.position + Vector3.up * 0.1f, target), 0.4f))
@@ -130,6 +138,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.isTrigger) return;
         grounded = true;
+        triggerCnt++;
         _player.playerAnim.SetBool("Ground", true);
     }
     private void TriggerStay(Collider other)
@@ -141,11 +150,13 @@ public class PlayerMovement : MonoBehaviour
     private void TriggerExit(Collider other)
     {
         if (other.isTrigger) return;
-        Vector3 startPos = transform.position + Vector3.up * 0.2f;
-        if (Physics.OverlapSphere(startPos, 0.3f, groundLayer).Length > 0)
+
+        triggerCnt--;
+        if (triggerCnt > 0)
             return;
 
         grounded = false;
+        if(!_player.boating)
         _player.playerAnim.SetBool("Ground", false);
     }
 
@@ -159,8 +170,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (_player.playerInput.Shift) weight *= 2;
 
-        Vector3 localMovement = new Vector3(input.x * weight, 0f, input.y * weight);
-
+        Vector3 localMovement = input.x * Camera.main.transform.right + input.y * Camera.main.transform.forward;
+        localMovement.y = 0f;
+        localMovement.Normalize();
+        localMovement *= weight;
         direction = Vector3.Lerp(direction, localMovement, 8f * Time.deltaTime);
 
         Vector3 worldMovement = transform.TransformDirection(direction);
@@ -178,11 +191,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (input.sqrMagnitude < 0.1f) return;
 
-        Quaternion targetRotation = Quaternion.LookRotation(localMovement);
-        visual.localRotation = Quaternion.RotateTowards(visual.localRotation, targetRotation, _rotateSpeed * Time.deltaTime);
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        visual.rotation = Quaternion.RotateTowards(visual.rotation, targetRotation, _rotateSpeed * Time.deltaTime * 2f);
 
-        velocity.x = worldMovement.x * _moveSpeed;
-        velocity.z = worldMovement.z * _moveSpeed;
+        velocity.x = localMovement.x * _moveSpeed;
+        velocity.z = localMovement.z * _moveSpeed;
 
         velocity.y = _rb.linearVelocity.y;
 
@@ -199,8 +212,24 @@ public class PlayerMovement : MonoBehaviour
         {
             grounded = false;
             _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, _jumpPower, _rb.linearVelocity.z);
+
+            if (SteamManager.instance.connectedToSteam)
+            {
+                int loaded = SteamUserStats.GetStatInt("Test");
+                loaded++;
+                SteamUserStats.SetStat("Test", loaded);
+                SteamUserStats.StoreStats();
+                print(loaded);
+                Steamworks.Data.Achievement ach = new Steamworks.Data.Achievement ("TestAchivement");
+                
+                if (!ach.State && loaded >= 10)
+                {
+                    ach.Trigger();
+                }
+            }
         }
     }
+
     public void StopMoveTarget()
     {
         _chaseState = AutoMoveState.None;

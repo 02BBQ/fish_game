@@ -35,7 +35,6 @@ public static class EventManager
     {
         if (!s_EventLookups.ContainsKey(evt))
         {
-            //T�� ĳ�������ִ� Action�� ���� �ִ´�. �̸� ���� ���ٸ� ���� �ʾƵ� �ǵ���
             Action<GameEvent> newAction = (e) => evt((T)e);
             s_EventLookups[evt] = newAction;
 

@@ -134,6 +134,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CameraLock"",
+                    ""type"": ""Button"",
+                    ""id"": ""02e0c3ff-c4c8-4438-8dea-fe5863952e9a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -653,6 +662,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Fishing"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ec9bbaeb-5dd1-4de3-9bf3-5f233ae371d6"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraLock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -754,6 +774,24 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Esc"",
                     ""type"": ""Button"",
                     ""id"": ""d9c3726c-d3ec-4498-be11-28ba6eb8d331"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""0db0dbb7-986c-4e02-b81d-59f3fb56edc0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""M"",
+                    ""type"": ""Button"",
+                    ""id"": ""529c80da-fc3a-4183-8605-2184765e19ff"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -1189,6 +1227,28 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Esc"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b670a647-3933-4eb7-a91e-fdd814b1550c"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""82f7e9dc-74b1-446d-a0c5-8101a10bae7f"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""M"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1270,6 +1330,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Ctrl = m_Player.FindAction("Ctrl", throwIfNotFound: true);
         m_Player_KeyPad = m_Player.FindAction("KeyPad", throwIfNotFound: true);
         m_Player_Fishing = m_Player.FindAction("Fishing", throwIfNotFound: true);
+        m_Player_CameraLock = m_Player.FindAction("CameraLock", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1283,6 +1344,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         m_UI_Esc = m_UI.FindAction("Esc", throwIfNotFound: true);
+        m_UI_Inventory = m_UI.FindAction("Inventory", throwIfNotFound: true);
+        m_UI_M = m_UI.FindAction("M", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1362,6 +1425,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Ctrl;
     private readonly InputAction m_Player_KeyPad;
     private readonly InputAction m_Player_Fishing;
+    private readonly InputAction m_Player_CameraLock;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1378,6 +1442,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @Ctrl => m_Wrapper.m_Player_Ctrl;
         public InputAction @KeyPad => m_Wrapper.m_Player_KeyPad;
         public InputAction @Fishing => m_Wrapper.m_Player_Fishing;
+        public InputAction @CameraLock => m_Wrapper.m_Player_CameraLock;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1423,6 +1488,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Fishing.started += instance.OnFishing;
             @Fishing.performed += instance.OnFishing;
             @Fishing.canceled += instance.OnFishing;
+            @CameraLock.started += instance.OnCameraLock;
+            @CameraLock.performed += instance.OnCameraLock;
+            @CameraLock.canceled += instance.OnCameraLock;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1463,6 +1531,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Fishing.started -= instance.OnFishing;
             @Fishing.performed -= instance.OnFishing;
             @Fishing.canceled -= instance.OnFishing;
+            @CameraLock.started -= instance.OnCameraLock;
+            @CameraLock.performed -= instance.OnCameraLock;
+            @CameraLock.canceled -= instance.OnCameraLock;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1495,6 +1566,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
     private readonly InputAction m_UI_Esc;
+    private readonly InputAction m_UI_Inventory;
+    private readonly InputAction m_UI_M;
     public struct UIActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1510,6 +1583,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
         public InputAction @Esc => m_Wrapper.m_UI_Esc;
+        public InputAction @Inventory => m_Wrapper.m_UI_Inventory;
+        public InputAction @M => m_Wrapper.m_UI_M;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1552,6 +1627,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Esc.started += instance.OnEsc;
             @Esc.performed += instance.OnEsc;
             @Esc.canceled += instance.OnEsc;
+            @Inventory.started += instance.OnInventory;
+            @Inventory.performed += instance.OnInventory;
+            @Inventory.canceled += instance.OnInventory;
+            @M.started += instance.OnM;
+            @M.performed += instance.OnM;
+            @M.canceled += instance.OnM;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1589,6 +1670,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Esc.started -= instance.OnEsc;
             @Esc.performed -= instance.OnEsc;
             @Esc.canceled -= instance.OnEsc;
+            @Inventory.started -= instance.OnInventory;
+            @Inventory.performed -= instance.OnInventory;
+            @Inventory.canceled -= instance.OnInventory;
+            @M.started -= instance.OnM;
+            @M.performed -= instance.OnM;
+            @M.canceled -= instance.OnM;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1665,6 +1752,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnCtrl(InputAction.CallbackContext context);
         void OnKeyPad(InputAction.CallbackContext context);
         void OnFishing(InputAction.CallbackContext context);
+        void OnCameraLock(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
@@ -1679,5 +1767,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
         void OnEsc(InputAction.CallbackContext context);
+        void OnInventory(InputAction.CallbackContext context);
+        void OnM(InputAction.CallbackContext context);
     }
 }
