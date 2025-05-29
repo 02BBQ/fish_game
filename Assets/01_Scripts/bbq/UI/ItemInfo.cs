@@ -7,7 +7,7 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 using System;
 using System.Linq.Expressions;
 
-public class ItemInfo : MonoBehaviour //, IItemInfoView
+public class ItemInfo : MonoBehaviour //, IItemInfoVi
 {
     [field: SerializeField] public TMP_Text nameText { get; private set; }
     [field: SerializeField] public TMP_Text descText { get; private set; }
