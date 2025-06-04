@@ -1,9 +1,6 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
-using UnityEditor;
-using UnityEditor.SceneManagement;
-using static Unity.Collections.Unicode;
 
 public class TreeGenerator : MonoBehaviour
 {

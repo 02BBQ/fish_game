@@ -1,86 +1,73 @@
-using NUnit.Framework;
+using Steamworks;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class WaterTank : Interactor
 {
-    public List<FishSO> fishs;
-    public FishModel fishPref;
-    List<FishModel> pool;
+    public List<FishSO> fishDefinitions; // FishSO 스크립터블 오브젝트 리스트
+    public FishModel fishPrefab; // 물고기 프리팹
+    List<FishModel> fishPool; // 오브젝트 풀
+
 
     private void Awake()
     {
-       // fishs = new List<FishSO>();
-        pool = new List<FishModel>();
-        //@ get fishlist in server
-    }
-    private void OnEnable()
-    {
-        InventoryManager.Instance.OnAddFish += AddFish;
-        InventoryManager.Instance.OnRemoveFish += RemoveFish;
-    }
-    private void OnDisable()
-    {
-        if (InventoryManager.Instance)
+        fishPool = new List<FishModel>();
+
+        // Steam 인벤토리 초기화 확인
+        if (!SteamManager.Initialized)
         {
-            InventoryManager.Instance.OnAddFish -= AddFish;
-            InventoryManager.Instance.OnRemoveFish -= RemoveFish;
+            Debug.LogError("Steam not initialized!");
+            return;
         }
     }
+
+
     protected override void Start()
     {
         base.Start();
-        // 초기 물고기들 처리
-        //@ Fishtank init code
-        foreach (FishSO fish in fishs)
-        {
-            FishModel fishObj = pool.FirstOrDefault(obj => !obj.gameObject.activeSelf);
+        RefreshFishTank(); // 초기 물고기 로드
+    }
 
-            if (fishObj == null)
+    // Steam 인벤토리 변경 시 호출
+    private void RefreshFishTank()
+    {
+        // 기존 물고기 비활성화
+        foreach (var fish in fishPool)
+        {
+            fish.gameObject.SetActive(false);
+        }
+
+        // Steam 인벤토리에서 물고기 아이템 조회
+        foreach (FishSO fishDef in fishDefinitions)
+        {
+            SteamItemDef_t itemDef = new SteamItemDef_t(fishDef.price);
+
+            if (SteamInventoryManager.Instance.TryGetItemDetails(itemDef, out var itemDetails))
             {
-                // 새 오브젝트 생성
-                fishObj = Instantiate(fishPref, transform);
-                pool.Add(fishObj);
+                // 보유 수량만큼 물고기 생성
+                for (int i = 0; i < itemDetails.m_unQuantity; i++)
+                {
+                    AddFishToTank(fishDef);
+                }
             }
-            fishObj.Init(fish.image, fish);
-            fishObj.gameObject.SetActive(true);
         }
     }
 
-    public void AddFish(List<FishSO> lst, FishSO fish)
+    private void AddFishToTank(FishSO fishData)
     {
-        if (lst != fishs) return;
+        // 풀에서 재사용 가능한 물고기 찾기
+        FishModel fishObj = fishPool.FirstOrDefault(obj => !obj.gameObject.activeSelf);
 
-        fishs.Add(fish);
-        
-        // pool에서 비활성화된 오브젝트 찾기
-        FishModel fishObj = pool.FirstOrDefault(obj => !obj.gameObject.activeSelf);
-        
         if (fishObj == null)
         {
             // 새 오브젝트 생성
-            fishObj = Instantiate(fishPref, transform);
-            pool.Add(fishObj);
+            fishObj = Instantiate(fishPrefab, transform);
+            fishPool.Add(fishObj);
         }
-        fishObj.Init(fish.image, fish);
+
+        fishObj.Init(fishData.image, fishData);
         fishObj.gameObject.SetActive(true);
-    }
-
-    public void RemoveFish(List<FishSO> lst, FishSO fish)
-    {
-        if (lst != fishs) return;
-
-        if (fishs.Contains(fish))
-        {
-            fishs.Remove(fish);
-            // 해당 물고기 오브젝트 찾아서 비활성화
-            FishModel fishObj = pool.FirstOrDefault(obj => obj.gameObject.activeSelf && obj.fishSO.nameStr == fish.nameStr);
-            if (fishObj != null)
-            {
-                fishObj.gameObject.SetActive(false);
-            }
-        }
     }
 
     protected override void OnTriggerEnter(Collider other)
@@ -91,6 +78,7 @@ public class WaterTank : Interactor
             GuideText.Instance.AddGuide("WaterTank");
         }
     }
+
     protected override void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -100,9 +88,13 @@ public class WaterTank : Interactor
             GuideText.Instance.RemoveGuide("WaterTank");
         }
     }
-    protected override void OnInterect()
+
+    protected override void OnInteract()
     {
-        InventoryManager.Instance.SetFish(50, fishs);
+        // 물고기 탭 UI 열기
         UIManager.Instance.fishTank.SetActive(true);
+
+        // 인벤토리 새로고침 (UI에 최신 데이터 반영)
+        SteamInventoryManager.Instance.RefreshInventory();
     }
 }

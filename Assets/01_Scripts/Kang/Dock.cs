@@ -23,7 +23,7 @@ public class Dock : Interactor
             GuideText.Instance.RemoveGuide("Dock");
         }
     }
-    protected override void OnInterect()
+    protected override void OnInteract()
     {
         UIManager.Instance.dock.SetActive(true);
     }

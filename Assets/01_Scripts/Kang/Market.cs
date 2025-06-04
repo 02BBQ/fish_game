@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
-using UnityEditor.Search;
 using UnityEngine;
 
 public class Market : Interactor
@@ -87,7 +85,7 @@ public class Market : Interactor
             }
         }
     }
-    protected override void OnInterect()
+    protected override void OnInteract()
     {
         marketUI.gameObject.SetActive(true);
     }

@@ -21,7 +21,7 @@ public abstract class Interactor : MapEntity
         {
             materials[1] = outlineMaterial;
             outlineMesh.sharedMaterials = materials;
-            Definder.Player.AddInteract(OnInterect);
+            Definder.Player.AddInteract(OnInteract);
         }
     }
     protected virtual void OnTriggerExit(Collider other)
@@ -30,8 +30,8 @@ public abstract class Interactor : MapEntity
         {
             materials[1] = nullMat;
             outlineMesh.sharedMaterials = materials;
-            Definder.Player.RemoveInterect(OnInterect);
+            Definder.Player.RemoveInterect(OnInteract);
         }
     }
-    protected abstract void OnInterect();
+    protected abstract void OnInteract();
 }

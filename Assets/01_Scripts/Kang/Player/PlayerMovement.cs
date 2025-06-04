@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using System;
 using Steamworks;
+using UnityEngine.SocialPlatforms.Impl;
 
 public enum AutoMoveState
 {
@@ -50,11 +51,10 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _yaw = transform.localEulerAngles.y;
-        if (SteamManager.instance.connectedToSteam)
+        if (SteamManager.Initialized)
         {
             bool bSuccess = SteamUserStats.RequestCurrentStats();
             print(bSuccess);
-            print(Steamworks.SteamClient.Name);
         }
     }
 
@@ -213,18 +213,32 @@ public class PlayerMovement : MonoBehaviour
             grounded = false;
             _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, _jumpPower, _rb.linearVelocity.z);
 
-            if (SteamManager.instance.connectedToSteam)
+            if (SteamManager.Initialized)
             {
-                int loaded = SteamUserStats.GetStatInt("Test");
-                loaded++;
-                SteamUserStats.SetStat("Test", loaded);
-                SteamUserStats.StoreStats();
-                print(loaded);
-                Steamworks.Data.Achievement ach = new Steamworks.Data.Achievement ("TestAchivement");
-                
-                if (!ach.State && loaded >= 10)
+                if (SteamUserStats.GetStat("Test", out int currentStatValue))
                 {
-                    ach.Trigger();
+                    Debug.Log($"Current Stat Value: {currentStatValue}");
+
+                    int newStatValue = currentStatValue + 1;
+                    SteamUserStats.SetStat("Test", newStatValue);
+
+                    if (newStatValue >= 10)
+                    {
+                        if (SteamUserStats.GetAchievement("TestAchivement", out bool isAchieved))
+                        {
+                            if (!isAchieved)
+                            {
+                                // Achievement 달성
+                                SteamUserStats.SetAchievement("TestAchivement");
+                                SteamUserStats.StoreStats();
+                                Debug.Log("Achievement Unlocked!");
+                            }
+                        }
+
+                        // 4. 변경사항 저장
+                        SteamUserStats.StoreStats();
+                        Debug.Log($"Stat updated to: {newStatValue}");
+                    }
                 }
             }
         }

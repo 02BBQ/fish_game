@@ -1,8 +1,7 @@
-using TMPro.EditorUtilities;
+/*using System.Collections.Generic;
+using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 using UnityEngine;
-using Unity.EditorCoroutines.Editor;
-using System.Collections.Generic;
 
 public class FishDataEditor : EditorWindow
 {
@@ -108,4 +107,6 @@ public static class JsonHelper
 public class TraitStringWrapper
 {
     public string[] traits;
-}
+}*/
+
+//build
