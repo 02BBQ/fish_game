@@ -2,13 +2,29 @@ using UnityEngine;
 
 public class ItemRotator : MonoBehaviour
 {
+    [SerializeField] private float rotationSpeed = 30f;
+    private bool isRotating = true;
+
     private void Update()
     {
-        transform.Rotate(Vector3.up, 50 * Time.deltaTime);
+        if (isRotating)
+        {
+            transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+        }
+    }
+
+    public void StartRotation()
+    {
+        isRotating = true;
+    }
+
+    public void StopRotation()
+    {
+        isRotating = false;
     }
 
     public void Reset()
     {
-        transform.rotation = Quaternion.Euler(0,180f,0);
+        transform.rotation = Quaternion.identity;
     }
 }

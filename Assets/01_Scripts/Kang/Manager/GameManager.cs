@@ -9,6 +9,8 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.SceneManagement;
+using fishing.Network;
+using System.Threading.Tasks;
 
 namespace ServerData
 {
@@ -37,6 +39,7 @@ namespace ServerData
 }
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
     public Transform spawnPoint;
     public bool startGame = false;
     private AsyncOperationHandle<GameObject> handle;
@@ -45,6 +48,43 @@ public class GameManager : MonoBehaviour
 
 
     public MoneyController moneyController;
+    private IFishingServerService serverService;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        moneyController = GetComponent<MoneyController>();
+        serverService = GetComponent<FishingServerService>();
+        if (serverService == null)
+        {
+            serverService = gameObject.AddComponent<FishingServerService>();
+        }
+    }
+
+    private async void Start()
+    {
+        var result = await serverService.GetData("test");
+        if (result.IsSuccess)
+        {
+            handleFishJson(result.Data);
+        }
+        else
+        {
+            Debug.LogError($"Failed to get data: {result.Error.Message}");
+        }
+        
+        Time.timeScale = 1f;
+        Debug.Log("GameManager Start");
+    }
 
     private void handleFishJson(InitData data)
     {
@@ -57,18 +97,21 @@ public class GameManager : MonoBehaviour
                 so.Initialize(fish);
                 InventoryManager.Instance.AddItem(so);
             }
+        }
+        if (data.inventoryData.FishingRod != null)
+        {
             foreach (InventoryItemData fish in data.inventoryData.FishingRod)
             {
                 // Load fishing rod prefab from addressables
                 var handle = Addressables.LoadAssetAsync<FishingRod>(fish.Address);
                 handle.Completed += (op) =>
                 {
-                    if (op.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
+                    if (op.Status == AsyncOperationStatus.Succeeded)
                     {
                         var fishingRod = op.Result;
                         if (fishingRod != null)
                         {
-                            // fishingRod.Initialize(fish);
+                            fishingRod.guid = fish.guid;
                             InventoryManager.Instance.AddItem(fishingRod);
                         }
                         else
@@ -83,16 +126,6 @@ public class GameManager : MonoBehaviour
                 };
             }
         }
-        else
-        {
-            Debug.Log("No fish data available.");
-        }
-    }
-
-    private void Start()
-    {
-        FishingServerConnector.Instance.GetData("test", handleFishJson);
-        Time.timeScale = 1f;
     }
 
     [ContextMenu("dsfa")]

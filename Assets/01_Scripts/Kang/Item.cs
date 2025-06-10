@@ -14,6 +14,8 @@ public class Item : ScriptableObject
     [TextArea]
     public string description;
     public bool stackable = true;
+
+    public string guid;
     
     [Header("Visual")]
     public string visualPath;

@@ -11,7 +11,6 @@ public class FishSO : Item, ModelView
     public string species;
     public string rarity;
     public float purity; 
-    public string guid;
     public string trait;
 
     public void Initialize(FishData data)
