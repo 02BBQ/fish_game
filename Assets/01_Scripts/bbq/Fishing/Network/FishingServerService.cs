@@ -8,19 +8,11 @@ namespace fishing.Network
 {
     public class FishingServerService : MonoBehaviour, IFishingServerService
     {
-        private ServerConfig _config;
         private IRetryPolicy _retryPolicy;
         
         private void Awake()
         {
-            _config = Resources.Load<ServerConfig>("ServerConfig");
-            if (_config == null)
-            {
-                Debug.LogError("ServerConfig not found in Resources folder!");
-                return;
-            }
-            
-            _retryPolicy = new ExponentialBackoffRetryPolicy(_config.MaxRetries, _config.RetryDelaySeconds);
+            _retryPolicy = new ExponentialBackoffRetryPolicy(ServerConfig.MaxRetries, ServerConfig.RetryDelaySeconds);
         }
         
         public async Task<Result<StartFishingResponse>> StartFishing()
@@ -29,7 +21,7 @@ namespace fishing.Network
             {
                 return await _retryPolicy.ExecuteAsync(async () =>
                 {
-                    using var request = UnityWebRequest.PostWwwForm($"{_config.BaseUrl}fish/start", "");
+                    using var request = UnityWebRequest.PostWwwForm($"{ServerConfig.BaseUrl}fish/start", "");
                     await request.SendWebRequest();
                     
                     if (request.result == UnityWebRequest.Result.Success)
@@ -65,7 +57,7 @@ namespace fishing.Network
                     string json = JsonConvert.SerializeObject(requestData);
                     byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
                     
-                    using var request = new UnityWebRequest($"{_config.BaseUrl}fish/end", "POST");
+                    using var request = new UnityWebRequest($"{ServerConfig.BaseUrl}fish/end", "POST");
                     request.uploadHandler = new UploadHandlerRaw(bodyRaw);
                     request.downloadHandler = new DownloadHandlerBuffer();
                     request.SetRequestHeader("Content-Type", "application/json");
@@ -105,7 +97,7 @@ namespace fishing.Network
                     string json = JsonConvert.SerializeObject(requestData);
                     byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
                     
-                    using var request = new UnityWebRequest($"{_config.BaseUrl}datastore/initload", "POST");
+                    using var request = new UnityWebRequest($"{ServerConfig.BaseUrl}datastore/initload", "POST");
                     request.uploadHandler = new UploadHandlerRaw(bodyRaw);
                     request.downloadHandler = new DownloadHandlerBuffer();
                     request.SetRequestHeader("Content-Type", "application/json");

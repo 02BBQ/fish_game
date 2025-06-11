@@ -56,6 +56,9 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            
+            // Initialize ServerConfig
+            ServerConfig.Initialize();
         }
         else
         {

@@ -46,6 +46,7 @@ namespace fishing.FSM
 
         public override void OnHoldEnd()
         {
+            Debug.Log("HoldEnd");
             if (fishing.Distance <= fishing.MaxDistance)
             {
                 fishing.ChangeState(Fishing.FishingStateType.Casting);

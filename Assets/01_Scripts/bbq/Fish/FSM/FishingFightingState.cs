@@ -27,14 +27,14 @@ namespace fishing.FSM
         public FishingFightingState(Fishing fishing) : base(fishing) 
         {
             impulseSource = fishing.GetComponent<CinemachineImpulseSource>();
-            impulseSource.GenerateImpulse();
-            fishing.FishingVisual.SetAnchor(true, fishing.Destination);
-            fishing.FishCanvas.StartEvent();
-            originalTargetSize = fishing.FishCanvas.target.sizeDelta;
         }
 
         public override void Enter()
         {
+            originalTargetSize = fishing.FishCanvas.target.sizeDelta;
+            impulseSource.GenerateImpulse();
+            fishing.FishingVisual.SetAnchor(true, fishing.Destination);
+            fishing.FishCanvas.StartEvent();
             fightingTime = 0f;
             InitializeFishingMinigame();
         }

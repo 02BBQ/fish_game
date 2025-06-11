@@ -107,7 +107,7 @@ namespace fishing.FSM
             }
             catch (Exception e)
             {
-                Debug.LogError($"상태 업데이트 중 오류 발생: {e.Message}");
+                Debug.LogError($"{currentState.GetType()} 업데이트 중 오류 발생: {e.Message}");
             }
         }
 
@@ -115,35 +115,35 @@ namespace fishing.FSM
         {
             if (isTransitioning || newState == null) return;
 
-            try
-            {
-                isTransitioning = true;
+            // try
+            // {
+            //     isTransitioning = true;
                 currentState?.Exit();
                 currentState = newState;
                 currentState?.Enter();
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"상태 전환 중 오류 발생: {e.Message}");
-            }
-            finally
-            {
-                isTransitioning = false;
-            }
+            // }
+            // catch (Exception e)
+            // {
+            //     Debug.LogError($"상태 전환 중 오류 발생: {e.Message}");
+            // }
+            // finally
+            // {
+            //     isTransitioning = false;
+            // }
         }
 
         public void OnHoldStart()
         {
             if (isTransitioning || currentState == null) return;
 
-            try
-            {
+            // try
+            // {
                 currentState.OnHoldStart();
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"홀드 시작 처리 중 오류 발생: {e.Message}");
-            }
+            // }
+            // catch (Exception e)
+            // {
+            //     Debug.LogError($"홀드 시작 처리 중 오류 발생: {e.Message}");
+            // }
         }
 
         public void OnHoldEnd()

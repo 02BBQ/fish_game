@@ -15,5 +15,8 @@ EditorBuildSettings:
     path: Assets/FPS Framework/Scenes/Loading.unity
     guid: 75e5571c0de96ac4a84aadc041f9d80e
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 09ffa281817f74947b8708ef18022377,
+      type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: fe0ad163545f89b47813a7b41af4a66a,
       type: 3}
+  m_UseUCBPForAssetBundles: 0

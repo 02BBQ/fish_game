@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// </summary>
 public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
 {
-    Image image;
+    [field: SerializeField] public Image image { get; private set; }
     public Color selectedColor, normalColor;
     [field: SerializeField] public InventoryItem slotItem;
 

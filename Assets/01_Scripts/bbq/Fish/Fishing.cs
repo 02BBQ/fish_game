@@ -4,6 +4,8 @@ using fishing.Network;
 using Debug = UnityEngine.Debug;
 using Vector3 = UnityEngine.Vector3;
 using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 
 namespace fishing.FSM
 {
@@ -23,7 +25,7 @@ namespace fishing.FSM
         [SerializeField] private FishingVisual fishingVisual;
         [SerializeField] private FishingRegion fishingRegion;
         [SerializeField] private FishSO fishSOBase;
-        [SerializeField] private FishTray fishTray;
+        [SerializeField] private FishTray fishTray; 
         [SerializeField] private LayerMask toAimLayer;
         
         [Header("Fishing UI")]
@@ -31,6 +33,7 @@ namespace fishing.FSM
 
         // State management
         public FishingStateMachine StateMachine { get; private set; }
+        public Dictionary<FishingStateType, FishingStateBase> States { get; private set; } = new Dictionary<FishingStateType, FishingStateBase>();
         public FishingStateType CurrentStateType { get; private set; } = FishingStateType.Idle;
         
         // Fishing properties
@@ -63,6 +66,7 @@ namespace fishing.FSM
         private void Awake()
         {
             StateMachine = new FishingStateMachine();
+
             if (GetComponent<FishingServerService>() == null)
             {
                 gameObject.AddComponent<FishingServerService>();
@@ -80,7 +84,15 @@ namespace fishing.FSM
             }
 
             SubscribeToEvents();
-            StateMachine.Initialize(new FishingIdleState(this));
+
+            States.Add(FishingStateType.Aiming, new FishingAimingState(this));
+            States.Add(FishingStateType.Casting, new FishingCastingState(this));
+            States.Add(FishingStateType.Fighting, new FishingFightingState(this));
+            States.Add(FishingStateType.Fishing, new FishingState(this));
+            States.Add(FishingStateType.Idle, new FishingIdleState(this));
+            States.Add(FishingStateType.Reeling, new FishingReelingState(this));
+            
+            StateMachine.Initialize(States[FishingStateType.Idle]);
         }
 
         private void OnDisable() 
@@ -131,27 +143,7 @@ namespace fishing.FSM
         {
             CurrentStateType = newStateType;
             
-            switch (newStateType)
-            {
-                case FishingStateType.Aiming:
-                    StateMachine.ChangeState(new FishingAimingState(this));
-                    break;
-                case FishingStateType.Casting:
-                    StateMachine.ChangeState(new FishingCastingState(this));
-                    break;
-                case FishingStateType.Fishing:
-                    StateMachine.ChangeState(new FishingState(this));
-                    break;
-                case FishingStateType.Fighting:
-                    StateMachine.ChangeState(new FishingFightingState(this));
-                    break;
-                case FishingStateType.Reeling:
-                    StateMachine.ChangeState(new FishingReelingState(this));
-                    break;
-                case FishingStateType.Idle:
-                    StateMachine.ChangeState(new FishingIdleState(this));
-                    break;
-            }
+            StateMachine.ChangeState(States[newStateType]);
         }
 
         // Helper methods
