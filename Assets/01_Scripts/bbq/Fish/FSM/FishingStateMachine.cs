@@ -121,6 +121,7 @@ namespace fishing.FSM
                 currentState?.Exit();
                 currentState = newState;
                 currentState?.Enter();
+            Debug.Log($"상태 전환: {currentState.GetType().Name}");
             // }
             // catch (Exception e)
             // {

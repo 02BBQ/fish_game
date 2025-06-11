@@ -5,63 +5,62 @@ namespace fishing.FSM
 {
     public class FishingFightingState : FishingStateBase
     {
-        private float xMove;
-        private float time;
-        private float initTime;
-        private float timeout = 10f;
-        private float health;
-        private float goal;
-        private float current;
-        private float power;
-        private float barWidth;
-        private float targetWidth;
-        private float halfBarWidth;
-        private float halfTargetWidth;
-        private Vector2 originalTargetSize;
-        private CinemachineImpulseSource impulseSource;
-        private float fightingTime = 0f;
+        private float _xMove;
+        private float _time;
+        private float _initTime;
+        private float _timeout = 10f;
+        private float _health;
+        private float _goal;
+        private float _current;
+        private float _power;
+        private float _barWidth;
+        private float _targetWidth;
+        private float _halfBarWidth;
+        private float _halfTargetWidth;
+        private Vector2 _originalTargetSize;
+        private CinemachineImpulseSource _impulseSource;
+        private float _fightingTime = 0f;
         private const float FIGHTING_DURATION = 5f;
-        private float successChance = 0.5f;
-        private float difficultyMultiplier = 1f;
+        private float _successChance = 0.5f;
+        private float _difficultyMultiplier = 1f;
 
         public FishingFightingState(Fishing fishing) : base(fishing) 
         {
-            impulseSource = fishing.GetComponent<CinemachineImpulseSource>();
+            _impulseSource = fishing.GetComponent<CinemachineImpulseSource>();
         }
 
         public override void Enter()
         {
-            originalTargetSize = fishing.FishCanvas.target.sizeDelta;
-            impulseSource.GenerateImpulse();
+            _originalTargetSize = fishing.FishCanvas.target.sizeDelta;
+            _impulseSource.GenerateImpulse();
             fishing.FishingVisual.SetAnchor(true, fishing.Destination);
             fishing.FishCanvas.StartEvent();
-            fightingTime = 0f;
+            _fightingTime = 0f;
             InitializeFishingMinigame();
         }
 
         private void InitializeFishingMinigame()
         {
-            time = Time.time;
-            initTime = time;
-            health = Random.Range(1.5f, 2.5f);
-            goal = Random.Range(1.5f, 2.5f);
-            current = 0f;
-            power = fishing.DancingStep;
-            difficultyMultiplier = CalculateDifficultyMultiplier();
+            _time = Time.time;
+            _initTime = _time;
+            _health = Random.Range(1.5f, 2.5f);
+            _goal = Random.Range(1.5f, 2.5f);
+            _current = 0f;
+            _power = fishing.DancingStep;
+            _difficultyMultiplier = CalculateDifficultyMultiplier();
 
-            fishing.FishCanvas.target.sizeDelta = originalTargetSize;
+            fishing.FishCanvas.target.sizeDelta = _originalTargetSize;
             
-            barWidth = (fishing.FishCanvas.bar.transform as RectTransform).rect.height;
-            targetWidth = fishing.FishCanvas.target.rect.height;
-            halfBarWidth = barWidth * 0.5f;
-            halfTargetWidth = targetWidth * 0.5f;
+            _barWidth = (fishing.FishCanvas.bar.transform as RectTransform).rect.height;
+            _targetWidth = fishing.FishCanvas.target.rect.height;
+            _halfBarWidth = _barWidth * 0.5f;
+            _halfTargetWidth = _targetWidth * 0.5f;
             
             AdjustTargetSize();
         }
 
         private float CalculateDifficultyMultiplier()
         {
-            // 물고기의 희귀도나 크기에 따라 난이도 조절
             float baseMultiplier = 1f;
             if (fishing.FishingFish != null)
             {
@@ -72,7 +71,7 @@ namespace fishing.FSM
 
         private void AdjustTargetSize()
         {
-            float adjustedSize = originalTargetSize.y / (Mathf.Max(power, 0.7f) * difficultyMultiplier);
+            float adjustedSize = _originalTargetSize.y / (Mathf.Max(_power, 0.7f) * _difficultyMultiplier);
             fishing.FishCanvas.target.sizeDelta = new Vector2(
                 fishing.FishCanvas.target.sizeDelta.x, 
                 adjustedSize);
@@ -89,10 +88,10 @@ namespace fishing.FSM
 
         private bool UpdateFightingTime()
         {
-            fightingTime += Time.deltaTime;
-            if (fightingTime >= FIGHTING_DURATION)
+            _fightingTime += Time.deltaTime;
+            if (_fightingTime >= FIGHTING_DURATION)
             {
-                fishing.Success = successChance > 0.5f;
+                fishing.Success = _successChance > 0.5f;
                 fishing.ChangeState(Fishing.FishingStateType.Reeling);
                 return true;
             }
@@ -101,25 +100,25 @@ namespace fishing.FSM
 
         private void UpdateMinigameLogic()
         {
-            time += Time.deltaTime * power * 0.75f;
-            float noise = Mathf.PerlinNoise(Time.time * 3f * power, initTime) - 0.5f;
-            noise *= 3200 * power * difficultyMultiplier;
-            xMove = Mathf.Lerp(xMove, noise, Time.deltaTime * 1.5f);
-            xMove = Mathf.Clamp(xMove, -halfBarWidth + halfTargetWidth, halfBarWidth - halfTargetWidth);
+            _time += Time.deltaTime * _power * 0.75f;
+            float noise = Mathf.PerlinNoise(Time.time * 3f * _power, _initTime) - 0.5f;
+            noise *= 3200 * _power * _difficultyMultiplier;
+            _xMove = Mathf.Lerp(_xMove, noise, Time.deltaTime * 1.5f);
+            _xMove = Mathf.Clamp(_xMove, -_halfBarWidth + _halfTargetWidth, _halfBarWidth - _halfTargetWidth);
         }
 
         private void UpdateTargetPosition()
         {
             Vector2 pos = fishing.FishCanvas.target.anchoredPosition;
-            pos.y = xMove;
+            pos.y = _xMove;
             fishing.FishCanvas.target.anchoredPosition = pos;
         }
 
         private void CheckGameConditions()
         {
-            timeout -= Time.deltaTime;
+            _timeout -= Time.deltaTime;
 
-            if (Time.time - initTime <= 0.3f) return;
+            if (Time.time - _initTime <= 0.3f) return;
 
             float targetCenterX = fishing.FishCanvas.target.position.y;
             float halfWidth = fishing.FishCanvas.target.rect.height * 0.5f;
@@ -129,13 +128,13 @@ namespace fishing.FSM
 
             if (mouseX >= xMin && mouseX <= xMax)
             {
-                current += Time.deltaTime;
+                _current += Time.deltaTime;
                 fishing.FishCanvas.ToggleRotator(true);
                 fishing.FishCanvas.SetColor(true);
             }
             else
             {
-                health -= Time.deltaTime * difficultyMultiplier;
+                _health -= Time.deltaTime * _difficultyMultiplier;
                 fishing.FishCanvas.ToggleRotator(false);
                 fishing.FishCanvas.SetColor(false);
             }
@@ -145,12 +144,12 @@ namespace fishing.FSM
 
         private void CheckGameEnd()
         {
-            if (current >= goal)
+            if (_current >= _goal)
             {
                 fishing.Success = true;
                 EndGame();
             }
-            else if (timeout <= 0 || health <= 0)
+            else if (_timeout <= 0 || _health <= 0)
             {
                 fishing.Success = false;
                 EndGame();
@@ -170,7 +169,7 @@ namespace fishing.FSM
 
         public override void Exit()
         {
-            fishing.FishCanvas.target.sizeDelta = originalTargetSize;
+            fishing.FishCanvas.target.sizeDelta = _originalTargetSize;
             fishing.FishCanvas.SetColor(false);
             fishing.FishingVisual.SetAnchor(false);
         }

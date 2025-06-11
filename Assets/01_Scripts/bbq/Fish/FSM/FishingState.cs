@@ -1,30 +1,31 @@
 using UnityEngine;
 using System.Threading.Tasks;
+using fishing.Network;
 
 namespace fishing.FSM
 {
     public class FishingState : FishingStateBase
     {
-        private float fishingTime = 0f;
+        private float _fishingTime = 0f;
         private const float FISHING_DURATION = 3f;
-        private bool isWaitingForServer = false;
+        private bool _isWaitingForServer = false;
 
         public FishingState(Fishing fishing) : base(fishing) { }
 
         public override async void Enter()
         {
-            fishingTime = 0f;
-            isWaitingForServer = true;
+            _fishingTime = 0f;
+            _isWaitingForServer = true;
+            fishing.Player.playerAnim.SetBool("Fishing", true);
+            fishing.PlayerMovement.movable = false;
+            fishing.Player.playerSlot.CanChange = false;
             
             try
             {
-                fishing.FishingFish = fishing.FishingRegion.fishWeights[fishing.GetCurrentRegionIndex() - 1].GetFish();
-                
-                // 서버에 낚시 시작 요청
                 await StartServerFishing(() => 
                 {
                     Debug.Log("낚시 준비 완료!");
-                    isWaitingForServer = false;
+                    _isWaitingForServer = false;
                 });
             }
             catch (System.Exception e)
@@ -36,10 +37,12 @@ namespace fishing.FSM
 
         public override void Update()
         {
-            if (isWaitingForServer) return;
+            fishing.FishingVisual.Bobber.position = fishing.Destination;
+            
+            if (_isWaitingForServer) return;
 
-            fishingTime += Time.deltaTime;
-            if (fishingTime >= FISHING_DURATION)
+            _fishingTime += Time.deltaTime;
+            if (_fishingTime >= FISHING_DURATION)
             {
                 fishing.ChangeState(Fishing.FishingStateType.Fighting);
             }
@@ -48,7 +51,17 @@ namespace fishing.FSM
         public override void Exit()
         {
             fishing.FishingVisual.SetAnchor(false);
-            isWaitingForServer = false;
+            _isWaitingForServer = false;
+            fishing.Player.playerAnim.SetBool("Fishing", false);
+            fishing.PlayerMovement.movable = true;
+            fishing.Player.playerSlot.CanChange = true;
+        }
+
+        public override void OnHoldStart()
+        {
+            base.OnHoldStart();
+            fishing.Success = false;
+            fishing.ChangeState(Fishing.FishingStateType.Reeling);
         }
     }
 }

@@ -7,12 +7,12 @@ namespace fishing.FSM
 {
     public class FishingReelingState : FishingStateBase
     {
-        private float reelingTime = 0f;
+        private float _reelingTime = 0f;
         private const float REELING_DURATION = 1f;
         private Vector3 goal;
         private Vector3 p0, p1, p2;
         private FishSO fish;
-        private bool isProcessingResult = false;
+        private bool _isProcessingResult = false;
 
         public FishingReelingState(Fishing fishing) : base(fishing) 
         {
@@ -21,8 +21,8 @@ namespace fishing.FSM
 
         public override async void Enter()
         {
-            reelingTime = 0f;
-            isProcessingResult = true;
+            _reelingTime = 0f;
+            _isProcessingResult = true;
             
             try
             {
@@ -45,14 +45,14 @@ namespace fishing.FSM
                     {
                         HandleFailure();
                     }
-                    isProcessingResult = false;
+                    _isProcessingResult = false;
                 });
             }
             catch (System.Exception e)
             {
                 Debug.LogError($"낚시 결과 처리 중 오류 발생: {e.Message}");
                 HandleFailure();
-                isProcessingResult = false;
+                _isProcessingResult = false;
             }
         }
 
@@ -67,10 +67,10 @@ namespace fishing.FSM
 
         public override void Update()
         {
-            if (isProcessingResult) return;
+            if (_isProcessingResult) return;
 
-            reelingTime += Time.deltaTime;
-            float t = reelingTime / REELING_DURATION;
+            _reelingTime += Time.deltaTime;
+            float t = _reelingTime / REELING_DURATION;
             
             if (t <= 1f)
             {
@@ -142,7 +142,7 @@ namespace fishing.FSM
             try
             {
                 fishing.FishingVisual.ResetBobber();
-                isProcessingResult = false;
+                _isProcessingResult = false;
             }
             catch (System.Exception e)
             {

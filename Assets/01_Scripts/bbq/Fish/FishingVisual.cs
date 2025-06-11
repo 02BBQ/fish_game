@@ -23,6 +23,7 @@ public class FishingVisual : MonoBehaviour
     {
         if (fishingRodTip != null && bobber != null)
         {
+            // Debug.Log("NIGGER");
             lineRenderer.UpdateLine(fishingRodTip.position, bobber.position);
         }
     }

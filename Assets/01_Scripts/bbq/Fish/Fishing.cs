@@ -53,7 +53,7 @@ namespace fishing.FSM
         public FishingVisual FishingVisual => fishingVisual;
         public FishCanvas FishCanvas => fishCanvas;
         public FishingRegion FishingRegion => fishingRegion;
-        public FishSO FishSOBase => fishSOBase;
+        public FishSO FishSOBase => fishSOBase; 
         public FishTray FishTray => fishTray;
         public LayerMask ToAimLayer => toAimLayer;
 

@@ -24,6 +24,7 @@ namespace fishing.FSM
                 var result = await serverService.StartFishing();
                 if (result.IsSuccess)
                 {
+                    Debug.Log($"낚시 시작: GUID={result.Data.guid}, 시간={result.Data.time}, 댄싱 단계={result.Data.dancingStep}");
                     fishing.UpdateState(result.Data.guid, result.Data.dancingStep);
                     fishing.StartCoroutine(WaitForFishing(result.Data.time / 1000f, onFishingReady));
                 }

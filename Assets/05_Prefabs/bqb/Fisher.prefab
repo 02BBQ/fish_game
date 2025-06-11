@@ -211,7 +211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishingVisual: {fileID: 0}
   fishingRegion: {fileID: 0}
-  fishSOBase: {fileID: 0}
+  fishSOBase: {fileID: 11400000, guid: 6955fbb6100623b4aa5e6008c49e59e6, type: 2}
   fishTray: {fileID: 129708328997882035}
   toAimLayer:
     serializedVersion: 2

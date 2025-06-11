@@ -5,7 +5,7 @@ public class FishingLineRenderer : MonoBehaviour
 {
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private int vertexCount = 12;
-    [SerializeField] private float catenaryA = 35.0f;
+    [SerializeField] private float catenaryA = 5.0f;
 
     private void Awake()
     {
