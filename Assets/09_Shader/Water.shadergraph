@@ -80,6 +80,9 @@
         },
         {
             "m_Id": "4cf24d578eec4655ac38f7dabea2deff"
+        },
+        {
+            "m_Id": "ce5a50e64b0e4c4a94e07eb78a017b57"
         }
     ],
     "m_Keywords": [],
@@ -329,6 +332,9 @@
         },
         {
             "m_Id": "5a39cecbcf5a454b9b08c0141f94f0c9"
+        },
+        {
+            "m_Id": "91a0ff67df404f4481e5be1c056bf001"
         }
     ],
     "m_GroupDatas": [
@@ -1042,6 +1048,20 @@
                     "m_Id": "412acb8b47ae418ba8d78628ae628319"
                 },
                 "m_SlotId": 1
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "91a0ff67df404f4481e5be1c056bf001"
+                },
+                "m_SlotId": 0
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "d8691c50e9bf47f29f873e479c62e08d"
+                },
+                "m_SlotId": 1376794723
             }
         },
         {
@@ -2928,6 +2948,9 @@
         },
         {
             "m_Id": "4cf24d578eec4655ac38f7dabea2deff"
+        },
+        {
+            "m_Id": "ce5a50e64b0e4c4a94e07eb78a017b57"
         }
     ]
 }
@@ -3408,7 +3431,7 @@
     "m_ObjectId": "2f9435811a324e47b9acf7903c705546",
     "m_Title": "Depth",
     "m_Position": {
-        "x": 307.333251953125,
+        "x": 307.3333740234375,
         "y": 492.6666259765625
     }
 }
@@ -4129,7 +4152,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "4221b26b90a047ab8f0d78f28047d311",
     "m_Id": 0,
-    "m_DisplayName": "Bend",
+    "m_DisplayName": "BendAmount",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -4894,7 +4917,7 @@
     "m_Title": "Reflect",
     "m_Position": {
         "x": 482.6666259765625,
-        "y": -368.0001220703125
+        "y": -368.00006103515627
     }
 }
 
@@ -5469,10 +5492,10 @@
     "m_Guid": {
         "m_GuidSerialized": "9d069290-2afa-4271-b806-c27f27fb2706"
     },
-    "m_Name": "Bend",
+    "m_Name": "BendAmount",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "Bend",
-    "m_DefaultReferenceName": "_Bend",
+    "m_RefNameGeneratedByDisplayName": "BendAmount",
+    "m_DefaultReferenceName": "_BendAmount",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -6601,6 +6624,42 @@
         "w": 0.0
     },
     "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
+    "m_ObjectId": "91a0ff67df404f4481e5be1c056bf001",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "Property",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": 1970.11376953125,
+            "y": 210.49014282226563,
+            "width": 0.0,
+            "height": 0.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "ea5a402d2d23492a8373fcce03009046"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_Property": {
+        "m_Id": "ce5a50e64b0e4c4a94e07eb78a017b57"
+    }
 }
 
 {
@@ -8461,6 +8520,29 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.BooleanShaderProperty",
+    "m_ObjectId": "ce5a50e64b0e4c4a94e07eb78a017b57",
+    "m_Guid": {
+        "m_GuidSerialized": "8f9b47e6-3fcf-4b57-a39d-68d07c9e2645"
+    },
+    "m_Name": "Bend",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "Bend",
+    "m_DefaultReferenceName": "_Bend",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": false
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "ce9c07ad68f44b9dbc468156ffb55728",
     "m_Id": 0,
@@ -8472,6 +8554,20 @@
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.BooleanMaterialSlot",
+    "m_ObjectId": "cf69b791bdd44736a2ff1d2d29f3b011",
+    "m_Id": 1376794723,
+    "m_DisplayName": "Bend",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "_Bend",
+    "m_StageCapability": 3,
+    "m_Value": false,
+    "m_DefaultValue": false
 }
 
 {
@@ -8679,6 +8775,9 @@
             "m_Id": "5a98238dfaa440cbbfd6fe9524d260a3"
         },
         {
+            "m_Id": "cf69b791bdd44736a2ff1d2d29f3b011"
+        },
+        {
             "m_Id": "54ea5fc532e041c1bddb46c35b949b65"
         }
     ],
@@ -8692,10 +8791,12 @@
     },
     "m_SerializedSubGraph": "{\n    \"subGraph\": {\n        \"fileID\": -5475051401550479605,\n        \"guid\": \"de09aa70beb4a2647b319bb031b6d42f\",\n        \"type\": 3\n    }\n}",
     "m_PropertyGuids": [
-        "f7e62774-45d5-400c-844f-05240046d846"
+        "f7e62774-45d5-400c-844f-05240046d846",
+        "89172586-2abd-44ac-84c6-2577dcf18ee8"
     ],
     "m_PropertyIds": [
-        -717788379
+        -717788379,
+        1376794723
     ],
     "m_Dropdowns": [],
     "m_DropdownSelectedEntries": []
@@ -9293,6 +9394,20 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.BooleanMaterialSlot",
+    "m_ObjectId": "ea5a402d2d23492a8373fcce03009046",
+    "m_Id": 0,
+    "m_DisplayName": "Bend",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Out",
+    "m_StageCapability": 3,
+    "m_Value": false,
+    "m_DefaultValue": false
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "ef133b179f4844c88f46787ee0761aa1",
     "m_Id": -1866142056,
@@ -9768,8 +9883,8 @@
     "m_ObjectId": "f80981e8e7bf4c1c8d9cbfaa5435cc49",
     "m_Title": "Split Area",
     "m_Position": {
-        "x": -913.3333740234375,
-        "y": -916.666748046875
+        "x": -913.3333129882813,
+        "y": -916.6666870117188
     }
 }
 

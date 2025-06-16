@@ -924,4 +924,6 @@ MonoBehaviour:
   _SFXSlider: {fileID: 0}
   _sensSlider: {fileID: 0}
   _ocean: {fileID: 2100000, guid: 519a360260dcf6744957bc2184e1f2b6, type: 2}
-  _toggle: {fileID: 0}
+  _oceanReflection: {fileID: 0}
+  _worldBend: {fileID: 0}
+  materialLabel: Bend

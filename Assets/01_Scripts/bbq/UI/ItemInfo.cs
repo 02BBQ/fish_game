@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ItemInfo : MonoBehaviour
+public class ItemInfo : MonoBehaviour //, IItemInfoVi
 {
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text descText;

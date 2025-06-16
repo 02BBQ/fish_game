@@ -102,6 +102,7 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
+    - Bend
     - Items
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
