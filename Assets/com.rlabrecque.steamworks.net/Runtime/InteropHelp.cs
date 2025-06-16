@@ -12,9 +12,8 @@
 #if !DISABLESTEAMWORKS
 
 using System.Runtime.InteropServices;
-using IntPtr = System.IntPtr;
-
 using System.Text;
+using IntPtr = System.IntPtr;
 
 namespace Steamworks {
 	public class InteropHelp {

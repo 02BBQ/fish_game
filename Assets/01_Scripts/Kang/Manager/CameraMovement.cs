@@ -1,8 +1,5 @@
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 public class CameraMovement : MonoBehaviour, IPointerDownHandler, IDragHandler
 {

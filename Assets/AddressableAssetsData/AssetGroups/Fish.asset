@@ -18,7 +18,8 @@ MonoBehaviour:
   - m_GUID: 5b2690616b7631347ae41063b60b2d2f
     m_Address: Fish/Default
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - default
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: db2422c37c4129946a896d3f9d2182fa, type: 2}

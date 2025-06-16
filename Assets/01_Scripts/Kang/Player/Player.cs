@@ -48,7 +48,7 @@ public class Player : MapEntity
         playerBoat.enabled = true;
         Rigidbody.mass = 10f;
         cForce.enabled = true;
-       // if(SteamManager.instance.connectedToSteam)
+        if(SteamManager.Initialized)
             SteamUserStats.ResetAllStats(true);
     }
     protected override void Update()

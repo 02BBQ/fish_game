@@ -944,7 +944,13 @@ PlayerSettings:
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
   cloudServicesEnabled:
+    Build: 0
+    Game Performance: 0
+    Legacy Analytics: 0
+    Purchasing: 0
+    UDP: 0
     UNet: 1
+    Unity Ads: 0
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -966,11 +972,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 8062aaa5-e2ac-457b-b970-f9f1333fa0a7
+  cloudProjectId: bfe56c49-80ba-4ca1-aa35-540554c4ace8
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: FPS Framework 2025-01-31_21-04-54
-  organizationId: bbqcute63
+  projectName: King of Fish
+  organizationId: seven0905
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

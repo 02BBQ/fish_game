@@ -1,13 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
-using UnityEngine.UI;
-using DG.Tweening;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Audio;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.Rendering.HighDefinition;
+using UnityEngine.UI;
 
 public class SettingManager : SingleTon<SettingManager>
 {

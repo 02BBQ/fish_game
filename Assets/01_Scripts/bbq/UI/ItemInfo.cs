@@ -1,11 +1,9 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using System.Collections.Generic;
 using UnityEngine.ResourceManagement.ResourceLocations;
-using System;
-using System.Linq.Expressions;
 
 public class ItemInfo : MonoBehaviour //, IItemInfoVi
 {

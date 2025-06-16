@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using DG.Tweening;
-using System;
 using Steamworks;
-using UnityEngine.SocialPlatforms.Impl;
+using System;
+using UnityEngine;
 
 public enum AutoMoveState
 {

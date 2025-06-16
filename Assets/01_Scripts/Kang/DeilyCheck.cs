@@ -1,78 +1,103 @@
 using System;
 using TMPro;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 [RequireComponent(typeof(Trigger))]
-public class DeilyCheck : MonoBehaviour
+public class DailyRewardSystem : MonoBehaviour
 {
-    Trigger trigger;
-    private DateTime lastRewardDate;
-    public GameObject particle;
-    public TextMeshPro timerText;
+    [Header("Settings")]
+    public int rewardAmount = 100;
+    public string rewardSaveKey = "LastRewardDate";
+
+    [Header("Visuals")]
+    public TextMeshPro rewardStatusText;
+    public GameObject rewardParticle;
+
+    private Trigger _trigger;
+    private DateTime _lastRewardDate;
+    private bool _canClaimReward = false;
+
     private void Awake()
     {
-        trigger = GetComponent<Trigger>();
-    }
-    private void Start()
-    {
-        string savedDate = PlayerPrefs.GetString("LastRewardDate", "");
-        if (!string.IsNullOrEmpty(savedDate))
-        {
-            lastRewardDate = DateTime.Parse(savedDate);
-        }
-        else
-        {
-            lastRewardDate = DateTime.MinValue;
-        }
-    }
-    private void Update()
-    {
-        UpdateTimerUI();
+        _trigger = GetComponent<Trigger>();
+        LoadRewardData();
     }
 
-    private void UpdateTimerUI()
-    {
-        DateTime now = DateTime.Now;
-        if (lastRewardDate.Date != now.Date)
-            now = lastRewardDate;
-        else
-            now = DateTime.Now;
-        DateTime nextReset = now.Date.AddDays(1); // 내일 00:00
-
-        TimeSpan timeLeft = nextReset - now;
-
-        string formatted = string.Format("{0:00}:{1:00}:{2:00}",
-            Mathf.Max(0, timeLeft.Hours), Mathf.Max(0, timeLeft.Minutes), Mathf.Max(0, timeLeft.Seconds));
-
-        timerText.text = formatted;
-    }
     private void OnEnable()
     {
-        trigger.TriggerEnter.AddListener(CheckDeily);
+        _trigger.TriggerEnter.AddListener(OnPlayerTriggerEnter);
     }
+
     private void OnDisable()
     {
-        trigger.TriggerEnter.RemoveListener(CheckDeily);
+        _trigger.TriggerEnter.RemoveListener(OnPlayerTriggerEnter);
     }
-    private void CheckDeily(Collider arg0)
-    {
-        if (!arg0.CompareTag("Player")) return;
-        DateTime now = DateTime.Now;
 
-        // 날짜가 다르면 보상 지급
-        if (lastRewardDate.Date != now.Date)
+    private void Update()
+    {
+        UpdateRewardStatus();
+    }
+    
+    [ContextMenu("Reset")]
+    public void RemoveMemeory()
+    {
+        PlayerPrefs.DeleteKey(rewardSaveKey);
+    }
+
+    private void LoadRewardData()
+    {
+        string savedDate = PlayerPrefs.GetString(rewardSaveKey, "");
+        _lastRewardDate = string.IsNullOrEmpty(savedDate) ? DateTime.MinValue : DateTime.Parse(savedDate);
+    }
+
+    private void UpdateRewardStatus()
+    {
+        DateTime now = DateTime.Now;
+        DateTime nextResetTime = _lastRewardDate.Date.AddDays(1);
+
+        // 보상 수령 가능 여부 확인
+        _canClaimReward = now >= nextResetTime;
+
+        if (_canClaimReward)
         {
-            
-            lastRewardDate = now;
-            particle.SetActive(true);
-            Definder.GameManager.Coin += 100;
-            PlayerPrefs.SetString("LastRewardDate", lastRewardDate.ToString());
-            PlayerPrefs.Save();
+            rewardStatusText.text = "Reward Ready!";
         }
         else
         {
-            Debug.Log("이미 오늘 보상을 받았습니다.");
+            TimeSpan timeLeft = nextResetTime - now;
+            rewardStatusText.text = string.Format("{0:00}:{1:00}:{2:00}",
+                timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
         }
+    }
+
+    private void OnPlayerTriggerEnter(Collider player)
+    {
+        if (!player.CompareTag("Player")) return;
+
+        if (_canClaimReward)
+        {
+            ClaimReward();
+        }
+        else
+        {
+            Debug.Log("아직 보상을 받을 수 없습니다.");
+        }
+    }
+
+    private void ClaimReward()
+    {
+        _lastRewardDate = DateTime.Now;
+        PlayerPrefs.SetString(rewardSaveKey, _lastRewardDate.ToString());
+        PlayerPrefs.Save();
+
+        // 보상 지급
+        Definder.GameManager.Coin += rewardAmount;
+        rewardParticle.SetActive(true);
+
+        // 효과음 등 추가 효과 구현 가능
+        Debug.Log($"일일 보상 {rewardAmount} 코인 획득!");
+
+        // 상태 업데이트
+        UpdateRewardStatus();
     }
 }
