@@ -9,13 +9,13 @@ using UnityEngine.UI;
 /// </summary>
 public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
 {
-    [field: SerializeField] public Image image { get; private set; }
+    [field: SerializeField] public Image Image { get; private set; }
     public Color selectedColor, normalColor;
     [field: SerializeField] public InventoryItem slotItem;
 
     private void Awake()
     {
-        image = GetComponent<Image>();
+        Image = GetComponent<Image>();
         // Deselect();
     }
 
@@ -36,7 +36,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
         {
             equipable.Equip(plr);
         }
-        image.color = selectedColor;
+        Image.color = selectedColor;
     }
     public void Deselect()
     {
@@ -46,7 +46,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
         {
             plr.playerSlot.currentEquip.Unequip();
         }
-        image.color = normalColor;
+        Image.color = normalColor;
     }
 
     public void OnDrop(PointerEventData eventData)

@@ -6,9 +6,15 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using fishing.Network;
+using System.Threading.Tasks;
 
 public class SellGoods : MonoBehaviour
 {
+    [Header("Server Config")]
+    public ServerConfig serverConfig;
+
+    [Header("UI")]
     Button button;
     public Item item;
     public Image image;
@@ -17,54 +23,58 @@ public class SellGoods : MonoBehaviour
     public TextMeshProUGUI nameText;
     public Item thisItem;
 
+    [Serializable] public class SellItemRequest
+    {
+        public string userId;
+        public string guid;
+    }
+    [Serializable] public class SellResponse
+    {
+        public bool suc;
+        public int money;
+    }
+
+    private IRetryPolicy _retryPolicy;
     private void Awake()
     {
         button = GetComponent<Button>();
-        button.onClick.AddListener(ClickSell);    
+        button.onClick.AddListener(ClickSell);
+        _retryPolicy = new ExponentialBackoffRetryPolicy(serverConfig.MaxRetries, serverConfig.RetryDelaySeconds);
     }
 
-    private void ClickSell()
+    private async void ClickSell()
     {
-        if (item.type != ItemType.Boat)
+        var result = await SellItemAsync(serverConfig.DefaultUserId, item);
+
+        if (!result.IsSuccess) return;
+        if (!result.Data.suc) return;
+
+        Definder.GameManager.moneyController.SetMoney(result.Data.money);
+        InventoryManager.Instance.RemoveItem(item);
+        gameObject.SetActive(false);
+    }
+
+    public async Task<Result<SellResponse>> SellItemAsync(string userId, Item item)
+    {
+        return await _retryPolicy.ExecuteAsync(async () =>
         {
-            // if(InventoryManager.Instance.RemoveItem(item))
-            //     Definder.GameManager.moneyController.EarnMoney(item.price);
-            
-        }
-    }
-
-    [Serializable] public class sellItem { public string userId; public string guid; }
-    [Serializable] public class sellResponse { public bool suc; public int money; }
-
-    public void SellItem(string userId, Item itme)
-    {
-        StartCoroutine(SellItemCoroutine(userId, itme));
-    }
-
-
-    private IEnumerator SellItemCoroutine(string userId, Item item)
-    {
-            var requestData = new sellItem { userId = userId, guid =  item.guid};
-        string json = JsonConvert.SerializeObject(requestData);
-        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
-
-        using (UnityWebRequest request = new UnityWebRequest($"http://172.31.2.88:5926/api/store/sell", "POST"))
-        {
+            var requestData = new SellItemRequest { userId = userId, guid = item.guid };
+            string json = JsonConvert.SerializeObject(requestData);
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+            using var request = new UnityWebRequest($"{serverConfig.BaseUrl}store/sell", "POST");
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
-
-            yield return request.SendWebRequest(); // brr brr
+            var op = request.SendWebRequest();
+            while (!op.isDone)
+                await Task.Yield();
             if (request.result == UnityWebRequest.Result.Success)
             {
-                // fishesJson 클래스를 사용하여 파싱
-                var response = JsonConvert.DeserializeObject<InitData>(request.downloadHandler.text);
+                var response = JsonConvert.DeserializeObject<SellResponse>(request.downloadHandler.text);
+                return Result<SellResponse>.Success(response);
             }
-            else
-            {
-                Debug.LogError($"Error: {request.error}");
-            }
-        }
+            return Result<SellResponse>.Failure(new Error($"Server error: {request.error}", Error.ErrorType.Server));
+        });
     }
     
     public void SetItem(Item item)

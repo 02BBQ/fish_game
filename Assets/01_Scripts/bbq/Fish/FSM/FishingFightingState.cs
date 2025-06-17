@@ -144,14 +144,12 @@ namespace fishing.FSM
 
         private void CheckGameEnd()
         {
-            if (_current >= _goal)
+            bool finished = _current >= _goal;
+            bool gameover = _timeout <= 0 || _health <= 0;
+
+            if (finished || gameover)
             {
-                fishing.Success = true;
-                EndGame();
-            }
-            else if (_timeout <= 0 || _health <= 0)
-            {
-                fishing.Success = false;
+                fishing.Success = finished && !gameover;
                 EndGame();
             }
         }

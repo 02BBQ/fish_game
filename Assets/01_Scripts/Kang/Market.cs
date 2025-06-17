@@ -20,11 +20,20 @@ public class Market : Interactor
 
     private void Awake()
     {
-
         LoadAndSortItems();    
-
         initItems = new List<SellGoods>();
+        // LoadFishingRods();
+    }
 
+    private void LoadFishingRods()
+    {
+        // 인벤토리에서 낚시대 아이템들을 가져와서 판매 UI에 표시
+        var fishingRods = InventoryManager.Instance.GetItemsByType(ItemType.FishingRod);
+        foreach (var rod in fishingRods)
+        {
+            SellGoods copyGoods = Instantiate(sellGoods, sellUIParents[(int)rod.type]).GetComponent<SellGoods>();
+            copyGoods.SetItem(rod);
+        }
     }
 
     public void LoadAndSortItems()
@@ -50,11 +59,8 @@ public class Market : Interactor
     protected override void Start()
     {
         base.Start();
-        // foreach (Item item in buyItems)
-        // {
-        //     AddGoodsInBuy(item);
-        // }
     }
+
     private void OnEnable()
     {
         EventManager.AddListener<AddItemEvent>(AddGoodsInSell);
@@ -73,6 +79,7 @@ public class Market : Interactor
             GuideText.Instance.AddGuide("Market");
         }
     }
+
     protected override void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -87,11 +94,12 @@ public class Market : Interactor
         BuyGoods copyGoods = Instantiate(buyGoods, buyUIParents[(int)item.type]).GetComponent<BuyGoods>();
         copyGoods.SetItem(item);
     }
+
     private void AddGoodsInSell(AddItemEvent addItemEvent)
     {
         foreach (Item addItem in addItemEvent.getItems)
         {
-            bool isItemInInit = initItems.Any(initItem => initItem.item.nameStr == addItem.nameStr);
+            bool isItemInInit = false; //initItems.Any(initItem => initItem.item.nameStr == addItem.nameStr);
             if (!isItemInInit)
             {
                 SellGoods copyGoods = Instantiate(sellGoods, sellUIParents[(int)addItem.type]).GetComponent<SellGoods>();
@@ -103,15 +111,16 @@ public class Market : Interactor
                 initItems.First(initItem => initItem.item.nameStr == addItem.nameStr).gameObject.SetActive(true);
             }
         }
-        foreach (SellGoods initItem in initItems)
-        {
-            bool isItemInAdd = addItemEvent.getItems.Any(addItem => addItem.nameStr == initItem.item.nameStr);
-            if (!isItemInAdd)
-            {
-                initItem.gameObject.SetActive(false);
-            }
-        }
+        // foreach (SellGoods initItem in initItems)
+        // {
+        //     bool isItemInAdd = addItemEvent.getItems.Any(addItem => addItem.nameStr == initItem.item.nameStr);
+        //     if (!isItemInAdd)
+        //     {
+        //         initItem.gameObject.SetActive(false);
+        //     }
+        // }
     }
+
     protected override void OnInterect()
     {
         marketUI.gameObject.SetActive(true);

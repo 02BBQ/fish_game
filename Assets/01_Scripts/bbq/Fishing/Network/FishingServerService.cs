@@ -8,11 +8,14 @@ namespace fishing.Network
 {
     public class FishingServerService : MonoBehaviour, IFishingServerService
     {
+        [Header("Server Config")]
+        public ServerConfig serverConfig;
+
         private IRetryPolicy _retryPolicy;
         
         private void Awake()
         {
-            _retryPolicy = new ExponentialBackoffRetryPolicy(ServerConfig.MaxRetries, ServerConfig.RetryDelaySeconds);
+            _retryPolicy = new ExponentialBackoffRetryPolicy(serverConfig.MaxRetries, serverConfig.RetryDelaySeconds);
         }
         
         public async Task<Result<StartFishingResponse>> StartFishing()
@@ -21,7 +24,7 @@ namespace fishing.Network
             {
                 return await _retryPolicy.ExecuteAsync(async () =>
                 {
-                    using var request = UnityWebRequest.PostWwwForm($"{ServerConfig.BaseUrl}fish/start", "");
+                    using var request = UnityWebRequest.PostWwwForm($"{serverConfig.BaseUrl}fish/start", "");
                     await request.SendWebRequest();
                     
                     if (request.result == UnityWebRequest.Result.Success)
@@ -57,7 +60,7 @@ namespace fishing.Network
                     string json = JsonConvert.SerializeObject(requestData);
                     byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
                     
-                    using var request = new UnityWebRequest($"{ServerConfig.BaseUrl}fish/end", "POST");
+                    using var request = new UnityWebRequest($"{serverConfig.BaseUrl}fish/end", "POST");
                     request.uploadHandler = new UploadHandlerRaw(bodyRaw);
                     request.downloadHandler = new DownloadHandlerBuffer();
                     request.SetRequestHeader("Content-Type", "application/json");
@@ -89,7 +92,7 @@ namespace fishing.Network
         
         public async Task<Result<InitData>> GetData(string userId)
         {
-            try
+            // try
             {
                 return await _retryPolicy.ExecuteAsync(async () =>
                 {
@@ -97,7 +100,7 @@ namespace fishing.Network
                     string json = JsonConvert.SerializeObject(requestData);
                     byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
                     
-                    using var request = new UnityWebRequest($"{ServerConfig.BaseUrl}datastore/initload", "POST");
+                    using var request = new UnityWebRequest($"{serverConfig.BaseUrl}datastore/initload", "POST");
                     request.uploadHandler = new UploadHandlerRaw(bodyRaw);
                     request.downloadHandler = new DownloadHandlerBuffer();
                     request.SetRequestHeader("Content-Type", "application/json");
@@ -116,15 +119,15 @@ namespace fishing.Network
                     ));
                 });
             }
-            catch (Exception ex)
-            {
-                Debug.LogError($"Get data failed: {ex}");
-                return Result<InitData>.Failure(new Error(
-                    "Unexpected error occurred",
-                    Error.ErrorType.Unknown,
-                    ex
-                ));
-            }
+            // catch (Exception ex)
+            // {
+            //     Debug.LogError($"Get data failed: {ex}");
+            //     return Result<InitData>.Failure(new Error(
+            //         "Unexpected error occurred",
+            //         Error.ErrorType.Unknown,
+            //         ex
+            //     ));
+            // }
         }
         
         [Serializable] private class EndFishingRequest { public string guid; public bool suc; }

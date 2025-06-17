@@ -39,6 +39,9 @@ namespace ServerData
 }
 public class GameManager : MonoBehaviour
 {
+    [Header("Server Config")]
+    public ServerConfig serverConfig;
+
     public static GameManager Instance { get; private set; }
     public Transform spawnPoint;
     public bool startGame = false;
@@ -56,9 +59,6 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            
-            // Initialize ServerConfig
-            ServerConfig.Initialize();
         }
         else
         {
@@ -75,10 +75,10 @@ public class GameManager : MonoBehaviour
 
     private async void Start()
     {
-        var result = await serverService.GetData("test");
+        var result = await serverService.GetData(serverConfig.DefaultUserId);
         if (result.IsSuccess)
         {
-            handleFishJson(result.Data);
+            await HandleInitData(result.Data);
         }
         else
         {
@@ -89,45 +89,64 @@ public class GameManager : MonoBehaviour
         Debug.Log("GameManager Start");
     }
 
-    private void handleFishJson(InitData data)
+    private async Task HandleInitData(InitData data)
+    {
+        await HandleMoney(data);
+        await HandleFishInventory(data.inventoryData);
+        await HandleFishingRodInventory(data.inventoryData);
+    }
+
+    private Task HandleMoney(InitData data)
     {
         moneyController?.SetMoney(data.money);
-        if (data.inventoryData.Fish != null)
+        return Task.CompletedTask;
+    }
+
+    private Task HandleFishInventory(InventoryData inventoryData)
+    {
+        if (inventoryData.Fish == null) return Task.CompletedTask;
+
+        foreach (FishJson fish in inventoryData.Fish)
         {
-            foreach (FishJson fish in data.inventoryData.Fish)
+            FishSO so = ScriptableObject.CreateInstance<FishSO>();
+            so.Initialize(fish);
+            InventoryManager.Instance.AddItem(so);
+        }
+        return Task.CompletedTask;
+    }
+
+    private async Task HandleFishingRodInventory(InventoryData inventoryData)
+    {
+        if (inventoryData.FishingRod == null) return;
+
+        var loadTasks = new List<Task>();
+        foreach (InventoryItemData rod in inventoryData.FishingRod)
+        {
+            loadTasks.Add(LoadFishingRod(rod));
+        }
+        await Task.WhenAll(loadTasks);
+    }
+
+    private async Task LoadFishingRod(InventoryItemData rodData)
+    {
+        try
+        {
+            var handle = Addressables.LoadAssetAsync<FishingRod>(rodData.Address);
+            var fishingRod = await handle.Task;
+            
+            if (fishingRod != null)
             {
-                FishSO so = ScriptableObject.CreateInstance<FishSO>();
-                so.Initialize(fish);
-                InventoryManager.Instance.AddItem(so);
+                fishingRod.guid = rodData.guid;
+                InventoryManager.Instance.AddItem(fishingRod);
+            }
+            else
+            {
+                Debug.LogError($"FishingRod component not found on prefab: {rodData.Address}");
             }
         }
-        if (data.inventoryData.FishingRod != null)
+        catch (Exception ex)
         {
-            foreach (InventoryItemData fish in data.inventoryData.FishingRod)
-            {
-                // Load fishing rod prefab from addressables
-                var handle = Addressables.LoadAssetAsync<FishingRod>(fish.Address);
-                handle.Completed += (op) =>
-                {
-                    if (op.Status == AsyncOperationStatus.Succeeded)
-                    {
-                        var fishingRod = op.Result;
-                        if (fishingRod != null)
-                        {
-                            fishingRod.guid = fish.guid;
-                            InventoryManager.Instance.AddItem(fishingRod);
-                        }
-                        else
-                        {
-                            Debug.LogError($"FishingRod component not found on prefab: {fish.Address}");
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogError($"Failed to load fishing rod from address: {fish.Address}");
-                    }
-                };
-            }
+            Debug.LogError($"Failed to load fishing rod from address {rodData.Address}: {ex.Message}");
         }
     }
 
