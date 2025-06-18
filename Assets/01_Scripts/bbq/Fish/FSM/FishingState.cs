@@ -20,19 +20,19 @@ namespace fishing.FSM
             fishing.PlayerMovement.movable = false;
             fishing.Player.playerSlot.CanChange = false;
             
-            try
-            {
+            // try
+            // {
                 await StartServerFishing(() => 
                 {
                     Debug.Log("낚시 준비 완료!");
                     _isWaitingForServer = false;
-                });
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"낚시 시작 중 오류 발생: {e.Message}");
-                fishing.ChangeState(Fishing.FishingStateType.Idle);
-            }
+                }); 
+            // }
+            // catch (System.Exception e)
+            // {
+            //     Debug.LogError($"낚시 시작 중 오류 발생: {e.Message}");
+            //     fishing.ChangeState(Fishing.FishingStateType.Idle);
+            // }
         }
 
         public override void Update()

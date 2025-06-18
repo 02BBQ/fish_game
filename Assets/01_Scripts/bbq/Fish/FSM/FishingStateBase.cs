@@ -14,13 +14,13 @@ namespace fishing.FSM
         protected FishingStateBase(Fishing fishing)
         {
             this.fishing = fishing;
-            this.serverService = fishing.GetComponent<FishingServerService>();
+            this.serverService = GameManager.Instance.serverService;
         }
 
         protected async Task StartServerFishing(Action onFishingReady)
         {
-            try 
-            {
+            // try 
+            // {
                 var result = await serverService.StartFishing();
                 if (result.IsSuccess)
                 {
@@ -32,11 +32,11 @@ namespace fishing.FSM
                 {
                     Debug.LogError($"낚시 시작 실패: {result.Error.Message}");
                 }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"서버 통신 오류: {e.Message}");
-            }
+            // }
+            // catch (Exception e)
+            // {
+            //     Debug.LogError($"서버 통신 오류: {e.Message}");
+            // }
         }
         
         private IEnumerator WaitForFishing(float waitTime, Action callback)

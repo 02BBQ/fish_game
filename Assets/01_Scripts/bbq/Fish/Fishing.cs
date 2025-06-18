@@ -66,11 +66,6 @@ namespace fishing.FSM
         private void Awake()
         {
             StateMachine = new FishingStateMachine();
-
-            if (GetComponent<FishingServerService>() == null)
-            {
-                gameObject.AddComponent<FishingServerService>();
-            }
         }
 
         private void OnEnable() 
