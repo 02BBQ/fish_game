@@ -37,12 +37,11 @@ namespace ServerData
         public InventoryData inventoryData;
     }
 }
-public class GameManager : MonoBehaviour
+public class GameManager : SingleTon<GameManager>
 {
     [Header("Server Config")]
     public ServerConfig serverConfig;
 
-    public static GameManager Instance { get; private set; }
     public Transform spawnPoint;
     public bool startGame = false;
     private AsyncOperationHandle<GameObject> handle;
@@ -55,16 +54,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
         moneyController = GetComponent<MoneyController>();
         serverService = GetComponent<FishingServerService>();
         if (serverService == null)
