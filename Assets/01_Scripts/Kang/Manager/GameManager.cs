@@ -87,6 +87,7 @@ public class GameManager : SingleTon<GameManager>
 
     private Task HandleMoney(InitData data)
     {
+        Debug.Log(data.money);
         moneyController?.SetMoney(data.money);
         return Task.CompletedTask;
     }

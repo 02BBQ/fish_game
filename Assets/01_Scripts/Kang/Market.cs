@@ -20,7 +20,6 @@ public class Market : Interactor
     {
         LoadAndSortItems();    
         initItems = new List<SellGoods>();
-        // LoadFishingRods();
     }
 
     private void LoadFishingRods()
@@ -61,12 +60,12 @@ public class Market : Interactor
 
     private void OnEnable()
     {
-        EventManager.AddListener<AddItemEvent>(AddGoodsInSell);
+        EventManager.AddListener<AddItemEvent>(AddGoodInSell);
     }
 
     private void OnDisable()
     {
-        EventManager.RemoveListener<AddItemEvent>(AddGoodsInSell);
+        EventManager.RemoveListener<AddItemEvent>(AddGoodInSell);
     }
 
     protected override void OnTriggerEnter(Collider other)
@@ -93,21 +92,19 @@ public class Market : Interactor
         copyGoods.SetItem(item);
     }
 
-    private void AddGoodsInSell(AddItemEvent addItemEvent)
+    private void AddGoodInSell(AddItemEvent addItemEvent)
     {
-        foreach (Item addItem in addItemEvent.getItems)
+        Item addItem = addItemEvent.newItem;
+        bool isItemInInit = false; //initItems.Any(initItem => initItem.item.nameStr == addItem.nameStr);
+        if (!isItemInInit)
         {
-            bool isItemInInit = false; //initItems.Any(initItem => initItem.item.nameStr == addItem.nameStr);
-            if (!isItemInInit)
-            {
-                SellGoods copyGoods = Instantiate(sellGoods, sellUIParents[(int)addItem.type]).GetComponent<SellGoods>();
-                copyGoods.SetItem(addItem);
-                initItems.Add(copyGoods);
-            }
-            else
-            {
-                initItems.First(initItem => initItem.item.nameStr == addItem.nameStr).gameObject.SetActive(true);
-            }
+            SellGoods copyGoods = Instantiate(sellGoods, sellUIParents[(int)addItem.type]).GetComponent<SellGoods>();
+            copyGoods.SetItem(addItem);
+            initItems.Add(copyGoods);
+        }
+        else
+        {
+            initItems.First(initItem => initItem.item.nameStr == addItem.nameStr).gameObject.SetActive(true);
         }
         // foreach (SellGoods initItem in initItems)
         // {

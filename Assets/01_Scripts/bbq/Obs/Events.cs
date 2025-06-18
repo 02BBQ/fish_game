@@ -21,5 +21,5 @@ public class CamShakeEvent : GameEvent
 
 public class AddItemEvent : GameEvent
 {
-    public List<Item> getItems;
+    public Item newItem;
 }
