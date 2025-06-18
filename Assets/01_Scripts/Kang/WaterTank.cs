@@ -38,7 +38,7 @@ public class WaterTank : Interactor
             fish.gameObject.SetActive(false);
         }
 
-    /*    // Steam 인벤토리에서 물고기 아이템 조회
+        // Steam 인벤토리에서 물고기 아이템 조회
         foreach (FishSO fishDef in fishDefinitions)
         {
             SteamItemDef_t itemDef = new SteamItemDef_t(fishDef.price);
@@ -51,7 +51,7 @@ public class WaterTank : Interactor
                     AddFishToTank(fishDef);
                 }
             }
-        }*/
+        }
     }
 
     private void AddFishToTank(FishSO fishData)
@@ -93,8 +93,7 @@ public class WaterTank : Interactor
     {
         // 물고기 탭 UI 열기
         UIManager.Instance.fishTank.SetActive(true);
-
         // 인벤토리 새로고침 (UI에 최신 데이터 반영)
-        //SteamInventoryManager.Instance.RefreshInventory();
+        SteamInventoryManager.Instance.RefreshInventory();
     }
 }
