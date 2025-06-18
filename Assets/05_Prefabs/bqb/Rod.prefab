@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 842091963337499262}
   - component: {fileID: 8770643933864969242}
   - component: {fileID: 1665215614263982792}
+  - component: {fileID: 5920754476889125800}
   m_Layer: 0
   m_Name: Rod
   m_TagString: Untagged
@@ -53,10 +54,8 @@ MonoBehaviour:
   fishingRod: {fileID: 842091963337499262}
   fishingRodTip: {fileID: 1884694934822234379}
   bobber: {fileID: 8846401139343823445}
-  <shakeParticleBase>k__BackingField: {fileID: 6854126403879113214, guid: 42dd03ebf3a61464580cc8e839e69ff1, type: 3}
-  <linerenderer>k__BackingField: {fileID: 1665215614263982792}
-  vertexCount: 12
-  catenaryA: 25
+  shakeParticleBase: {fileID: 0}
+  lineRenderer: {fileID: 5920754476889125800}
 --- !u!120 &1665215614263982792
 LineRenderer:
   serializedVersion: 2
@@ -174,6 +173,21 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &5920754476889125800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150236819499210394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 206ae3d7a472ac642a8495270643363e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineRenderer: {fileID: 1665215614263982792}
+  vertexCount: 12
+  catenaryA: 5
 --- !u!1 &1107995160072106584
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
+using ServerData;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -7,32 +9,147 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.SceneManagement;
+using fishing.Network;
+using System.Threading.Tasks;
 
-public class GameManager : MonoBehaviour
+namespace ServerData
 {
-    int _coin;
-    public int Coin { 
-        get => _coin;
-        set
-        {
-            _coin = value;
-            SetCoinText();
-        }
+    [System.Serializable]
+    public class InventoryItemData
+    {
+        public string guid;
+        public string Address;
+        public string Category;
+        public int? CurrencyCount;
+        public string Desc;
+        public int Id;
+        public int Limit;
+        public int MaxPerPurchase;
+        public string Name;
+        public bool Stackable;
+        // public ServerItem item;
     }
 
-    [SerializeField] private TextMeshProUGUI coinText;
+    [System.Serializable]
+    public class ServerResponse
+    {
+        public int money;
+        public InventoryData inventoryData;
+    }
+}
+public class GameManager : MonoBehaviour
+{
+    [Header("Server Config")]
+    public ServerConfig serverConfig;
+
+    public static GameManager Instance { get; private set; }
     public Transform spawnPoint;
     public bool startGame = false;
     private AsyncOperationHandle<GameObject> handle;
     private string currentPath;
     private Action<GameObject> currentCallback;
 
-    private void Start()
+
+    public MoneyController moneyController;
+    public IFishingServerService serverService;
+
+    private void Awake()
     {
-        Time.timeScale = 1f;
-        Coin = 100000;
-        SetCoinText();
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        moneyController = GetComponent<MoneyController>();
+        serverService = GetComponent<FishingServerService>();
+        if (serverService == null)
+        {
+            serverService = gameObject.AddComponent<FishingServerService>();
+        }
     }
+
+    private async void Start()
+    {
+        var result = await serverService.GetData(serverConfig.DefaultUserId);
+        if (result.IsSuccess)
+        {
+            await HandleInitData(result.Data);
+        }
+        else
+        {
+            Debug.LogError($"Failed to get data: {result.Error.Message}");
+        }
+        
+        Time.timeScale = 1f;
+        Debug.Log("GameManager Start");
+    }
+
+    private async Task HandleInitData(InitData data)
+    {
+        await HandleMoney(data);
+        await HandleFishInventory(data.inventoryData);
+        await HandleFishingRodInventory(data.inventoryData);
+    }
+
+    private Task HandleMoney(InitData data)
+    {
+        moneyController?.SetMoney(data.money);
+        return Task.CompletedTask;
+    }
+
+    private Task HandleFishInventory(InventoryData inventoryData)
+    {
+        if (inventoryData.Fish == null) return Task.CompletedTask;
+
+        foreach (FishJson fish in inventoryData.Fish)
+        {
+            FishSO so = ScriptableObject.CreateInstance<FishSO>();
+            so.Initialize(fish);
+            InventoryManager.Instance.AddItem(so);
+        }
+        return Task.CompletedTask;
+    }
+
+    private async Task HandleFishingRodInventory(InventoryData inventoryData)
+    {
+        if (inventoryData.FishingRod == null) return;
+
+        var loadTasks = new List<Task>();
+        foreach (InventoryItemData rod in inventoryData.FishingRod)
+        {
+            loadTasks.Add(LoadFishingRod(rod));
+        }
+        await Task.WhenAll(loadTasks);
+    }
+
+    private async Task LoadFishingRod(InventoryItemData rodData)
+    {
+        try
+        {
+            var handle = Addressables.LoadAssetAsync<FishingRod>(rodData.Address);
+            var fishingRod = await handle.Task;
+            
+            if (fishingRod != null)
+            {
+                fishingRod.guid = rodData.guid;
+                InventoryManager.Instance.AddItem(fishingRod);
+            }
+            else
+            {
+                Debug.LogError($"FishingRod component not found on prefab: {rodData.Address}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to load fishing rod from address {rodData.Address}: {ex.Message}");
+        }
+    }
+
     [ContextMenu("dsfa")]
     public void Delete()
     {
@@ -49,14 +166,10 @@ public class GameManager : MonoBehaviour
     public void OnClickQuit()
     {
 #if UNITY_EDITOR
-        EditorApplication.ExitPlaymode();  // ¿¡µðÅÍ¿¡¼­ ½ÇÇà ÁßÀÌ¸é Play ¸ðµå Á¾·á
+        EditorApplication.ExitPlaymode();  // ï¿½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ Play ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 #else
-        Application.Quit();  // ºôµåµÈ °ÔÀÓ¿¡¼­´Â Á¤»ó Á¾·á
+        Application.Quit();  // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 #endif
-    }
-    private void SetCoinText()
-    {
-        coinText.text = _coin.ToString("0");
     }
 
     public void PauseGame()
@@ -100,7 +213,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            print("¾øÀ½;;");
+            print("ï¿½ï¿½ï¿½ï¿½;;");
         }
         
         Addressables.Release(locationHandle);
@@ -113,7 +226,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"·Îµå¿¡ ½ÇÆÐÇß½À´Ï´Ù.");
+            Debug.LogError($"ï¿½Îµå¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.");
         }
     }
 

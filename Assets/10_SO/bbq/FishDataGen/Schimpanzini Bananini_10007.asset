@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 10007
   fishSprite: {fileID: 0}
   baseWeight: 570
-  spec: "\uCE68\uD310\uC9C0\uB178 \uBC14\uB098\uB2C8\uB2C8"
+  spec: "\uC2EC\uD310\uC9C0\uB2C8 \uBC14\uB098\uB2C8\uB2C8"
   basePrice: 800
   MaxWeightMultiplier: 3
   MinWeightMultiplier: 1
@@ -23,4 +23,4 @@ MonoBehaviour:
   DancingStepMin: 0.4
   visualAddress: 
   rarity: UltraSuperRare
-  description: 
+  description: Bananuci, monkey, monkey, monkey, uchi.

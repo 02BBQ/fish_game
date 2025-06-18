@@ -9,11 +9,13 @@ public class Item : ScriptableObject
     public ItemType type;
 
     public string nameStr;
-    public int cost;
+    public int price;
 
     [TextArea]
     public string description;
     public bool stackable = true;
+
+    public string guid;
     
     [Header("Visual")]
     public string visualPath;

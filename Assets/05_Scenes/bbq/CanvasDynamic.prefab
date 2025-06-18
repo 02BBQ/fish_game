@@ -467,10 +467,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df41988c7ced4d041a7b1136b489fadb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <nameText>k__BackingField: {fileID: 5837387934079546375}
-  <descText>k__BackingField: {fileID: 8602020047236526920}
-  <modelAddress>k__BackingField: Fish/Default
-  modelPosition: {fileID: 0}
+  nameText: {fileID: 0}
+  descText: {fileID: 0}
+  modelLoader: {fileID: 0}
+  itemImage: {fileID: 0}
 --- !u!1 &759824344449430473
 GameObject:
   m_ObjectHideFlags: 0
@@ -3073,7 +3073,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7634746024959427849}
-  m_Father: {fileID: 613751428944852638}
+  m_Father: {fileID: 2166261556320464902}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4445,7 +4445,6 @@ RectTransform:
   - {fileID: 5701972144833729404}
   - {fileID: 2252342996598622149}
   - {fileID: 3748171651735611795}
-  - {fileID: 3106263517503232775}
   - {fileID: 6589042397870494345}
   - {fileID: 7581136738167426997}
   - {fileID: 2986741194170065982}
@@ -5260,6 +5259,7 @@ RectTransform:
   - {fileID: 7156120549572475158}
   - {fileID: 3599185009734578810}
   - {fileID: 7021348354399531560}
+  - {fileID: 3106263517503232775}
   m_Father: {fileID: 613751428944852638}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

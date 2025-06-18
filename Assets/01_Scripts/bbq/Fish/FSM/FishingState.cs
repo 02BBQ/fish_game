@@ -1,41 +1,67 @@
 using UnityEngine;
+using System.Threading.Tasks;
+using fishing.Network;
 
-public class FishingState : FishingStateBase
+namespace fishing.FSM
 {
-    private float timeout;
-
-    public FishingState(Fishing fishing) : base(fishing) 
+    public class FishingState : FishingStateBase
     {
-    }
+        private float _fishingTime = 0f;
+        private const float FISHING_DURATION = 3f;
+        private bool _isWaitingForServer = false;
 
-    public override void Enter()
-    {
-        base.Enter();
-        if (fishing.Hit.collider != null && fishing.Hit.collider.gameObject.layer != LayerMask.NameToLayer("Suimono_Water"))
+        public FishingState(Fishing fishing) : base(fishing) { }
+
+        public override async void Enter()
         {
-            fishing.ChangeState(Fishing.FishingStateType.Reeling);
-            return;
+            _fishingTime = 0f;
+            _isWaitingForServer = true;
+            fishing.Player.playerAnim.SetBool("Fishing", true);
+            fishing.PlayerMovement.movable = false;
+            fishing.Player.playerSlot.CanChange = false;
+            
+            // try
+            // {
+                await StartServerFishing(() => 
+                {
+                    Debug.Log("낚시 준비 완료!");
+                    _isWaitingForServer = false;
+                }); 
+            // }
+            // catch (System.Exception e)
+            // {
+            //     Debug.LogError($"낚시 시작 중 오류 발생: {e.Message}");
+            //     fishing.ChangeState(Fishing.FishingStateType.Idle);
+            // }
         }
 
-         StartServerFishing(OnFishingReady);
-    }
+        public override void Update()
+        {
+            fishing.FishingVisual.Bobber.position = fishing.Destination;
+            
+            if (_isWaitingForServer) return;
 
-    private void OnFishingReady()
-    {
-        if (fishing.CurrentStateType != Fishing.FishingStateType.Fishing) return;
-        
-        fishing.ChangeState(Fishing.FishingStateType.Fighting);
-    }
+            _fishingTime += Time.deltaTime;
+            if (_fishingTime >= FISHING_DURATION)
+            {
+                fishing.ChangeState(Fishing.FishingStateType.Fighting);
+            }
+        }
 
-    public override void Update()
-    {
-    }
+        public override void Exit()
+        {
+            fishing.FishingVisual.SetAnchor(false);
+            _isWaitingForServer = false;
+            fishing.Player.playerAnim.SetBool("Fishing", false);
+            fishing.PlayerMovement.movable = true;
+            fishing.Player.playerSlot.CanChange = true;
+        }
 
-    public override void OnHoldStart()
-    {
-        base.OnHoldStart();
-
-        fishing.Success = false;
-        fishing.ChangeState(Fishing.FishingStateType.Reeling);
+        public override void OnHoldStart()
+        {
+            base.OnHoldStart();
+            fishing.Success = false;
+            fishing.ChangeState(Fishing.FishingStateType.Reeling);
+        }
     }
 }

@@ -1,9 +1,14 @@
-public class FishingIdleState : FishingStateBase
-{
-    public FishingIdleState(Fishing fishing) : base(fishing) { }
+using UnityEngine;
 
-    public override void OnHoldStart()
+namespace fishing.FSM
+{
+    public class FishingIdleState : FishingStateBase
     {
-        fishing.ChangeState(Fishing.FishingStateType.Aiming);
+        public FishingIdleState(Fishing fishing) : base(fishing) { }
+
+        public override void OnHoldStart()
+        {
+            fishing.ChangeState(Fishing.FishingStateType.Aiming);
+        }
     }
 }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 10025
   fishSprite: {fileID: 0}
-  baseWeight: 420
+  baseWeight: 304
   spec: "\uAE00\uB85C\uB974\uBCF4 \uD504\uB8E9\uD1A0\uB4DC\uB9B4\uB85C"
   basePrice: 800
   MaxWeightMultiplier: 3
@@ -23,4 +23,5 @@ MonoBehaviour:
   DancingStepMin: 0.4
   visualAddress: 
   rarity: UltraSuperRare
-  description: 
+  description: Glorbo Fruttodrillo, deep in the Swamp, reigned. His body was a huge
+    striped watermelon.

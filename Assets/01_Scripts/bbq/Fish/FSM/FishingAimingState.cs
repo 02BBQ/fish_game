@@ -1,57 +1,64 @@
 using UnityEngine;
 
-public class FishingAimingState : FishingStateBase
+namespace fishing.FSM
 {
-    private Transform aimTransform;
-    private Vector3 origin;
-    private Vector3 direction;
-    private GameObject rig;
-
-    public FishingAimingState(Fishing fishing) : base(fishing) { }
-
-    public override void Enter()
+    public class FishingAimingState : FishingStateBase
     {
-        fishing.PlayerMovement.StopMoveTarget();
-        rig = fishing.Player.transform.GetComponentInChildren<Animator>().gameObject;
-        
-        fishing.Aim.SetActive(true);
-        direction = rig.transform.forward;
-        origin = fishing.Player.transform.position;
-        aimTransform = fishing.Aim.transform;
-        aimTransform.position = origin;
-        fishing.Distance = 1;
-    }
+        private Transform _aimTransform;
+        private Vector3 _origin;
+        private Vector3 _direction;
+        private GameObject _rig;
+        private bool _isAiming = false;
 
-    public override void Update()
-    {
-        origin = fishing.Player.transform.position;
-        direction = rig.transform.forward;
-        
-        fishing.Distance = fishing.IsMouseDown ? 
-            Mathf.Min(fishing.Distance + Time.deltaTime, fishing.MaxDistance) : 
-            fishing.Distance;
-            
-        aimTransform.position = origin + direction * fishing.Distance;
-        
-        if (Physics.Raycast(aimTransform.position + Vector3.up * 4, -Vector3.up, 
-            out var hit, 50, fishing.ToAimLayer))
+        public FishingAimingState(Fishing fishing) : base(fishing) { }
+
+        public override void Enter()
         {
-            aimTransform.position = new Vector3(aimTransform.position.x, hit.point.y, aimTransform.position.z);
-            fishing.Hit = hit;
+            _isAiming = true;
+            
+            fishing.PlayerMovement.StopMoveTarget();
+            _rig = fishing.Player.transform.GetComponentInChildren<Animator>().gameObject;
+            
+            _direction = _rig.transform.forward;
+            _origin = fishing.Player.transform.position;
+            fishing.FishTray.throwPower = 3f;
+            fishing.FishTray.trajectoryLine.enabled = true;
         }
-    }
 
-    public override void OnHoldEnd()
-    {
-        fishing.Destination = aimTransform.position;
-        fishing.Player.playerAnim.SetBool("Fishing", true);
-        fishing.PlayerMovement.movable = false;
-        fishing.Player.playerSlot.CanChange = false;
-        fishing.Success = false;
-    }
+        public override void Update()
+        {
+            if (fishing.IsMouseDown)
+            {
+                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out var hit, 100f, fishing.ToAimLayer))
+                {
+                    fishing.Destination = hit.point;
+                    fishing.Distance = Vector3.Distance(fishing.Player.transform.position, hit.point);
+                    fishing.Hit = hit;
+                }
+            }
 
-    public override void Exit()
-    {
-        fishing.Aim.SetActive(false);
+            fishing.FishTray.throwPower = Mathf.Min(fishing.FishTray.throwPower + Time.deltaTime, 7f);
+
+            if (_isAiming)
+                fishing.FishTray.UpdateTray(_rig.transform);
+        }
+
+        public override void OnHoldEnd()
+        {
+            _isAiming = false;
+            fishing.FishTray.trajectoryLine.enabled = false;
+            fishing.Destination = fishing.FishTray.Goal;
+            fishing.Player.playerAnim.SetBool("Fishing", true);
+            fishing.PlayerMovement.movable = false;
+            fishing.Player.playerSlot.CanChange = false;
+            fishing.Success = false;
+            fishing.FishTray.trajectoryLine.enabled = false;
+            // fishing.ChangeState(Fishing.FishingStateType.Casting);
+        }
+
+        public override void Exit()
+        {
+        }
     }
 }
