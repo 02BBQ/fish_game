@@ -1,74 +1,61 @@
 using UnityEngine;
 
-public class FishingCastingState : FishingStateBase
+namespace fishing.FSM
 {
-    private float progress;
-    private Vector3 p0, p3;
-    private float totalFlightTime = 1f;
-
-    public FishingCastingState(Fishing fishing) : base(fishing) 
+    public class FishingCastingState : FishingStateBase
     {
-        
-    }
+        private float _castingTime = 0f;
+        private const float CASTING_DURATION = 1f;
+        private float _progress = 0f;
+        private Vector3 _p0, _p3;
 
-    void StartThrow()
-    {
-        progress = 0f;
-    }
+        public FishingCastingState(Fishing fishing) : base(fishing) { }
 
-    void UpdateThrow()
-    {
-        progress += Time.deltaTime / totalFlightTime;
-        
-        if (progress >= 1f)
+        private void UpdateThrow()
         {
-            fishing.FishingVisual.bobber.position = fishing.Destination;
-            fishing.ChangeState(Fishing.FishingStateType.Fishing);
-            return;
+            _progress += Time.deltaTime / CASTING_DURATION;
+            
+            if (_progress >= 1f)
+            {
+                fishing.FishingVisual.Bobber.position = fishing.Destination;
+                fishing.ChangeState(Fishing.FishingStateType.Fishing);
+                return; 
+            }
+            
+            // 궤적 포인트 보간
+            int index = Mathf.FloorToInt(_progress * (fishing.FishTray.lineResolution - 1));
+            float segmentProgress = (_progress * (fishing.FishTray.lineResolution - 1)) - index;
+            
+            if (index < fishing.FishTray.TrajectoryPoints.Length - 1)
+            {
+                fishing.FishingVisual.Bobber.position = Vector3.Lerp(fishing.FishTray.TrajectoryPoints[index], fishing.FishTray.TrajectoryPoints[index + 1], segmentProgress);
+            }
         }
-        
-        // 궤적 포인트 보간
-        int index = Mathf.FloorToInt(progress * (fishing.FishTray.lineResolution - 1));
-        float segmentProgress = (progress * (fishing.FishTray.lineResolution - 1)) - index;
-        
-        if (index < fishing.FishTray.TrajectoryPoints.Length - 1)
+
+        public override void Enter()
         {
-            fishing.FishingVisual.bobber.position = Vector3.Lerp(fishing.FishTray.TrajectoryPoints[index], fishing.FishTray.TrajectoryPoints[index + 1], segmentProgress);
+            _castingTime = 0f;
+            _progress = 0f;
+            fishing.FishingVisual.ResetBobber();
+            fishing.Player.playerAnim.SetBool("Fishing", true);
+            fishing.PlayerMovement.movable = false;
+            fishing.Player.playerSlot.CanChange = false;
         }
-    }
 
-    public override void Update()
-    {
-        UpdateThrow();
-        // progress = Mathf.Min(progress + Time.deltaTime / 
-        //     Mathf.Max((fishing.Destination - p0).magnitude / 10.3f, 0.8f), 1);
-        
-        // var p1 = p0 + Vector3.up * Mathf.Min(Vector3.Distance(p0, p3) / 4f, 3f);
-        // Vector3 p2 = (p1 + fishing.Destination) / 2; 
-        // p2.y = p1.y;
-        
-        // var point = fishing.QuadBeizer(p0, p1, p2, fishing.Destination, progress);
-        // fishing.FishingVisual.bobber.position = point;
-        
-        // if (progress >= 1)
-        // {
-        //     fishing.ChangeState(Fishing.FishingStateType.Fishing);
-        // }
-    }
+        public override void Update()
+        {
+            _castingTime += Time.deltaTime;
+            if (_castingTime >= CASTING_DURATION)
+            {
+                fishing.ChangeState(Fishing.FishingStateType.Fishing);
+                return;
+            }
+            UpdateThrow();
+        }
 
-    public override void Enter()
-    {
-        StartThrow();
-
-        progress = 0;
-        p0 = fishing.transform.position - fishing.transform.forward;
-        p3 = fishing.Destination;
-        
-        // fishing.FishingFish = fishing.FishingRegion.fishWeights[fishing.GetCurrentRegionIndex() - 1].GetFish();
-    }
-
-    public override void Exit()
-    {
-        
+        public override void Exit()
+        {
+            fishing.FishingVisual.SetAnchor(true, fishing.Destination);
+        }
     }
 }

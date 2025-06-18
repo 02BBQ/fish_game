@@ -108,7 +108,7 @@ public class InventoryManager : SingleTon<InventoryManager>
 
                 itemInSlot.count++;
                 itemInSlot.RefreshCount();
-                EventManager.Broadcast(Events.AddItemEvent);
+                // EventManager.Broadcast(Events.AddItemEvent);
                 return true;
             }
         }
@@ -116,7 +116,7 @@ public class InventoryManager : SingleTon<InventoryManager>
         if (inventoryItems.Count < inventorySlots.Count)//��ĭ ������ 
         {
             SpawnNewItem(item);
-            EventManager.Broadcast(Events.AddItemEvent);
+            // EventManager.Broadcast(Events.AddItemEvent);
             return true;
         }
         return false;
@@ -358,5 +358,10 @@ public class InventoryManager : SingleTon<InventoryManager>
     }
 
     #endregion
+
+    public List<Item> GetItemsByType(ItemType type)
+    {
+        return Items.Where(item => item.type == type).ToList();
+    }
 
 }

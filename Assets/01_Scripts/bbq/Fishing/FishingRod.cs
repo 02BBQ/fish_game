@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.Interactions;
+using fishing.FSM;
 
 [CreateAssetMenu(fileName = "FishingRod", menuName = "Items/FishingRod")]
 public class FishingRod : Item, IEquipable
@@ -12,6 +13,9 @@ public class FishingRod : Item, IEquipable
     private Fishing fisher;
     private FishingVisual fishingVisual;
     private FishCanvas fishCanvas;
+
+    public FishCanvas FishCanvas => fishCanvas;
+    public FishingVisual FishingVisual => fishingVisual;
 
     private Player owner;
 
@@ -25,8 +29,7 @@ public class FishingRod : Item, IEquipable
         fisher.transform.SetParent(owner.transform,false);
         fisher.transform.localPosition = Vector3.zero + Vector3.up * 1f;
         fishCanvas = Instantiate(fishCanvasBase);
-        fisher.fishCanvas = fishCanvas;
-        fisher.fishingVisual = fishingVisual;
+        fisher.SetModel(this);
         fishingVisual.transform.localRotation = Quaternion.Euler(-90, 0, 0);
     }
 

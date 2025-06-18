@@ -1,112 +1,153 @@
-using System.Text;
 using UnityEngine;
+using System.Threading.Tasks;
+using System.Text;
+using System.Collections;
 
-public class FishingReelingState : FishingStateBase
+namespace fishing.FSM
 {
-    private float progress;
-    private Vector3 goal;
-    private Vector3 p0, p1, p2;
-    private FishSO fish;
-
-    public FishingReelingState(Fishing fishing) : base(fishing) 
+    public class FishingReelingState : FishingStateBase
     {
-        fishing.Player.playerAnim.SetBool("Fishing", false);
-    }
+        private float _reelingTime = 0f;
+        private const float REELING_DURATION = 1f;
+        private Vector3 goal;
+        private Vector3 p0, p1, p2;
+        private FishSO fish;
+        private bool _isProcessingResult = false;
 
-    public override void Enter()
-    {
-        progress = 0f;
-        goal = fishing.transform.position;
-        p0 = fishing.FishingVisual.bobber.position;
-        p2 = fishing.FishingVisual.fishingRodTip.position;
-        p1 = (p0 + p2) / 2; 
-        p1.y = p2.y + 2f + Vector3.Distance(p0, p2) / 8;
-        
-        // 서버에 결과 전송
-        EndServerFishing(fishing.Success, fishData => 
+        public FishingReelingState(Fishing fishing) : base(fishing) 
         {
-            if (fishing.Success && fishData != null)
-            {
-                var fish = GameObject.Instantiate(fishing.FishSOBase);
-                fish.Initialize(fishData);
-                HandleSuccess(fish);
-            }
-            else
-            {
-                HandleFailure();
-            }
-        });
-    }
+            fishing.Player.playerAnim.SetBool("Fishing", false);
+        }
 
-    private void HandleSuccess(FishSO fish)
-    {
-        this.fish = fish;
-        // StringBuilder sb = new StringBuilder($"{fish.weight}kg <color=yellow>{fish.species}</color>를 낚았다!");
-        // Events.NotificationEvent.text = sb.ToString();
-        // EventManager.Broadcast(Events.NotificationEvent);
-        InventoryManager.Instance.AddItem(fish);
-        
-        // fishing.ChangeState(Fishing.FishingStateType.Idle);
-    }
-    
-    private void HandleFailure()
-    {
-        // fishing.ChangeState(Fishing.FishingStateType.Idle);
-    }
-
-    public override void Update()
-    {
-        if (fishing.Success)
+        public override async void Enter()
         {
-            progress = Mathf.Min(progress + Time.deltaTime, 1);
-            fishing.FishingVisual.bobber.position = fishing.Bezier(p0, p1, p2, progress);
+            _reelingTime = 0f;
+            _isProcessingResult = true;
             
-            if (progress >= 1)
+            try
             {
-                fishing.Player.playerAnim.SetTrigger("BackFlip");
-                EndReeling();
-            }
-        }
-        else
-        {
-            progress = Mathf.Min(progress + Time.deltaTime * 0.75f, 1);
-            fishing.FishingVisual.bobber.position = Vector3.Lerp(
-                fishing.FishingVisual.bobber.position, goal, progress);
+                fishing.Player.playerAnim.SetBool("Fishing", false);
+                fishing.PlayerMovement.movable = true;
+                fishing.Player.playerSlot.CanChange = true;
                 
-            if (progress >= 1)
+                SetupReelingAnimation();
+                
+                // 서버에 결과 전송
+                await EndServerFishing(fishing.Success, fishData => 
+                {
+                    if (fishing.Success && fishData != null)
+                    {
+                        var fish = GameObject.Instantiate(fishing.FishSOBase);
+                        fish.Initialize(fishData);
+                        HandleSuccess(fish);
+                    }
+                    else
+                    {
+                        HandleFailure();
+                    }
+                    _isProcessingResult = false;
+                });
+            }
+            catch (System.Exception e)
             {
-                EndReeling();
+                Debug.LogError($"낚시 결과 처리 중 오류 발생: {e.Message}");
+                HandleFailure();
+                _isProcessingResult = false;
             }
         }
-    }
 
-    private void EndReeling()
-    {
-        if (fishing.Success && fish != null)
+        private void SetupReelingAnimation()
         {
-            if (fish.trait == null || fish.trait == string.Empty)
+            goal = fishing.transform.position;
+            p0 = fishing.FishingVisual.Bobber.position;
+            p2 = fishing.FishingVisual.FishingRodTip.position;
+            p1 = (p0 + p2) / 2; 
+            p1.y = p2.y + 2f + Vector3.Distance(p0, p2) / 8;
+        }
+
+        public override void Update()
+        {
+            if (_isProcessingResult) return;
+
+            _reelingTime += Time.deltaTime;
+            float t = _reelingTime / REELING_DURATION;
+            
+            if (t <= 1f)
             {
-                StringBuilder sb = new StringBuilder(
-                    $"{fish.weight}kg <color=yellow>{fish.species}</color>를 낚았다!");
-                Events.NotificationEvent.text = sb.ToString();
+                fishing.FishingVisual.Bobber.position = fishing.Bezier(p0, p1, p2, t);
             }
             else
             {
-                StringBuilder sb = new StringBuilder(
-                    $"{fish.weight}kg {fish.purity} {fish.trait} <color=yellow>{fish.species}</color>를 낚았다!");
-                Events.NotificationEvent.text = sb.ToString();
+                EndReeling();
             }
-            // InventoryManager.Instance.AddItem(fishing.Fish);
-            EventManager.Broadcast(Events.NotificationEvent);
         }
-        else
+
+        private void HandleSuccess(FishSO fish)
         {
-            GameObject.Destroy(fishing.Fish);
+            this.fish = fish;
+            try
+            {
+                if (string.IsNullOrEmpty(fish.trait))
+                {
+                    StringBuilder sb = new StringBuilder(
+                        $"{fish.weight:F1}kg <color=yellow>{fish.species}</color>를 낚았다!");
+                    Events.NotificationEvent.text = sb.ToString();
+                }
+                else
+                {
+                    StringBuilder sb = new StringBuilder(
+                        $"{fish.weight:F1}kg {fish.purity:F1} {fish.trait} <color=yellow>{fish.species}</color>를 낚았다!");
+                    Events.NotificationEvent.text = sb.ToString();
+                }
+                EventManager.Broadcast(Events.NotificationEvent);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"알림 표시 중 오류 발생: {e.Message}");
+            }
         }
-        
-        fishing.FishingVisual.ResetBobber();
-        fishing.PlayerMovement.movable = true;
-        fishing.Player.playerSlot.CanChange = true;
-        fishing.ChangeState(Fishing.FishingStateType.Idle);
+
+        private void HandleFailure()
+        {
+            try
+            {
+                if (fishing.Fish != null)
+                {
+                    GameObject.Destroy(fishing.Fish);
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"물고기 제거 중 오류 발생: {e.Message}");
+            }
+        }
+
+        private void EndReeling()
+        {
+            try
+            {
+                fishing.FishingVisual.ResetBobber();
+                fishing.PlayerMovement.movable = true;
+                fishing.Player.playerSlot.CanChange = true;
+                fishing.ChangeState(Fishing.FishingStateType.Idle);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"릴링 종료 중 오류 발생: {e.Message}");
+            }
+        }
+
+        public override void Exit()
+        {
+            try
+            {
+                fishing.FishingVisual.ResetBobber();
+                _isProcessingResult = false;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"상태 종료 중 오류 발생: {e.Message}");
+            }
+        }
     }
 }
