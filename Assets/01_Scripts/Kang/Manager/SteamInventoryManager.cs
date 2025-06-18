@@ -32,7 +32,7 @@ public class SteamInventoryManager : MonoBehaviour
     {
         if (autoInitialize)
         {
-            InitializeSteamInventory();
+            //InitializeSteamInventory();
         }
     }
 

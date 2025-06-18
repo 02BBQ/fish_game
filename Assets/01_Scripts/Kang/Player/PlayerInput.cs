@@ -56,6 +56,24 @@ public class PlayerInput : ScriptableObject
 
         _inputAction.Player.CameraLock.performed += (obj) => CamereLock?.Invoke();
     }
+    private void OnDisable()
+    {
+        // 모든 액션 이벤트 해제
+        if (_inputAction != null)
+        {
+            _inputAction.Player.Look.performed -= Aim_performed;
+            _inputAction.Player.Move.performed -= Movement_performed;
+            _inputAction.Player.Move.canceled -= Movement_performed;
+            _inputAction.Player.Jump.performed -= Jump_performed;
+            _inputAction.Player.Jump.canceled -= Jump_canceled;
+            _inputAction.Player.Sprint.performed -= Shift_performed;
+            _inputAction.Player.Sprint.canceled -= Shift_canceled;
+            _inputAction.Player.KeyPad.performed -= KeyPad_performed;
+
+            _inputAction.Player.Disable();
+             _inputAction.Disable();
+        }
+    }
     private void KeyPad_performed(InputAction.CallbackContext obj)
     {
         downKeyPad?.Invoke(int.Parse(obj.control.name));
