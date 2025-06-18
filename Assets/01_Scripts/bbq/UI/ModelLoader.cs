@@ -139,6 +139,7 @@ public class ModelLoader : MonoBehaviour
     {
         CancelPendingUnload();
         ClearPreviousResources();
+        StopAllCoroutines();
     }
 
     private static void SetLayerRecursively(GameObject obj, int layer)

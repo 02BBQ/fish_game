@@ -1,78 +1,103 @@
 using System;
 using TMPro;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 [RequireComponent(typeof(Trigger))]
-public class DeilyCheck : MonoBehaviour
+public class DailyRewardSystem : MonoBehaviour
 {
-    Trigger trigger;
-    private DateTime lastRewardDate;
-    public GameObject particle;
-    public TextMeshPro timerText;
+    [Header("Settings")]
+    public int rewardAmount = 100;
+    public string rewardSaveKey = "LastRewardDate";
+
+    [Header("Visuals")]
+    public TextMeshPro rewardStatusText;
+    public GameObject rewardParticle;
+
+    private Trigger _trigger;
+    private DateTime _lastRewardDate;
+    private bool _canClaimReward = false;
+
     private void Awake()
     {
-        trigger = GetComponent<Trigger>();
-    }
-    private void Start()
-    {
-        string savedDate = PlayerPrefs.GetString("LastRewardDate", "");
-        if (!string.IsNullOrEmpty(savedDate))
-        {
-            lastRewardDate = DateTime.Parse(savedDate);
-        }
-        else
-        {
-            lastRewardDate = DateTime.MinValue;
-        }
-    }
-    private void Update()
-    {
-        UpdateTimerUI();
+        _trigger = GetComponent<Trigger>();
+        LoadRewardData();
     }
 
-    private void UpdateTimerUI()
-    {
-        DateTime now = DateTime.Now;
-        if (lastRewardDate.Date != now.Date)
-            now = lastRewardDate;
-        else
-            now = DateTime.Now;
-        DateTime nextReset = now.Date.AddDays(1); // ï¿½ï¿½ï¿½ï¿½ 00:00
-
-        TimeSpan timeLeft = nextReset - now;
-
-        string formatted = string.Format("{0:00}:{1:00}:{2:00}",
-            Mathf.Max(0, timeLeft.Hours), Mathf.Max(0, timeLeft.Minutes), Mathf.Max(0, timeLeft.Seconds));
-
-        timerText.text = formatted;
-    }
     private void OnEnable()
     {
-        trigger.TriggerEnter.AddListener(CheckDeily);
+        _trigger.TriggerEnter.AddListener(OnPlayerTriggerEnter);
     }
+
     private void OnDisable()
     {
-        trigger.TriggerEnter.RemoveListener(CheckDeily);
+        _trigger.TriggerEnter.RemoveListener(OnPlayerTriggerEnter);
     }
-    private void CheckDeily(Collider arg0)
-    {
-        if (!arg0.CompareTag("Player")) return;
-        DateTime now = DateTime.Now;
 
-        // ï¿½ï¿½Â¥ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-        if (lastRewardDate.Date != now.Date)
+    private void Update()
+    {
+        UpdateRewardStatus();
+    }
+    
+    [ContextMenu("Reset")]
+    public void RemoveMemeory()
+    {
+        PlayerPrefs.DeleteKey(rewardSaveKey);
+    }
+
+    private void LoadRewardData()
+    {
+        string savedDate = PlayerPrefs.GetString(rewardSaveKey, "");
+        _lastRewardDate = string.IsNullOrEmpty(savedDate) ? DateTime.MinValue : DateTime.Parse(savedDate);
+    }
+
+    private void UpdateRewardStatus()
+    {
+        DateTime now = DateTime.Now;
+        DateTime nextResetTime = _lastRewardDate.Date.AddDays(1);
+
+        // º¸»ó ¼ö·É °¡´É ¿©ºÎ È®ÀÎ
+        _canClaimReward = now >= nextResetTime;
+
+        if (_canClaimReward)
         {
-            
-            lastRewardDate = now;
-            particle.SetActive(true);
-            Definder.GameManager.moneyController.EarnMoney(100);
-            PlayerPrefs.SetString("LastRewardDate", lastRewardDate.ToString());
-            PlayerPrefs.Save();
+            rewardStatusText.text = "Reward Ready!";
         }
         else
         {
-            Debug.Log("ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Ò½ï¿½ï¿½Ï´ï¿½.");
+            TimeSpan timeLeft = nextResetTime - now;
+            rewardStatusText.text = string.Format("{0:00}:{1:00}:{2:00}",
+                timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
         }
+    }
+
+    private void OnPlayerTriggerEnter(Collider player)
+    {
+        if (!player.CompareTag("Player")) return;
+
+        if (_canClaimReward)
+        {
+            ClaimReward();
+        }
+        else
+        {
+            Debug.Log("¾ÆÁ÷ º¸»óÀ» ¹ÞÀ» ¼ö ¾ø½À´Ï´Ù.");
+        }
+    }
+
+    private void ClaimReward()
+    {
+        _lastRewardDate = DateTime.Now;
+        PlayerPrefs.SetString(rewardSaveKey, _lastRewardDate.ToString());
+        PlayerPrefs.Save();
+
+        // º¸»ó Áö±Þ
+        Definder.GameManager.moneyController.EarnMoney(rewardAmount);
+        rewardParticle.SetActive(true);
+
+        // È¿°úÀ½ µî Ãß°¡ È¿°ú ±¸Çö °¡´É
+        Debug.Log($"ÀÏÀÏ º¸»ó {rewardAmount} ÄÚÀÎ È¹µæ!");
+
+        // »óÅÂ ¾÷µ¥ÀÌÆ®
+        UpdateRewardStatus();
     }
 }

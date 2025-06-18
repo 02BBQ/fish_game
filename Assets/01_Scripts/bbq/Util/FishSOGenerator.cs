@@ -1,11 +1,10 @@
-using UnityEngine;
-using UnityEditor;
-using System.IO;
-using System.Collections;
-using UnityEngine.Networking;
-using System;
+/*using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.Networking;
 
 
 public static class FishSOGenerator
@@ -134,3 +133,4 @@ public static class FishSOGenerator
         Debug.Log("✅ RarityTable.asset 생성 완료!");
     }
 }
+*/

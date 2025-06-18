@@ -11,6 +11,7 @@ public class ItemInfo : MonoBehaviour //, IItemInfoVi
     
     public void UpdateItemInfo(Item item)
     {
+        if (!item) return;
         // 기본 정보 업데이트
         nameText.text = item.GetName();
         descText.text = item.GetDescription().ToString();
