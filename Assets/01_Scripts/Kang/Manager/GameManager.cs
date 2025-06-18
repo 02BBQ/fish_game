@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
         moneyController = GetComponent<MoneyController>();
         serverService = GetComponent<FishingServerService>();
         if (serverService == null)
-        {
+        { 
             serverService = gameObject.AddComponent<FishingServerService>();
         }
     }

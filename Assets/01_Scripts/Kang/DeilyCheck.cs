@@ -91,7 +91,7 @@ public class DailyRewardSystem : MonoBehaviour
         PlayerPrefs.Save();
 
         // 보상 지급
-        Definder.GameManager.Coin += rewardAmount;
+        Definder.GameManager.moneyController.EarnMoney(rewardAmount);
         rewardParticle.SetActive(true);
 
         // 효과음 등 추가 효과 구현 가능
