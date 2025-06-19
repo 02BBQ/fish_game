@@ -65,7 +65,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Amount: 0.0297
-    - _Bend: 0
+    - _Bend: 1
     - _Metalic: 0
     - _NormalFloat: 1
     - _QueueControl: 0

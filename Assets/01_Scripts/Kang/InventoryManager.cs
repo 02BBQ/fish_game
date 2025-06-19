@@ -25,7 +25,7 @@ public class InventoryManager : SingleTon<InventoryManager>
     [SerializeField] GameObject sellBtn;
     [SerializeField] GameObject getBtn;
     [SerializeField] GameObject keepBtn;
-    [SerializeField] FishSlot personalFishSlot;
+    public FishSlot personalFishSlot;
 
     public Action<List<FishSO>, FishSO> OnRemoveFish;
     public Action<List<FishSO>, FishSO> OnAddFish;
