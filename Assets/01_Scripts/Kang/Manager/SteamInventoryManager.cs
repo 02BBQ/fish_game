@@ -3,30 +3,13 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SteamInventoryManager : MonoBehaviour
+public class SteamInventoryManager : SingleTon<SteamInventoryManager>
 {
-    private static SteamInventoryManager _instance;
-    public static SteamInventoryManager Instance => _instance;
-
     private SteamInventoryResult_t _inventoryResult = SteamInventoryResult_t.Invalid;
     private Dictionary<SteamItemDef_t, SteamItemDetails_t> _inventoryItems = new Dictionary<SteamItemDef_t, SteamItemDetails_t>();
 
     [Header("Settings")]
-    public float inventoryUpdateInterval = 30f;
     public bool autoInitialize = true;
-
-    private void Awake()
-    {
-        if (_instance == null)
-        {
-            _instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     private void Start()
     {
@@ -47,19 +30,16 @@ public class SteamInventoryManager : MonoBehaviour
         SteamInventory.LoadItemDefinitions();
         RefreshInventory();
     }
-
     public void RefreshInventory()
     {
         if (SteamInventory.GetAllItems(out _inventoryResult))
         {
             uint itemCount = 0;
             SteamInventory.GetResultItems(_inventoryResult, null, ref itemCount);
-
             if (itemCount > 0)
             {
                 SteamItemDetails_t[] items = new SteamItemDetails_t[itemCount];
                 SteamInventory.GetResultItems(_inventoryResult, items, ref itemCount);
-
                 _inventoryItems.Clear();
                 foreach (var item in items)
                 {
@@ -93,7 +73,7 @@ public class SteamInventoryManager : MonoBehaviour
         SteamItemDef_t[] itemDefs = new SteamItemDef_t[] { itemDef };
         uint[] quantities = new uint[] { quantity };
 
-        if (SteamInventory.GenerateItems(out SteamInventoryResult_t result, itemDefs, quantities, 1))
+        if (SteamInventory.AddPromoItem(out SteamInventoryResult_t result, itemDef))
         {
             SteamInventory.DestroyResult(_inventoryResult);
             _inventoryResult = result;
