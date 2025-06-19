@@ -141,6 +141,7 @@ public class Player : MapEntity
             fishRenderer.sprite = fishSO.image;
         }
         fishObj.SetActive(true);
+        InventoryManager.Instance.personalFishSlot.SetItem(currentFish);
     }
     public void DisableFish()
     {

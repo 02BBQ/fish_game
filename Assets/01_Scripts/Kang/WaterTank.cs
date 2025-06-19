@@ -93,7 +93,6 @@ public class WaterTank : Interactor
     {
         // 물고기 탭 UI 열기
         UIManager.Instance.fishTank.SetActive(true);
-
         // 인벤토리 새로고침 (UI에 최신 데이터 반영)
         //SteamInventoryManager.Instance.RefreshInventory();
     }
