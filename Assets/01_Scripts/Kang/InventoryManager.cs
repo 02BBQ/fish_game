@@ -39,7 +39,12 @@ public class InventoryManager : SingleTon<InventoryManager>
     private void Awake()
     {
         category.ClearOptions();
-        Events.AddItemEvent.getItems = Items;
+        foreach (Item item in Items)
+        {
+            Events.ItemAddedEvent.newItem = item;
+            EventManager.Broadcast(Events.ItemAddedEvent);
+        }
+        
         List<string> types = new List<string>();
         types.Add("All");
         foreach (ItemType type in Enum.GetValues(typeof(ItemType)))
@@ -48,7 +53,6 @@ public class InventoryManager : SingleTon<InventoryManager>
                 types.Add(type.ToString());
         }
         category.AddOptions(types);
-
     }
 
     private void Start()
@@ -108,7 +112,8 @@ public class InventoryManager : SingleTon<InventoryManager>
 
                 itemInSlot.count++;
                 itemInSlot.RefreshCount();
-                // EventManager.Broadcast(Events.AddItemEvent);
+                Events.ItemAddedEvent.newItem = item;
+                EventManager.Broadcast(Events.ItemAddedEvent);
                 return true;
             }
         }
@@ -116,7 +121,8 @@ public class InventoryManager : SingleTon<InventoryManager>
         if (inventoryItems.Count < inventorySlots.Count)//��ĭ ������ 
         {
             SpawnNewItem(item);
-            // EventManager.Broadcast(Events.AddItemEvent);
+            Events.ItemAddedEvent.newItem = item;
+            EventManager.Broadcast(Events.ItemAddedEvent);
             return true;
         }
         return false;
@@ -127,7 +133,7 @@ public class InventoryManager : SingleTon<InventoryManager>
         {
             InventoryItem itemInSlot = inventoryItems[i];
             if (itemInSlot != null &&
-                itemInSlot.item.nameStr == item.nameStr)
+                itemInSlot.item.guid == item.guid)
             {
                 if (item.stackable == true && itemInSlot.count > 1)
                 {
@@ -138,6 +144,19 @@ public class InventoryManager : SingleTon<InventoryManager>
                 {
                     DeleteItem(itemInSlot);
                 }
+                return true;
+            }
+        }
+        return false;
+    }
+    public bool RemoveItemByGuid(string guid)
+    {
+        for (int i = 0; i < inventoryItems.Count; i++)
+        {
+            InventoryItem itemInSlot = inventoryItems[i];
+            if (itemInSlot != null && itemInSlot.item.guid == guid)
+            {
+                DeleteItem(itemInSlot);
                 return true;
             }
         }

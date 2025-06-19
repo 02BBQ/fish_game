@@ -87,6 +87,7 @@ public class GameManager : SingleTon<GameManager>
 
     private Task HandleMoney(InitData data)
     {
+        Debug.Log(data.money);
         moneyController?.SetMoney(data.money);
         return Task.CompletedTask;
     }
@@ -122,6 +123,7 @@ public class GameManager : SingleTon<GameManager>
         {
             var handle = Addressables.LoadAssetAsync<FishingRod>(rodData.Address);
             var fishingRod = await handle.Task;
+            fishingRod = Instantiate(fishingRod);
             
             if (fishingRod != null)
             {

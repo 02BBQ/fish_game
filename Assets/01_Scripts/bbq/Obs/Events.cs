@@ -5,7 +5,8 @@ public static class Events
 {
     public static NotificationEvent NotificationEvent = new();
     public static CamShakeEvent CamShakeEvent = new();
-    public static AddItemEvent AddItemEvent = new();
+    public static ItemAddedEvent ItemAddedEvent = new();
+    public static ItemDeletedEvent ItemDeletedEvent = new();
 }
 
 public class NotificationEvent : GameEvent
@@ -19,7 +20,13 @@ public class CamShakeEvent : GameEvent
     public float duration;
 }
 
-public class AddItemEvent : GameEvent
+public class ItemAddedEvent : GameEvent
 {
-    public List<Item> getItems;
+    public Item newItem;
+}
+
+
+public class ItemDeletedEvent : GameEvent
+{
+    public Item newItem;
 }
