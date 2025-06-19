@@ -30,7 +30,7 @@ public class SellGoods : MonoBehaviour
     }
     [Serializable] public class SellResponse
     {
-        public bool suc;
+        public bool success;
         public int money;
     }
 
@@ -47,11 +47,12 @@ public class SellGoods : MonoBehaviour
         var result = await SellItemAsync(serverConfig.DefaultUserId, item);
 
         if (!result.IsSuccess) return;
-        if (!result.Data.suc) return;
+        if (!result.Data.success) return;
 
         Definder.GameManager.moneyController.SetMoney(result.Data.money);
         InventoryManager.Instance.RemoveItem(item);
         gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 
     public async Task<Result<SellResponse>> SellItemAsync(string userId, Item item)

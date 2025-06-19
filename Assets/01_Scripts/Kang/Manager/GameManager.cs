@@ -123,6 +123,7 @@ public class GameManager : SingleTon<GameManager>
         {
             var handle = Addressables.LoadAssetAsync<FishingRod>(rodData.Address);
             var fishingRod = await handle.Task;
+            fishingRod = Instantiate(fishingRod);
             
             if (fishingRod != null)
             {

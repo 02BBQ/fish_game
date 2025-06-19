@@ -14,23 +14,12 @@ public class Market : Interactor
     public GameObject buyGoods;
     public GameObject sellGoods;
 
-    List<SellGoods> initItems;
+    private List<SellGoods> initItems;
 
     private void Awake()
     {
         LoadAndSortItems();    
         initItems = new List<SellGoods>();
-    }
-
-    private void LoadFishingRods()
-    {
-        // 인벤토리에서 낚시대 아이템들을 가져와서 판매 UI에 표시
-        var fishingRods = InventoryManager.Instance.GetItemsByType(ItemType.FishingRod);
-        foreach (var rod in fishingRods)
-        {
-            SellGoods copyGoods = Instantiate(sellGoods, sellUIParents[(int)rod.type]).GetComponent<SellGoods>();
-            copyGoods.SetItem(rod);
-        }
     }
 
     public void LoadAndSortItems()
@@ -60,12 +49,12 @@ public class Market : Interactor
 
     private void OnEnable()
     {
-        EventManager.AddListener<AddItemEvent>(AddGoodInSell);
+        EventManager.AddListener<ItemAddedEvent>(AddGoodInSell);
     }
 
     private void OnDisable()
     {
-        EventManager.RemoveListener<AddItemEvent>(AddGoodInSell);
+        EventManager.RemoveListener<ItemAddedEvent>(AddGoodInSell);
     }
 
     protected override void OnTriggerEnter(Collider other)
@@ -92,9 +81,10 @@ public class Market : Interactor
         copyGoods.SetItem(item);
     }
 
-    private void AddGoodInSell(AddItemEvent addItemEvent)
+    private void AddGoodInSell(ItemAddedEvent addItemEvent)
     {
         Item addItem = addItemEvent.newItem;
+        Debug.Log(addItem.guid);
         bool isItemInInit = false; //initItems.Any(initItem => initItem.item.nameStr == addItem.nameStr);
         if (!isItemInInit)
         {
@@ -106,14 +96,6 @@ public class Market : Interactor
         {
             initItems.First(initItem => initItem.item.nameStr == addItem.nameStr).gameObject.SetActive(true);
         }
-        // foreach (SellGoods initItem in initItems)
-        // {
-        //     bool isItemInAdd = addItemEvent.getItems.Any(addItem => addItem.nameStr == initItem.item.nameStr);
-        //     if (!isItemInAdd)
-        //     {
-        //         initItem.gameObject.SetActive(false);
-        //     }
-        // }
     }
     protected override void OnInteract()
     {
