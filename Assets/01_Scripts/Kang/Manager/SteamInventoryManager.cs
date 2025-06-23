@@ -32,21 +32,24 @@ public class SteamInventoryManager : SingleTon<SteamInventoryManager>
     }
     public void RefreshInventory()
     {
-        if (SteamInventory.GetAllItems(out _inventoryResult))
+        if (SteamManager.Instance.useSteam)
         {
-            uint itemCount = 0;
-            SteamInventory.GetResultItems(_inventoryResult, null, ref itemCount);
-            if (itemCount > 0)
+            if (SteamInventory.GetAllItems(out _inventoryResult))
             {
-                SteamItemDetails_t[] items = new SteamItemDetails_t[itemCount];
-                SteamInventory.GetResultItems(_inventoryResult, items, ref itemCount);
-                _inventoryItems.Clear();
-                foreach (var item in items)
+                uint itemCount = 0;
+                SteamInventory.GetResultItems(_inventoryResult, null, ref itemCount);
+                if (itemCount > 0)
                 {
-                    _inventoryItems[item.m_iDefinition] = item;
-                }
+                    SteamItemDetails_t[] items = new SteamItemDetails_t[itemCount];
+                    SteamInventory.GetResultItems(_inventoryResult, items, ref itemCount);
+                    _inventoryItems.Clear();
+                    foreach (var item in items)
+                    {
+                        _inventoryItems[item.m_iDefinition] = item;
+                    }
 
-                Debug.Log($"Inventory refreshed. Found {itemCount} items.");
+                    Debug.Log($"Inventory refreshed. Found {itemCount} items.");
+                }
             }
         }
     }

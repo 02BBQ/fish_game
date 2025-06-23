@@ -37,19 +37,22 @@ public class Player : MapEntity
         fishRenderer = fishObj.GetComponent<SpriteRenderer>();
         fishMesh = fishObj.GetComponent<MeshFilter>();
     }
-    // public Item debugItem;
+    public Item debugItem;
     protected override void Start()
     {
-        isMove = true;
-        isRotate = true;
-        playerInput.InputAction.Enable();
-        base.Start();
-        // InventoryManager.Instance.AddItem(debugItem);
-        playerBoat.enabled = true;
-        Rigidbody.mass = 10f;
-        cForce.enabled = true;
-        if(SteamManager.Initialized)
-            SteamUserStats.ResetAllStats(true);
+        if (SteamManager.Instance.useSteam)
+        {
+            isMove = true;
+            isRotate = true;
+            playerInput.InputAction.Enable();
+            base.Start();
+            InventoryManager.Instance.AddItem(debugItem);
+            playerBoat.enabled = true;
+            Rigidbody.mass = 10f;
+            cForce.enabled = true;
+            if (SteamManager.Initialized)
+                SteamUserStats.ResetAllStats(true);
+        }
     }
     protected override void Update()
     {

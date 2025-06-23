@@ -120,7 +120,6 @@ MonoBehaviour:
   target: {fileID: 8699576279405785406}
   parent: {fileID: 9138226490926376821}
   rotator: {fileID: 1582300798531826199}
-  hiddenOffsetY: 0
 --- !u!1 &2627054648326546475
 GameObject:
   m_ObjectHideFlags: 0

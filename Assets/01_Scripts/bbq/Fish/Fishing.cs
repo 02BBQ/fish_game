@@ -48,6 +48,7 @@ namespace fishing.FSM
         public FishData FishingFish { get; set; }
         public FishSO Fish { get; set; }
         public string CurrentFishGUID => currentFishGuid;
+        public FishingRod FishingRodSO { get; private set; }
 
         // Public properties
         public FishingVisual FishingVisual => fishingVisual;
@@ -158,6 +159,7 @@ namespace fishing.FSM
 
         public void SetModel(FishingRod fishingRod)
         {
+            FishingRodSO = fishingRod;
             fishCanvas = fishingRod.FishCanvas;
             fishingVisual = fishingRod.FishingVisual;
         }

@@ -15,10 +15,15 @@ MonoBehaviour:
   image: {fileID: 21300000, guid: ff6ec858149b41f43bf0487234c7df95, type: 3}
   type: 2
   nameStr: OldFishingRod
-  cost: 1
+  price: 0
   description: Old aged like someone...
   stackable: 0
+  guid: 
   visualPath: 
-  fisherBase: {fileID: 4997893226570511630, guid: 9ebf622c7a14ce14f8e8609779ff8e83, type: 3}
-  fishCanvasBase: {fileID: 3965119566086143170, guid: 6da31746dbece554d9f334a705c96e1f, type: 3}
-  fishingVisualBase: {fileID: 8770643933864969242, guid: bb033e4837eb6fc43bb96a71eff99494, type: 3}
+  fisherBase: {fileID: 4997893226570511630, guid: 9ebf622c7a14ce14f8e8609779ff8e83,
+    type: 3}
+  fishCanvasBase: {fileID: 3965119566086143170, guid: 6da31746dbece554d9f334a705c96e1f,
+    type: 3}
+  fishingVisualBase: {fileID: 8770643933864969242, guid: bb033e4837eb6fc43bb96a71eff99494,
+    type: 3}
+  difficulty: 0.987

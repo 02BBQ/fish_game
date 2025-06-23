@@ -9,6 +9,7 @@ public class FishingRod : Item, IEquipable
     [SerializeField] private Fishing fisherBase;
     [SerializeField] private FishCanvas fishCanvasBase;
     [SerializeField] private FishingVisual fishingVisualBase;
+    [SerializeField, Range(0.987f, 3)] private float difficulty;
 
     private Fishing fisher;
     private FishingVisual fishingVisual;
@@ -16,6 +17,7 @@ public class FishingRod : Item, IEquipable
 
     public FishCanvas FishCanvas => fishCanvas;
     public FishingVisual FishingVisual => fishingVisual;
+    public float Difficulty => difficulty;
 
     private Player owner;
 
