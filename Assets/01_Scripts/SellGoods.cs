@@ -46,8 +46,23 @@ public class SellGoods : MonoBehaviour
     {
         var result = await SellItemAsync(serverConfig.DefaultUserId, item);
 
-        if (!result.IsSuccess) return;
-        if (!result.Data.success) return;
+        if (!result.IsSuccess || !result.Data.success)
+        {
+            // 실패 메시지 만들기
+            string reason = result.IsSuccess ? "디버그 귀찮노" : "서버 연결 실패";
+            System.Text.StringBuilder sb = new System.Text.StringBuilder(
+                $"<color=yellow>{item.name}</color> 구매 실패: <color=red>{reason}</color>"
+            );
+            Events.NotificationEvent.text = sb.ToString();
+            EventManager.Broadcast(Events.NotificationEvent);
+            return;
+        }
+
+        System.Text.StringBuilder sucsb = new System.Text.StringBuilder(
+                $"<color=yellow>{item.name}</color> 판매 성공!"
+            );
+            Events.NotificationEvent.text = sucsb.ToString();
+            EventManager.Broadcast(Events.NotificationEvent);
 
         Definder.GameManager.moneyController.SetMoney(result.Data.money);
         InventoryManager.Instance.RemoveItem(item);

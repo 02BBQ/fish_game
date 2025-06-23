@@ -84,7 +84,6 @@ public class Market : Interactor
     private void AddGoodInSell(ItemAddedEvent addItemEvent)
     {
         Item addItem = addItemEvent.newItem;
-        Debug.Log(addItem.guid);
         bool isItemInInit = false; //initItems.Any(initItem => initItem.item.nameStr == addItem.nameStr);
         if (!isItemInInit)
         {

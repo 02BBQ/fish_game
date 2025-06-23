@@ -60,7 +60,27 @@ public class BuyGoods : MonoBehaviour
 
     private async void ClickBuy()
     {
-        await BuyItemAsync(serverConfig.DefaultUserId, item.name);
+        var result = await BuyItemAsync(serverConfig.DefaultUserId, item.name);
+
+        if (!result.IsSuccess || !result.Data.success)
+        {
+            // 실패 메시지 만들기
+            string reason = result.IsSuccess ? result.Data.message : "서버 연결 실패";
+            System.Text.StringBuilder sb = new System.Text.StringBuilder(
+                $"<color=yellow>{item.name}</color> 구매 실패: <color=red>{reason}</color>"
+            );
+            Events.NotificationEvent.text = sb.ToString();
+            EventManager.Broadcast(Events.NotificationEvent);
+            return;
+        }
+
+        System.Text.StringBuilder sucsb = new System.Text.StringBuilder(
+                $"<color=yellow>{item.name}</color> 구매 성공!"
+            );
+            Events.NotificationEvent.text = sucsb.ToString();
+            EventManager.Broadcast(Events.NotificationEvent);
+
+        // 성공 시 기존 로직 (아무것도 안 해도 됨)
     }
 
     public async Task<Result<BuyResponse>> BuyItemAsync(string userId, string itemId)

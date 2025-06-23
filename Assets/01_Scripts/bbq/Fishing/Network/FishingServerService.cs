@@ -92,7 +92,7 @@ namespace fishing.Network
         
         public async Task<Result<InitData>> GetData(string userId)
         {
-            // try
+            try
             {
                 return await _retryPolicy.ExecuteAsync(async () =>
                 {
@@ -119,11 +119,57 @@ namespace fishing.Network
                     ));
                 });
             }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Get data failed: {ex}");
+                return Result<InitData>.Failure(new Error(
+                    "Unexpected error occurred",
+                    Error.ErrorType.Unknown,
+                    ex
+                ));
+            }
+        }
+
+        public async Task<Result<InitData>> AuthenticateSteamUser(string steamId, string authTicket)
+        {
+            // try
+            // {
+                return await _retryPolicy.ExecuteAsync(async () =>
+                {
+                    var requestData = new SteamAuthRequest { steamId = steamId, authTicket = authTicket };
+                    string json = JsonConvert.SerializeObject(requestData);
+                    byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+
+                    var request = new UnityWebRequest($"{serverConfig.BaseUrl}auth/steam", "POST");
+                    request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+                    request.downloadHandler = new DownloadHandlerBuffer();
+                    request.SetRequestHeader("Content-Type", "application/json");
+
+                    Debug.Log($"Sending Steam auth request to: {serverConfig.BaseUrl}auth/steam");
+                    Debug.Log($"Request data: {json}");
+                    
+                    await request.SendWebRequest();
+                    
+                    Debug.Log($"Steam auth response: {request.downloadHandler?.text}");
+                    Debug.Log($"Response code: {request.responseCode}");
+                    
+                    if (request.result == UnityWebRequest.Result.Success)
+                    {
+                        var response = JsonConvert.DeserializeObject<InitData>(request.downloadHandler.text);
+                        return Result<InitData>.Success(response);
+                    }
+                    
+                    return Result<InitData>.Failure(new Error(
+                        $"Steam authentication failed: {request.error}",
+                        Error.ErrorType.Server
+                    ));
+                });
+            // }
             // catch (Exception ex)
             // {
-            //     Debug.LogError($"Get data failed: {ex}");
+            //     Debug.LogError($"Steam authentication failed: {ex}");
             //     return Result<InitData>.Failure(new Error(
-            //         "Unexpected error occurred",
+            //         "Steam authentication failed",
             //         Error.ErrorType.Unknown,
             //         ex
             //     ));
@@ -133,5 +179,6 @@ namespace fishing.Network
         [Serializable] private class EndFishingRequest { public string guid; public bool suc; }
         [Serializable] private class EndFishingResponse { public bool suc; public FishJson fish; }
         [Serializable] private class dataReq { public string userId; }
+        [Serializable] private class SteamAuthRequest { public string steamId; public string authTicket; }
     }
 } 
