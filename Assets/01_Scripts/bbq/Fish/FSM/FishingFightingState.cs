@@ -23,10 +23,12 @@ namespace fishing.FSM
         private const float FIGHTING_DURATION = 5f;
         private float _successChance = 0.5f;
         private float _difficultyMultiplier = 1f;
+        private Fishing _fishing;
 
         public FishingFightingState(Fishing fishing) : base(fishing) 
         {
             _impulseSource = fishing.GetComponent<CinemachineImpulseSource>();
+            _fishing = fishing;
         }
 
         public override void Enter()
@@ -49,6 +51,7 @@ namespace fishing.FSM
             _power = fishing.DancingStep;
             _difficultyMultiplier = CalculateDifficultyMultiplier();
 
+            _originalTargetSize.y = Mathf.Min(600f, _originalTargetSize.y * _fishing.FishingRodSO.Difficulty);
             fishing.FishCanvas.target.sizeDelta = _originalTargetSize;
             
             _barWidth = (fishing.FishCanvas.bar.transform as RectTransform).rect.height;
