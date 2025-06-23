@@ -89,7 +89,7 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _Bend: 1
+    - _Bend: 0
     - _BendAmount: 0
     - _Blend: 0
     - _Blur: 0.005
@@ -104,7 +104,7 @@ Material:
     - _FoamSpeed: 11.59
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Ref: 1
+    - _Ref: 0
     - _ReflScale: 23.4
     - _ReflSpeed: 0.07
     - _SrcBlend: 5
