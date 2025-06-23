@@ -136,7 +136,7 @@ namespace fishing.Network
             // {
                 return await _retryPolicy.ExecuteAsync(async () =>
                 {
-                    var requestData = new SteamAuthRequest { steamId = steamId, authTicket = authTicket };
+                    var requestData = new SteamAuthRequest { steamId = steamId, ticket = authTicket };
                     string json = JsonConvert.SerializeObject(requestData);
                     byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
 
@@ -179,6 +179,6 @@ namespace fishing.Network
         [Serializable] private class EndFishingRequest { public string guid; public bool suc; }
         [Serializable] private class EndFishingResponse { public bool suc; public FishJson fish; }
         [Serializable] private class dataReq { public string userId; }
-        [Serializable] private class SteamAuthRequest { public string steamId; public string authTicket; }
+        [Serializable] private class SteamAuthRequest { public string steamId; public string ticket; }
     }
 } 
