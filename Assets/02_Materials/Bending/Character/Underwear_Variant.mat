@@ -27,7 +27,7 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _Bend: 1
+    - _Bend: 0
     - _Smoothness: 0.1
     m_Colors:
     - _Color: {r: 0.51886773, g: 0.36808497, b: 0.23740646, a: 1}
