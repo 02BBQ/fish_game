@@ -12,14 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4851b4497adda1b4a834baa2d5fd415b, type: 3}
   m_Name: Locust
   m_EditorClassIdentifier: 
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: f98c9834677518448b56dae99b864637, type: 3}
   type: 3
   nameStr: Locust
   price: 5
-  description: 
+  description: 'More More Luck
+
+'
   stackable: 1
   guid: 
   visualPath: fishingBait/locusts
   id: 203
   limit: -1
   maxPerPurchase: 60
+  baitMultiplier: 0.9

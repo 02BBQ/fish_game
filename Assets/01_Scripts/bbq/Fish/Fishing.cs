@@ -49,6 +49,7 @@ namespace fishing.FSM
         public FishSO Fish { get; set; }
         public string CurrentFishGUID => currentFishGuid;
         public FishingRod FishingRodSO { get; private set; }
+        public Item UsedBait { get; set; }
 
         // Public properties
         public FishingVisual FishingVisual => fishingVisual;

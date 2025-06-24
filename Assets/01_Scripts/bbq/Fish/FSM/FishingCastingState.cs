@@ -40,6 +40,7 @@ namespace fishing.FSM
             fishing.Player.playerAnim.SetBool("Fishing", true);
             fishing.PlayerMovement.movable = false;
             fishing.Player.playerSlot.CanChange = false;
+            fishing.UsedBait = fishing.Player.playerSlot.currentBait;
         }
 
         public override void Update()

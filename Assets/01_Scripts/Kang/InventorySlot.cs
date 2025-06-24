@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using fishing.FSM;
+using bbq.Fishing;
 
 /// <summary>
 /// this class is in gray background image, this is slot
 /// </summary>
-public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
+public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerClickHandler
 {
     [field: SerializeField] public Image Image { get; private set; }
     public Color selectedColor, normalColor;
@@ -14,7 +16,6 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
     private void Awake()
     {
         Image = GetComponent<Image>();
-        // Deselect();
     }
 
     private void Start()
@@ -22,27 +23,57 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler
         Deselect();
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        var plr = Definder.Player;
+        if (!plr.playerSlot.CanChange) return;
+
+        if (slotItem != null && slotItem.item.type == ItemType.Bait)
+        {
+            // 이미 같은 미끼가 장착되어 있다면 해제
+            if (plr.playerSlot.currentBait == slotItem.item)
+            {
+                BaitEquipSystem.Instance.UnequipBait();
+            }
+            else
+            {
+                // 새로운 미끼 장착
+                BaitEquipSystem.Instance.EquipBait(slotItem.item);
+            }
+        }
+    }
+
     public void Select()
     {   
         var plr = Definder.Player;
         if (!plr.playerSlot.CanChange) return;
-        if (plr.playerSlot.currentEquip != null)
+
+        if (slotItem != null && slotItem.item is IEquipable equipable)
         {
-            plr.playerSlot.currentEquip.Unequip();
-        }
-        if (slotItem != null &&slotItem.item is IEquipable equipable)
-        {
+            if (plr.playerSlot.currentEquip != null)
+            {
+                plr.playerSlot.currentEquip.Unequip();
+            }
             equipable.Equip(plr);
+            Image.color = selectedColor;
         }
-        Image.color = selectedColor;
     }
+
     public void Deselect()
     {
         var plr = Definder.Player;
         if (!plr.playerSlot.CanChange) return;
-        if (plr.playerSlot.currentEquip != null)
+
+        if (slotItem != null)
         {
-            plr.playerSlot.currentEquip.Unequip();
+            if (slotItem.item.type == ItemType.Bait && plr.playerSlot.currentBait == slotItem.item)
+            {
+                BaitEquipSystem.Instance.UnequipBait();
+            }
+            else if (plr.playerSlot.currentEquip != null && slotItem.item is IEquipable)
+            {
+                plr.playerSlot.currentEquip.Unequip();
+            }
         }
         Image.color = normalColor;
     }

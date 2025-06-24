@@ -37,6 +37,10 @@ public class FishingRod : Item, IEquipable
 
     public void Unequip()
     {
+        if (owner != null && owner.playerSlot.currentEquip == this)
+        {
+            owner.playerSlot.currentEquip = null;
+        }
         TryDestroy(fisher);
         TryDestroy(fishCanvas);  
         TryDestroy(fishingVisual);

@@ -26,7 +26,7 @@ public class BuyGoods : MonoBehaviour
     [Serializable] public class BuyRequest
     {
         public string userId;
-        public string itemId;
+        public string itemName;
     }
 
     [Serializable] public class BuyResponse
@@ -87,7 +87,7 @@ public class BuyGoods : MonoBehaviour
     {
         return await _retryPolicy.ExecuteAsync(async () =>
         {
-            var requestData = new BuyRequest { userId = userId, itemId = itemId };
+            var requestData = new BuyRequest { userId = userId, itemName = itemId };
             string json = JsonConvert.SerializeObject(requestData);
             byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
             using var request = new UnityWebRequest($"{serverConfig.BaseUrl}store/buy", "POST");
