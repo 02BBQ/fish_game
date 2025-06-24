@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using fishing.Network;
 using System.Threading.Tasks;
+using bbq.Fishing;
 
 public class SellGoods : MonoBehaviour
 {
@@ -64,6 +65,15 @@ public class SellGoods : MonoBehaviour
             Events.NotificationEvent.text = sucsb.ToString();
             EventManager.Broadcast(Events.NotificationEvent);
 
+        if (item is IEquipable equippableItem && Definder.Player.playerSlot.currentEquip == equippableItem)
+        {
+            equippableItem.Unequip();
+        }
+        else if (item.type == ItemType.Bait && Definder.Player.playerSlot.currentBait == item)
+        {
+            BaitEquipSystem.Instance.UnequipBait();
+        }
+        
         Definder.GameManager.moneyController.SetMoney(result.Data.money);
         InventoryManager.Instance.RemoveItem(item);
         gameObject.SetActive(false);

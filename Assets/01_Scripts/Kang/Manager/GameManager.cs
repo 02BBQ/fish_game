@@ -32,6 +32,12 @@ namespace ServerData
     }
 
     [System.Serializable]
+    public class BaitData: InventoryItemData
+    {
+        public ushort BaitMultiplier;
+    }
+
+    [System.Serializable]
     public class ServerResponse
     {
         public int money;
@@ -220,6 +226,19 @@ public class GameManager : SingleTon<GameManager>
         await HandleMoney(data);
         await HandleFishInventory(data.inventoryData);
         await HandleFishingRodInventory(data.inventoryData);
+        await HandleBaitInventory(data.inventoryData);
+    }
+
+    private async Task HandleBaitInventory(InventoryData inventoryData)
+    {
+        if (inventoryData.FishingBait == null) return;
+
+        var loadTasks = new List<Task>();
+        foreach (InventoryItemData rod in inventoryData.FishingBait)
+        {
+            loadTasks.Add(LoadFishingRod<Bait>(rod));
+        }
+        await Task.WhenAll(loadTasks);
     }
 
     private Task HandleMoney(InitData data)
@@ -249,16 +268,16 @@ public class GameManager : SingleTon<GameManager>
         var loadTasks = new List<Task>();
         foreach (InventoryItemData rod in inventoryData.FishingRod)
         {
-            loadTasks.Add(LoadFishingRod(rod));
+            loadTasks.Add(LoadFishingRod<FishingRod>(rod));
         }
         await Task.WhenAll(loadTasks);
     }
 
-    private async Task LoadFishingRod(InventoryItemData rodData)
+    private async Task LoadFishingRod<T>(InventoryItemData rodData) where T: Item
     {
         try
         {
-            var handle = Addressables.LoadAssetAsync<FishingRod>(rodData.Address);
+            var handle = Addressables.LoadAssetAsync<T>(rodData.Address);
             var fishingRod = await handle.Task;
             fishingRod = Instantiate(fishingRod);
             

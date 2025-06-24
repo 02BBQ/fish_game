@@ -24,7 +24,19 @@ namespace fishing.Network
             {
                 return await _retryPolicy.ExecuteAsync(async () =>
                 {
-                    using var request = UnityWebRequest.PostWwwForm($"{serverConfig.BaseUrl}fish/start", "");
+                    var currentBait = Definder.Player.playerSlot.currentBait;
+                    var requestData = new StartFishingRequest { 
+                        userId = serverConfig.DefaultUserId,
+                        baitGuid = currentBait?.guid
+                    };
+                    string json = JsonConvert.SerializeObject(requestData);
+                    byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+                    
+                    using var request = new UnityWebRequest($"{serverConfig.BaseUrl}fish/start", "POST");
+                    request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+                    request.downloadHandler = new DownloadHandlerBuffer();
+                    request.SetRequestHeader("Content-Type", "application/json");
+                    
                     await request.SendWebRequest();
                     
                     if (request.result == UnityWebRequest.Result.Success)
@@ -32,6 +44,12 @@ namespace fishing.Network
                         var response = JsonConvert.DeserializeObject<StartFishingResponse>(request.downloadHandler.text);
                         return Result<StartFishingResponse>.Success(response);
                     }
+
+                    System.Text.StringBuilder sb = new System.Text.StringBuilder(
+                        $"낚시 실패: <color=red>{request.error}</color>"
+                    );
+                    Events.NotificationEvent.text = sb.ToString();
+                    EventManager.Broadcast(Events.NotificationEvent);
                     
                     return Result<StartFishingResponse>.Failure(new Error(
                         $"Server error: {request.error}",
@@ -56,7 +74,13 @@ namespace fishing.Network
             {
                 return await _retryPolicy.ExecuteAsync(async () =>
                 {
-                    var requestData = new EndFishingRequest { guid = guid, suc = success };
+                    var currentBait = Definder.Player.playerSlot.currentBait;
+                    var requestData = new EndFishingRequest { 
+                        userId = serverConfig.DefaultUserId,
+                        guid = guid, 
+                        baitGuid = currentBait?.guid,
+                        suc = success 
+                    };
                     string json = JsonConvert.SerializeObject(requestData);
                     byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
                     
@@ -176,7 +200,8 @@ namespace fishing.Network
             // }
         }
         
-        [Serializable] private class EndFishingRequest { public string guid; public bool suc; }
+        [Serializable] private class StartFishingRequest { public string userId; public string baitGuid; }
+        [Serializable] private class EndFishingRequest { public string userId; public string guid; public string baitGuid; public bool suc; }
         [Serializable] private class EndFishingResponse { public bool suc; public FishJson fish; }
         [Serializable] private class dataReq { public string userId; }
         [Serializable] private class SteamAuthRequest { public string steamId; public string ticket; }

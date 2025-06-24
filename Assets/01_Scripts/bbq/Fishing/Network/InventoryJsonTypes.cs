@@ -17,6 +17,7 @@ public class ItemJson
 {
     public List<FishJson> Fish;
     public List<InventoryItemData> FishingRod;
+    public List<BaitData> FishingBait;
 }
 
 [Serializable]
