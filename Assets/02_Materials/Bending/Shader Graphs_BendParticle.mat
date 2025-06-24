@@ -52,7 +52,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Amount: 0.01
-    - _Bend: 0
+    - _Bend: 1
     - _Clamp: 1
     - _Metalic: 0
     - _NormalFloat: 1
