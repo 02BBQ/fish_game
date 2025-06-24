@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4851b4497adda1b4a834baa2d5fd415b, type: 3}
   m_Name: LuckyPasteBait
   m_EditorClassIdentifier: 
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 78f30f3084d0b4145bb86cfe48645327, type: 3}
   type: 3
   nameStr: LuckyPasteBait
   price: 2000
@@ -23,3 +23,4 @@ MonoBehaviour:
   id: 205
   limit: -1
   maxPerPurchase: 60
+  baitMultiplier: 0

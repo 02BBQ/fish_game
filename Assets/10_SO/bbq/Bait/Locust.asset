@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4851b4497adda1b4a834baa2d5fd415b, type: 3}
   m_Name: Locust
   m_EditorClassIdentifier: 
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 0eec8c6ee88e07b44a105d6b368b36fb, type: 3}
   type: 3
   nameStr: Locust
   price: 5
@@ -23,3 +23,4 @@ MonoBehaviour:
   id: 203
   limit: -1
   maxPerPurchase: 60
+  baitMultiplier: 0
