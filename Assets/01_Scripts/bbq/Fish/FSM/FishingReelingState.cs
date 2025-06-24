@@ -23,18 +23,27 @@ namespace fishing.FSM
         {
             _reelingTime = 0f;
             _isProcessingResult = true;
-            
+            bool usedBaitConsumed = false;
             try
             {
                 fishing.Player.playerAnim.SetBool("Fishing", false);
                 fishing.PlayerMovement.movable = true;
                 fishing.Player.playerSlot.CanChange = true;
-                
                 SetupReelingAnimation();
-                
+                var usedBait = fishing.UsedBait;
                 // 서버에 결과 전송
                 await EndServerFishing(fishing.Success, fishData => 
                 {
+                    // 성공 && 플레이어가 직접 릴 당김: 미끼 유지
+                    // 실패(자동 실패 등): 미끼 소모
+                    if (!fishing.Success && usedBait != null)
+                    {
+                        InventoryManager.Instance.RemoveItem(usedBait);
+                        usedBaitConsumed = true;
+                    }
+                    // 무조건 미끼 장착 해제
+                    if (usedBait != null)
+                        bbq.Fishing.BaitEquipSystem.Instance.UnequipBait();
                     if (fishing.Success && fishData != null)
                     {
                         var fish = GameObject.Instantiate(fishing.FishSOBase);

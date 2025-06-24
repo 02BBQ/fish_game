@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Bait
+  m_EditorClassIdentifier: 
+  m_GroupName: Bait
+  m_GUID: 011c6727955209a4f9a4e16a3874dcf5
+  m_SerializeEntries:
+  - m_GUID: 25b832875a3ef5f4781d0a1ed4d116e8
+    m_Address: fishingBait/spoonWorm
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Items
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 357be1f1d4b33184ab382dfede3dc971
+    m_Address: fishingBait/locusts
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Items
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6937d68b24c243946948faa77b635620
+    m_Address: fishingBait/corn
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Items
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b89fbeec8c3fc7144bae1f584ebdc2d1
+    m_Address: fishingBait/luckyPasteBait
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Items
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eff6403e5fb436641a8040d0f8ae1fc5
+    m_Address: fishingBait/earthworm
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Items
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: db2422c37c4129946a896d3f9d2182fa, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b5b5aff1aaf1f494b847261f7323dfa3, type: 2}
+    - {fileID: 11400000, guid: b7486509bad989c469daa937ffd51c40, type: 2}
