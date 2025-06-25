@@ -35,7 +35,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Bend: 1
+    - _Bend: 0
     - _Metalic: 0.276
     - _Smoothness: 0.29
     m_Colors:
