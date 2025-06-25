@@ -69,9 +69,10 @@ public class GameManager : SingleTon<GameManager>
 
         isSteamInitialized = true;
         steamUserId = SteamUser.GetSteamID();
+        serverConfig.SetUserId(steamUserId.ToString());
         Debug.Log($"스팀 초기화 성공! 유저 ID: {steamUserId}");
 
-        // 세션 티켓 발급
+        // 세션 티켓 발급   
         GetSteamAuthTicket();
     }
 
