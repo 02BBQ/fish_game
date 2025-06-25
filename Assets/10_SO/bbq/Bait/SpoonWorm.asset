@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4851b4497adda1b4a834baa2d5fd415b, type: 3}
   m_Name: SpoonWorm
   m_EditorClassIdentifier: 
-  image: {fileID: 21300000, guid: f98c9834677518448b56dae99b864637, type: 3}
+  image: {fileID: 21300000, guid: 77c823d2d2b4bb34b97262fd85d1ded3, type: 3}
   type: 3
   nameStr: SpoonWorm
   price: 10

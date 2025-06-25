@@ -37,7 +37,7 @@ public class Player : MapEntity
         fishRenderer = fishObj.GetComponent<SpriteRenderer>();
         fishMesh = fishObj.GetComponent<MeshFilter>();
     }
-    public Item debugItem;
+    //public Item debugItem;
     protected override void Start()
     {
         if (SteamManager.Instance.useSteam)
@@ -46,7 +46,7 @@ public class Player : MapEntity
             isRotate = true;
             playerInput.InputAction.Enable();
             base.Start();
-            InventoryManager.Instance.AddItem(debugItem);
+            //InventoryManager.Instance.AddItem(debugItem);
             playerBoat.enabled = true;
             Rigidbody.mass = 10f;
             cForce.enabled = true;

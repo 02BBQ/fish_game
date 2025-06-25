@@ -38,14 +38,17 @@ namespace fishing.FSM
                     // 실패(자동 실패 등): 미끼 소모
                     if (!fishing.Success && usedBait != null)
                     {
-                        InventoryManager.Instance.RemoveItem(usedBait);
+                        //InventoryManager.Instance.RemoveItem(usedBait);
                         usedBaitConsumed = true;
                     }
                     // 무조건 미끼 장착 해제
-                    if (usedBait != null)
-                        bbq.Fishing.BaitEquipSystem.Instance.UnequipBait();
                     if (fishing.Success && fishData != null)
                     {
+                        if (usedBait != null)
+                        {
+                            bbq.Fishing.BaitEquipSystem.Instance.UnequipBait();
+                            InventoryManager.Instance.RemoveItem(usedBait);
+                        }
                         var fish = GameObject.Instantiate(fishing.FishSOBase);
                         fish.Initialize(fishData);
                         HandleSuccess(fish);
