@@ -14,10 +14,17 @@ namespace fishing.Network
         [Header("Game Settings")]
         [SerializeField] private string defaultUserId = "test";
 
+        private string userId;
+
         public string BaseUrl => baseUrl;
         public float TimeoutSeconds => timeoutSeconds;
         public int MaxRetries => maxRetries;
         public float RetryDelaySeconds => retryDelaySeconds;
-        public string DefaultUserId => defaultUserId;
+        public string DefaultUserId => string.IsNullOrEmpty(userId) ? defaultUserId : userId;
+
+        public void SetUserId(string id)
+        {
+            userId = id;
+        }
     }
 }
