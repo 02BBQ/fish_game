@@ -14,7 +14,7 @@ namespace fishing.Network
         [Header("Game Settings")]
         [SerializeField] private string defaultUserId = "test";
 
-        private string userId;
+        [SerializeField] private string userId;
 
         public string BaseUrl => baseUrl;
         public float TimeoutSeconds => timeoutSeconds;
@@ -24,7 +24,7 @@ namespace fishing.Network
 
         public void SetUserId(string id)
         {
-            userId = id;
+            defaultUserId = id;
         }
     }
 }

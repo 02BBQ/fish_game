@@ -12,6 +12,11 @@ namespace fishing.Network
         public ServerConfig serverConfig;
 
         private IRetryPolicy _retryPolicy;
+
+        public void init(ServerConfig _)
+        {
+            serverConfig = _;
+        }
         
         private void Awake()
         {
@@ -24,6 +29,7 @@ namespace fishing.Network
             {
                 return await _retryPolicy.ExecuteAsync(async () =>
                 {
+                    Debug.Log(serverConfig.DefaultUserId);
                     var currentBait = Definder.Player.playerSlot.currentBait;
                     var requestData = new StartFishingRequest { 
                         userId = serverConfig.DefaultUserId,

@@ -412,7 +412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f637766f77def2438ecafb24edee591, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverConfig: {fileID: 11400000, guid: 35ea1ee25ab1dfa4ab717dd88c285159, type: 2}
+  serverConfig: {fileID: 11400000, guid: 7be60de784bc3254086401ef5179d7b0, type: 2}
   item: {fileID: 11400000, guid: 082a9852c6669b540b724b762e987317, type: 2}
   image: {fileID: 3745835882537118806}
   description: {fileID: 1040239507775032825}
