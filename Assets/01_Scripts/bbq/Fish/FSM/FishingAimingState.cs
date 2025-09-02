@@ -10,14 +10,16 @@ namespace fishing.FSM
         private GameObject _rig;
         private bool _isAiming = false;
 
-        public FishingAimingState(Fishing fishing) : base(fishing) { }
+        public FishingAimingState(Fishing fishing) : base(fishing) 
+        { 
+            _rig = fishing.Player.transform.GetComponentInChildren<Animator>().gameObject;
+        }
 
         public override void Enter()
         {
             _isAiming = true;
             
             fishing.PlayerMovement.StopMoveTarget();
-            _rig = fishing.Player.transform.GetComponentInChildren<Animator>().gameObject;
             
             _direction = _rig.transform.forward;
             _origin = fishing.Player.transform.position;
